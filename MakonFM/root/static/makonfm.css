@@ -1,0 +1,10 @@
+body {
+    font-family: verdana;
+}
+.track-menu  li > * { display: none; }
+.track-menu  li > a { display: inline; }
+.track-menu  li.show > * { display: block; }
+.track-menu  li > h2,
+.track-menu  li > h3 {
+    display: block;
+}
