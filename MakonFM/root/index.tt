@@ -1340,6 +1340,28 @@
         </div>
     </div>
 
+    <div class="subtitles">
+        <span class="Word" data-timestamp="0">Ťuk</span>
+        <span class="Word" data-timestamp="1.1">ťuk.</span>
+        <span class="Word" data-timestamp="2.2">"Takže</span>
+        <span class="Word cur" data-timestamp="3.3">dobrý</span>
+        <span class="Word" data-timestamp="4.4">večer,"</span>
+        <span class="Word" data-timestamp="5.5">řekl</span>
+        <span class="Word" data-timestamp="6.6">jelen.</span>
+    </div>
+    <dl class="curword" data-timestamp="3.3">
+        <dt class="occurrence">Výskyt</dt>
+        <dd class="occurrence">dobrý</dd>
+        
+        <dt class="fonet">Výslovnost</dt>
+        <dd class="fonet">d o b r ii</dd>
+        
+        <dt class="wordform">Slovní tvar</dt>
+        <dd class="wordform">dobrý</dd>
+    </dl>
+
+    <input type="number" step="0.1" id="ts" />
+
     <script type="text/javascript" src="/static/makonfm.js"></script>
 
 </body>

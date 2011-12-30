@@ -8,3 +8,6 @@ body {
 .track-menu  li > h3 {
     display: block;
 }
+.subtitles .cur {
+    text-decoration: underline;
+}
