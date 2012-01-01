@@ -21,7 +21,11 @@ $('.track-menu li>a').click(function(evt) {
 
 $("#jquery_jplayer_1").jPlayer({
     swfPath: "/static",
-    supplied: "mp3"
+    supplied: "mp3",
+    timeupdate: function(evt) {
+        MakonFM.upd_sub(evt.jPlayer.status.currentTime, MakonFM.subs);
+        ;;; $('#ts').val(evt.jPlayer.status.currentTime);
+    }
 });
 
 MakonFM._i_by_ts = function(ts, subs, i) {
