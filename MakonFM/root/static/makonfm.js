@@ -68,7 +68,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
         MakonFM._add_st_word(sub, {onhead:$st});
         first_have = sub.timestamp;
     }
-    var first_need = subs[Math.max(0,i-10)].timestamp;
+    var first_need = subs[Math.max(0,i-MakonFM.WORDS_PRE)].timestamp;
     var first_have_i = MakonFM._i_by_ts(first_have, subs, i);
     var new_first;
     
@@ -89,7 +89,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
     }
     
     var last_have = $st.find('.Word:last' ).data('timestamp');
-    var last_need = subs[Math.min(i+10,subs.length-1)].timestamp;
+    var last_need = subs[Math.min(i+MakonFM.WORDS_POST,subs.length-1)].timestamp;
     var last_have_i = MakonFM._i_by_ts(last_have, subs, i);
     var new_last;
     
