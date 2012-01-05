@@ -11,3 +11,8 @@ body {
 .subtitles .cur {
     text-decoration: underline;
 }
+.jp-audio {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
