@@ -20,6 +20,7 @@ $('.track-menu li>a').click(function(evt) {
     $('#jquery_jplayer_1').jPlayer('setMedia', {
         mp3: MakonFM.MEDIA_BASE + fn
     });
+    $('#jquery_jplayer_1').jPlayer('play');
     MakonFM.get_subs(fn);
 });
 
