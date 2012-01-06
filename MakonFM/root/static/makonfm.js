@@ -40,7 +40,7 @@ MakonFM._i_by_ts = function(ts, subs, i) {
     while (subs[i++].timestamp < ts) { }
     while (subs[--i].timestamp > ts) { }
     return i;
-}
+};
 
 MakonFM._add_st_word = function(sub, where) {
     var $word = $('<span>')
@@ -55,7 +55,7 @@ MakonFM._add_st_word = function(sub, where) {
     else throw ('no where specified to _add_st_word');
     
     $word.after(' ');
-}
+};
 
 MakonFM.upd_sub = function (ts, subs, i) {
     var $st = $('.subtitles');
