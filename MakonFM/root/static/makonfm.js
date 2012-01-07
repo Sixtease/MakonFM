@@ -293,3 +293,74 @@ MakonFM.get_subs = function(fn) {
 $(document).bind('got_subtitles.MakonFM', function(evt, arg) {
     MakonFM.subtitles[arg.fn] = MakonFM.subs = arg.data;
 });
+
+MakonFM.get_selected_words = function() {
+    var $rv;
+    var range;
+    if (window.getSelection) {
+        var sel = getSelection();
+        var sel_str = sel.toString();
+        if (sel_str.length == 0) return;
+        if (!/\S/.test(sel_str)) return;
+        
+        range = sel.getRangeAt(0);
+        
+        var sc = range.startContainer;
+        function try_el($el,l) {
+            if ($el.is('.Word')) {console.log(l,$el);return $el;}
+            else return false;
+        }
+        if      ($rv = try_el($(sc),'sc')) { }
+        else if ($rv = try_el($(sc).parent(),'scparent')) { }
+        else if ($rv = try_el($(sc.nextSibling),'scnext')) { }
+        else throw ('Failed to find start word');
+        
+        var ec = range.endContainer;
+        var $end;
+        if      ($end = try_el($(ec),'ec')) { }
+        else if ($end = try_el($(ec).parent(),'ecparent')) {
+            if (range.endOffset == 0) $end = $end.prev();
+        }
+        else if ($end = try_el($(ec.previousSibling),'ecprev')) { }
+        else throw ('Failed to find end word');
+        
+        var end_ts = $end.data('timestamp');
+        if (!end_ts) throw ('No end timestamp');
+        if ($rv.data('timestamp') <= end_ts) { }
+        else throw ("start word does't have lesser timestamp than end word");
+        
+        for (var $last = $rv.last(); !$last.is($end); $last = $next) {
+            var $next = $last.next();
+            if ($next.length == 0) {
+                throw ('seek-selection-end reached subtitle end');
+            }
+            if ($next.data('timestamp') > end_ts) {
+                throw ('seek-selection-end reached beyond end node');
+            }
+            $rv = $rv.add($next);
+        }
+    }
+    /*else if (document.getSelection) {
+        t = document.getSelection();
+    }*/
+    else if (document.selection) {
+        $rv = $(document.selection.createRange().htmlText).filter('.Word');
+    }
+    return $rv;
+};
+
+$('.subtitles').bind('mouseup', function(evt) {
+    var $sel = MakonFM.get_selected_words();
+    if ($sel && $sel.length) {} else return;
+    $sel.hide();
+    var $ta = $('<textarea>')
+    .addClass('subedit')
+    .val($.map($.makeArray($sel),function(x){return $(x).text()}).join(' '))
+    .insertBefore($sel.first())
+    .blur(function(){
+        $(this).remove();
+        $sel.show();
+        $('.subtitles').removeClass('edited');
+    });
+    $('.subtitles').addClass('edited');
+});

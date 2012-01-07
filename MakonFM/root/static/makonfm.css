@@ -23,8 +23,15 @@ body {
     overflow: hidden;
     position: relative;
 }
+.subtitles.edited {
+    height: auto;
+}
 .subtitles .cur {
     background-color: rgb(255,255,130);
+}
+.subedit {
+    display: block;
+    width: 100%;
 }
 body div.jp-audio {
     position: fixed;
