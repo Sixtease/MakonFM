@@ -1,12 +1,22 @@
 body {
     font-family: verdana;
 }
+.track-menu  li { cursor: pointer; }
+.track-menu  li h2:hover,
+.track-menu  li h3:hover,
+.track-menu  li h4:hover,
+.track-menu  li a:hover { text-decoration: underline; }
 .track-menu  li > * { display: none; }
 .track-menu  li > a { display: inline; }
 .track-menu  li.show > * { display: block; }
 .track-menu  li > h2,
-.track-menu  li > h3 {
+.track-menu  li > h3,
+.track-menu  li > h4 {
     display: block;
+}
+.track-menu  li > h4 {
+    margin: 0;
+    font-weight: normal;
 }
 .subtitles {
     height: 66px;
