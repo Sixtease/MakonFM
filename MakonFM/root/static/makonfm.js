@@ -1,5 +1,6 @@
 var MakonFM = {
-    MEDIA_BASE:    'http://commondatastorage.googleapis.com/karel-makon-mp3/',
+//    MEDIA_BASE:    'http://commondatastorage.googleapis.com/karel-makon-mp3/',
+    MEDIA_BASE:    '/static/audio/',
 //    SUBTITLE_BASE: 'http://commondatastorage.googleapis.com/karel-makon-sub/',
     SUBTITLE_BASE: '/static/subs/',
     WORDS_PRE: 10,
