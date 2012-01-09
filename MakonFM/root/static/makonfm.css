@@ -33,6 +33,17 @@ body {
     display: block;
     width: 100%;
 }
+.edited .selected {
+    display: none;
+}
+.word.corrected {
+    color: #AAA;
+}
+.show-content-after:after {
+    content: " " attr(content_after);
+    font-weight: bold;
+    color: black;
+}
 body div.jp-audio {
     position: fixed;
     top: 0;

@@ -50,7 +50,7 @@ MakonFM._i_by_ts = function(ts, subs, i) {
 
 MakonFM._add_st_word = function(sub, where) {
     var $word = $('<span>')
-    .addClass('Word')
+    .addClass('word')
     .attr('data-timestamp', sub.timestamp)
     .text(sub.occurrence);
     
@@ -68,7 +68,7 @@ MakonFM._add_st_word = function(sub, where) {
 
 MakonFM.upd_sub = function (ts, subs, i) {
     var $st = $('.subtitles');
-    var $cur_have = $st.find('.Word.cur');
+    var $cur_have = $st.find('.word.cur');
     var cur_have = $cur_have.data('timestamp');
     var next_have = $cur_have.next().data('timestamp');
     if (cur_have < ts && next_have > ts) return;
@@ -81,13 +81,13 @@ MakonFM.upd_sub = function (ts, subs, i) {
     MakonFM.CURRENT_INDEX = i;
     var sub = subs[i];
     
-    var $new_cur = $st.find('.Word[data-timestamp="'+sub.timestamp+'"]');
+    var $new_cur = $st.find('.word[data-timestamp="'+sub.timestamp+'"]');
     if ($new_cur == $cur_have) return;
     var $stopper_left = null;
     var $stopper_right = null;
     
     if ($new_cur.length == 0) {
-        var $first_have = $st.find('.Word:first');
+        var $first_have = $st.find('.word:first');
         if ($first_have.length == 0) {
             $new_cur = MakonFM._add_st_word(sub, {onhead:$st});
         }
@@ -98,7 +98,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
                 $stopper_right = $first_have;
             }
             else {
-                var $last_have = $st.find('.Word:last');
+                var $last_have = $st.find('.word:last');
                 var last_have = $last_have.data('timestamp');
                 if (sub.timestamp > last_have) {
                     $new_cur = MakonFM._add_st_word(sub, {after:$last_have});
@@ -116,7 +116,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
         scroll(lines_to_scroll);
     }
     
-    $st.find('.Word').removeClass('cur');
+    $st.find('.word').removeClass('cur');
     $new_cur.addClass('cur');
 
     function add_adjacent(arg) {
@@ -186,7 +186,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
     }
     function scrollup(n) {
         if (n === undefined) n = 1;
-        var $start = $st.find('.Word:first');
+        var $start = $st.find('.word:first');
         var i = MakonFM._i_by_ts($start.data('timestamp'), subs);
         var $added = $start;
         while (MakonFM._lineno_of($start) < n) {
@@ -194,7 +194,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
             if (i < 0) break;
             $added = MakonFM._add_st_word(subs[i], {before:$added});
         }
-        var $last = $st.find('.Word:last');
+        var $last = $st.find('.word:last');
         while (MakonFM._lineno_of($last) >= MakonFM.SUB_LINE_CNT) {
             var $to_remove = $last;
             $last = $last.prev();
@@ -203,7 +203,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
     }
     function scrolldown(n) {
         if (n === undefined) n = 1;
-        var $words = $st.find('.Word');
+        var $words = $st.find('.word');
         var lines_added = 0;
         
         var $added = $words.last();
@@ -269,7 +269,7 @@ MakonFM.show_word_info = function(word, $cont, subs) {
     $cont.find('dd.wordform  ').text(word.wordform  );
 };
 
-$('.subtitles .Word').live('click', function(evt) {
+$('.subtitles .word').live('click', function(evt) {
     if (evt.button != 0) return;
     var ts = $(evt.target).data('timestamp');
     MakonFM.show_word_info(evt.target);
@@ -307,22 +307,22 @@ MakonFM.get_selected_words = function() {
         range = sel.getRangeAt(0);
         
         var sc = range.startContainer;
-        function try_el($el,l) {
-            if ($el.is('.Word')) {console.log(l,$el);return $el;}
+        function try_el($el) {
+            if ($el.is('.word')) return $el;
             else return false;
         }
-        if      ($rv = try_el($(sc),'sc')) { }
-        else if ($rv = try_el($(sc).parent(),'scparent')) { }
-        else if ($rv = try_el($(sc.nextSibling),'scnext')) { }
+        if      ($rv = try_el($(sc))) { }
+        else if ($rv = try_el($(sc).parent())) { }
+        else if ($rv = try_el($(sc.nextSibling))) { }
         else throw ('Failed to find start word');
         
         var ec = range.endContainer;
         var $end;
-        if      ($end = try_el($(ec),'ec')) { }
-        else if ($end = try_el($(ec).parent(),'ecparent')) {
+        if      ($end = try_el($(ec))) { }
+        else if ($end = try_el($(ec).parent())) {
             if (range.endOffset == 0) $end = $end.prev();
         }
-        else if ($end = try_el($(ec.previousSibling),'ecprev')) { }
+        else if ($end = try_el($(ec.previousSibling))) { }
         else throw ('Failed to find end word');
         
         var end_ts = $end.data('timestamp');
@@ -345,23 +345,64 @@ MakonFM.get_selected_words = function() {
         t = document.getSelection();
     }*/
     else if (document.selection) {
-        $rv = $(document.selection.createRange().htmlText).filter('.Word');
+        $rv = $(document.selection.createRange().htmlText).filter('.word');
     }
     return $rv;
 };
 
-$('.subtitles').bind('mouseup', function(evt) {
-    var $sel = MakonFM.get_selected_words();
-    if ($sel && $sel.length) {} else return;
-    $sel.hide();
-    var $ta = $('<textarea>')
-    .addClass('subedit')
-    .val($.map($.makeArray($sel),function(x){return $(x).text()}).join(' '))
-    .insertBefore($sel.first())
-    .blur(function(){
-        $(this).remove();
-        $sel.show();
-        $('.subtitles').removeClass('edited');
-    });
-    $('.subtitles').addClass('edited');
+$('.subtitles').bind({
+    mouseup: function(evt) {
+        var $sel = MakonFM.get_selected_words();
+        if ($sel && $sel.length) {} else return;
+        $sel.addClass('selected');
+        var $ta = MakonFM._get_sub_textarea($sel);
+        $ta.focus();
+        $('.subtitles').addClass('edited');
+    },
+    done_editing: function(evt, ta) {
+        var $ta = ta ? $(ta) : $(this).find('.subedit');
+        $(this)
+        .removeClass('edited')
+        .find('.selected').removeClass('selected');
+        $ta.data('words').show();
+        $ta
+        .removeData('words')
+        .remove();
+    }
 });
+MakonFM._get_sub_textarea = function($words) {
+    if (!$words || $words.length == 0) {
+        throw ('No words for new textarea');
+    }
+    
+    var $rv = $('<textarea>')
+    .addClass('subedit')
+    .data({words: $words})
+    .val($.map($.makeArray($words),function(x){return $(x).text()}).join(' '))
+    .bind({
+        blur: blur_cb,
+        change: change_cb,
+        keypress: keypress_cb
+    })
+    .insertBefore($words.first());
+    
+    return $rv;
+    
+    function blur_cb() {
+        if ($(this).data('changed')) {
+            $words.addClass('corrected');
+            $words.last()
+            .attr({content_after: $rv.val()})
+            .addClass('show-content-after');// TODO: pridat $rv.val() do content after
+        }
+        $(this).closest('.subtitles').trigger('done_editing', $rv);
+    }
+    function keypress_cb(evt) {
+        if (evt.keyCode == 27) {
+            $(this).closest('.subtitles').trigger('done_editing', $rv);
+        }
+    }
+    function change_cb() {
+        $(this).data('changed', true);
+    }
+};
