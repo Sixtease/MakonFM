@@ -354,10 +354,14 @@ $('.subtitles').bind({
     mouseup: function(evt) {
         var $sel = MakonFM.get_selected_words();
         if ($sel && $sel.length) {} else return;
+        
         $sel.addClass('selected');
-        var $ta = MakonFM._get_sub_textarea($sel);
-        $ta.focus();
         $('.subtitles').addClass('edited');
+        
+        var $ta = MakonFM._get_sub_textarea($sel);
+        if ($ta) $ta
+        .insertBefore($sel.first())
+        .focus();
     },
     done_editing: function(evt, ta) {
         var $ta = ta ? $(ta) : $(this).find('.subedit');
@@ -375,6 +379,8 @@ MakonFM._get_sub_textarea = function($words) {
         throw ('No words for new textarea');
     }
     
+    if ($words.filter('.corrected').length > 0) return;
+    
     var $rv = $('<textarea>')
     .addClass('subedit')
     .data({words: $words})
@@ -383,17 +389,18 @@ MakonFM._get_sub_textarea = function($words) {
         blur: blur_cb,
         change: change_cb,
         keypress: keypress_cb
-    })
-    .insertBefore($words.first());
+    });
     
     return $rv;
     
     function blur_cb() {
         if ($(this).data('changed')) {
             $words.addClass('corrected');
+            var submission = $rv.val();
             $words.last()
-            .attr({content_after: $rv.val()})
-            .addClass('show-content-after');// TODO: pridat $rv.val() do content after
+            .attr('content-after', submission)
+            .addClass('show-content-after');
+            MakonFM.send_subtitles($words, submission);
         }
         $(this).closest('.subtitles').trigger('done_editing', $rv);
     }
@@ -405,4 +412,27 @@ MakonFM._get_sub_textarea = function($words) {
     function change_cb() {
         $(this).data('changed', true);
     }
+};
+MakonFM.send_subtitles = function($orig, submitted, subs) {
+    if (!$orig) throw ('send_subtitles needs original words');
+    if ($orig.length == 0) throw ('send_subtitles needs more than 0 original words');
+    if ($orig.filter('.word').length < $orig.length) throw ("send_subtitles needs original .word's");
+    if (typeof submitted !== 'string') throw ('send_subtitles needs string of new subtitles');
+    if (!subs) subs = MakonFM.subs;
+    
+    var start_ts = $orig.first().data('timestamp');
+    if (!$.isNumeric(start_ts)) throw ('invalid start timestamp');
+    
+    var end_ts;
+    var i = MakonFM._i_by_ts($orig.last().data('timestamp'), subs);
+    if (!i) throw ('send_subtitles failed to get index of last selected word');
+    i++;
+    if (i == subs.length) end_ts = Infinity;
+    else if (i < subs.length) {
+        end_ts = subs[i].timestamp;
+    }
+    else throw ('Something smells about indices here in send_subtitles');
+    if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
+    
+    console.log('sending subs', start_ts, end_ts, submitted);
 };

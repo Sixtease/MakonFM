@@ -40,7 +40,7 @@ body {
     color: #AAA;
 }
 .show-content-after:after {
-    content: " " attr(content_after);
+    content: " " attr(content-after);
     font-weight: bold;
     color: black;
 }
