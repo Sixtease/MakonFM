@@ -3,6 +3,7 @@ var MakonFM = {
     MEDIA_BASE:    '/static/audio/',
 //    SUBTITLE_BASE: 'http://commondatastorage.googleapis.com/karel-makon-sub/',
     SUBTITLE_BASE: '/static/subs/',
+    SEND_SUBTITLES_URL: '/subsubmit/',
     WORDS_PRE: 10,
     WORDS_POST: 10,
     CURRENT_INDEX: 0,
@@ -277,6 +278,7 @@ $('.subtitles .word').live('click', function(evt) {
 
 MakonFM.get_subs = function(fn) {
     var stem = fn.replace(/(?:\.(?:mp3|ogg|sub(?:\.js)?))?$/, '');
+    MakonFM.current_file = stem;
     if (MakonFM.subtitles[stem]) {
         MakonFM.subs = MakonFM.subtitles[stem];
         return;
@@ -434,5 +436,8 @@ MakonFM.send_subtitles = function($orig, submitted, subs) {
     else throw ('Something smells about indices here in send_subtitles');
     if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
     
-    console.log('sending subs', start_ts, end_ts, submitted);
+    $.post(MakonFM.SEND_SUBTITLES_URL, {
+        start: start_ts,
+        
+    })
 };
