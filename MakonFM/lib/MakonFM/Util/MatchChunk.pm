@@ -3,43 +3,77 @@ package MakonFM::Util::MatchChunk;
 use strict;
 use utf8;
 use open qw(:std :utf8);
+use JSON ();
+use File::chdir;
+use MakonFM::Util::Vyslov qw(vyslov);
+use MakonFM::Util::HTKout2subs;
 
-use File::Basename;
-my $PATH;
-BEGIN { $PATH = sub { dirname ( (caller)[1] ) }->(); }
-use lib $PATH;
+our $workpath;
+our $HTKpath = '';
+our $soxpath = '';
 
-use Vyslov qw(vyslov);
-
-my $htk_path = '';
 sub import {
-    my ($package, %options) = @_;
-    if ($options{})
+    my ($class, %arg) = @_;
+    if (exists $arg{workpath}) {
+        $workpath = $arg{workpath};
+        $workpath =~ s{(?<=[^/])/*$}{/};
+    }
+    if (exists $arg{HTKpath}) {
+        $HTKpath = $arg{HTKpath};
+    }
+    if (exists $arg{soxpath}) {
+        $soxpath = $arg{soxpath};
+    }
 }
 
-my $trans_fn = shift;
-my $wav_fn = shift;
+$MakonFM::Util::HTKout2subs::quiet = 1;
 
-open my $trans_fh, '<:utf8', $trans_fn or die "Couldn't open '$trans_fn': $!";
+sub get_subs {
 
-my @words = parse_words($trans_fh);
+    my ($trans_fn, $audio_fn, $start_pos, $end_pos) = @_;
 
-my $trans_mlf = txt2mlf(@words);
-my $trans_mlf_fn = 'trans.mlf';
-open my $trans_mlf_fh, '>:encoding(iso-8859-2)', $trans_mlf_fn or die "Couldn't open $trans_mlf_fn for writing: $!";
-print {$trans_mlf_fh} $trans_mlf;
-close $trans_mlf_fh;
+    local $CWD = $workpath if $workpath;
 
-my $dict = txt2dict(@words);
-my $dict_fn = 'dict';
-open my $dict_fh, '>:encoding(iso-8859-2)', $dict_fn or die "Couldn't open '$dict_fn': $!";
-print {$dict_fh} $dict;
-close $dict_fh;
+    open my $trans_fh, '<:utf8', $trans_fn or die "Couldn't open '$trans_fn': $!";
 
-my $mfc_fn = 'chunk0.mfc';
-system(qq{HCopy -C config0 $wav_fn $mfc_fn});
+    my @words = parse_words($trans_fh);
 
-system(qq{LANG=C HVite -l '*' -b silence -C config1 -a -H hmmmacros -H hmmdefs -i aligned.mlf -m -t 250.0 -I "$trans_mlf_fn" -y lab "$dict_fn" monophones1 "$mfc_fn"});
+    my $trans_mlf = txt2mlf(@words);
+    my $trans_mlf_fn = 'trans.mlf';
+    open my $trans_mlf_fh, '>:encoding(iso-8859-2)', $trans_mlf_fn or die "Couldn't open $trans_mlf_fn for writing: $!";
+    print {$trans_mlf_fh} $trans_mlf;
+    close $trans_mlf_fh;
+
+    my $dict = txt2dict(@words);
+    my $dict_fn = 'dict';
+    open my $dict_fh, '>:encoding(iso-8859-2)', $dict_fn or die "Couldn't open '$dict_fn': $!";
+    print {$dict_fh} $dict;
+    close $dict_fh;
+
+    my $wav_fn = 'chunk0.wav';
+    unlink $wav_fn;
+    system(qq(${soxpath}sox "$audio_fn" "$wav_fn" trim $start_pos =$end_pos));
+
+    my $mfc_fn = 'chunk0.mfc';
+    unlink $mfc_fn;
+    system(qq(${HTKpath}HCopy -C config0 "$wav_fn" "$mfc_fn"));
+
+    my $aligned_fn = 'aligned.mlf';
+    unlink $aligned_fn;
+    system(qq(LANG=C ${HTKpath}HVite -l '*' -b silence -C config1 -a -H hmmmacros -H hmmdefs -i $aligned_fn -m -t 100.0 -I "$trans_mlf_fn" -y lab "$dict_fn" monophones1 "$mfc_fn"));
+
+    my @subs = do {
+        open my $aligned_fh, '<', $aligned_fn or die "Couldn't open '$aligned_fn': $!";
+        my $splits = [0+$start_pos];
+        grep {;
+            $_->{wordform} ne 'silence'
+        } @{ MakonFM::Util::HTKout2subs::get_subs($splits, $aligned_fh) }
+    };
+
+    my $json = JSON->new->pretty;
+    return $json->encode(\@subs)
+
+}
 
 sub txt2dict {
     my $dict = '';
@@ -88,3 +122,5 @@ sub occ2form {
         return lc
     }
 }
+
+1

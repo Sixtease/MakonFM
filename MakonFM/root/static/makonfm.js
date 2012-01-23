@@ -437,7 +437,11 @@ MakonFM.send_subtitles = function($orig, submitted, subs) {
     if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
     
     $.post(MakonFM.SEND_SUBTITLES_URL, {
+        filestem: MakonFM.current_file,
         start: start_ts,
-        
-    })
+        end: end_ts,
+        trans: submitted
+    }).success( function() {
+        console.log('send succeeded', arguments);
+    });
 };
