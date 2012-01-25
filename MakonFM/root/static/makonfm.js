@@ -398,10 +398,8 @@ MakonFM._get_sub_textarea = function($words) {
     function blur_cb() {
         if ($(this).data('changed')) {
             $words.addClass('corrected');
+            MakonFM._mark_subtitles_as_corrected($words);
             var submission = $rv.val();
-            $words.last()
-            .attr('content-after', submission)
-            .addClass('show-content-after');
             MakonFM.send_subtitles($words, submission);
         }
         $(this).closest('.subtitles').trigger('done_editing', $rv);
@@ -441,7 +439,52 @@ MakonFM.send_subtitles = function($orig, submitted, subs) {
         start: start_ts,
         end: end_ts,
         trans: submitted
-    }).success( function() {
-        console.log('send succeeded', arguments);
+    }).success( function(new_subs) {
+        ;;; console.log('new subs:', new_subs);
+        if (new_subs && new_subs.success === 1) {
+            MakonFM.merge_subtitles(new_subs);
+        }
+        else if (new_subs && new_subs.success === 0) {
+            throw 'Failed matching'; // TODO: negotiate for better transcription
+        }
+        else {
+            throw 'unexpected new subs';
+        }
     });
+};
+
+MakonFM.merge_subtitles = function(new_subs, old_subs) {
+    if (!old_subs) {
+        old_subs = MakonFM.subtitles[new_subs.filestem];
+    }
+    if (!old_subs) {
+        throw 'No old subs to receive editation';
+    }
+    
+    var s = new_subs.subs;
+    for (var i = 0; i < s.length; i++) {
+        s[i].humanic = true;
+    }
+    
+    var start = MakonFM._i_by_ts(new_subs.start, old_subs);
+    var  end  = MakonFM._i_by_ts(new_subs. end , old_subs);
+    var how_many = 1 + end - start;
+    old_subs.splice.apply(old_subs, [start, how_many].concat(s));
+    
+    var $old_subs = $('.word.corrected[data-timestamp="' + new_subs.start + '"]');
+    if ($old_subs.length > 0) {
+        $old_subs = $old_subs.add($old_subs.nextAll('.corrected'));
+        $old_subs.first().before('TADY_BY_MELY_BYT_NOVE_TITULKY'); // FIXME
+        $old_subs.remove();
+    }
+};
+
+MakonFM._mark_subtitles_as_corrected = function($words) {
+    var start_ts = $words.first().data('timestamp');
+    var   end_ts = $words. last().data('timestamp');
+    var start = MakonFM._i_by_ts(start_ts, MakonFM.subs);
+    var   end = MakonFM._i_by_ts(  end_ts, MakonFM.subs);
+    for (var i = start; i <= end; i++) {
+        MakonFM.subs[i].corrected = true;
+    }
 };

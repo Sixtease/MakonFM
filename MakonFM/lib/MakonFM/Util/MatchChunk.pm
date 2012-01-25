@@ -3,7 +3,6 @@ package MakonFM::Util::MatchChunk;
 use strict;
 use utf8;
 use open qw(:std :utf8);
-use JSON ();
 use File::chdir;
 use MakonFM::Util::Vyslov qw(vyslov);
 use MakonFM::Util::HTKout2subs;
@@ -70,8 +69,15 @@ sub get_subs {
         } @{ MakonFM::Util::HTKout2subs::get_subs($splits, $aligned_fh) }
     };
 
-    my $json = JSON->new->pretty;
-    return $json->encode(\@subs)
+    my $success = 1;
+    if (scalar(@words) xor scalar(@subs)) {
+        $success = 0;
+    }
+
+    return {
+        subs => \@subs,
+        success => $success,
+    }
 
 }
 
