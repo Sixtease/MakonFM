@@ -2,11 +2,7 @@ package MakonFM::Controller::SubSubmit;
 use Moose;
 use namespace::autoclean;
 use Encode;
-use FindBin qw($Bin);
-use MakonFM::Util::MatchChunk (
-    workpath => "$Bin/../temp/match_chunk/",
-    HTKpath  => '/home/sixtease/programs/lmhtk/bin/',
-);
+use MakonFM::Util::MatchChunk;
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -15,7 +11,7 @@ sub index :Path :Args(0) {
     
     my $trans = decode_utf8 $c->request->parameters->{trans};
     my $audio_fn = 
-        $c->config->{audio_path}{mp3}
+        $c->econf(qw{paths audio mp3})
         . $c->request->parameters->{filestem}
         . '.mp3'
     ;

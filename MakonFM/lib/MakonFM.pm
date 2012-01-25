@@ -44,6 +44,22 @@ __PACKAGE__->config(
 # Start the application
 __PACKAGE__->setup();
 
+# takes a list of hash keys to $c->config
+# and returns the config value with $foo
+# expanded to the config value of foo.
+# E.G. given $c->config->{paths}{HTK} eq '$home/HTK',
+# $c->econf->('paths', 'HTK') returns
+# $c->config->{home} . '/HTK'
+sub econf {
+    my ($c, @keys) = @_;
+    my $rv = $c->config;
+    while (my $key = shift @keys) {
+        $rv = $rv->{$key};
+    }
+    $rv =~ s/\$(\w+)/$c->config->{$1}/e;
+    return $rv
+}
+
 
 =head1 NAME
 

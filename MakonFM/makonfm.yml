@@ -1,3 +1,9 @@
 name: MakonFM
-audio_path:
-    mp3: /home/sixtease/Music/Makon/all/mp3/
+paths:
+    HTK: ''
+    sox: ''
+    audio:
+        mp3: $home/root/static/audio/mp3
+Util:
+    MatchChunk:
+        workpath: $home/temp/match_chunk/

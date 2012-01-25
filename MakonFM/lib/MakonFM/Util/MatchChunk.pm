@@ -8,9 +8,9 @@ use File::chdir;
 use MakonFM::Util::Vyslov qw(vyslov);
 use MakonFM::Util::HTKout2subs;
 
-our $workpath;
-our $HTKpath = '';
-our $soxpath = '';
+our $HTKpath  = MakonFM->econf(qw{paths HTK});
+our $soxpath  = MakonFM->econf(qw{paths sox});
+our $workpath = MakonFM->econf(qw{Util MatchChunk workpath});
 
 sub import {
     my ($class, %arg) = @_;
