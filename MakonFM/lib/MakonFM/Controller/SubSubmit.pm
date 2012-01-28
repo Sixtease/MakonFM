@@ -25,6 +25,14 @@ sub index :Path :Args(0) {
     $rv->{start} = $start;
     $rv->{end} = $end;
     
+    $c->model->resultset('Submission')->create({
+        filestem => $filestem,
+        start_ts => $start,
+        end_ts   => $end,
+        transcription => $trans,
+        # author => $c->session->{user}, #TODO
+    });
+    
     $c->response->content_type('text/json');
     $c->response->body(encode_utf8(JSON->new->pretty->encode($rv)));
 }
