@@ -1,4 +1,5 @@
 name: MakonFM
+default_model: DB
 paths:
     HTK: ''
     sox: ''
