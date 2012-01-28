@@ -39,6 +39,9 @@ body {
 .word.corrected {
     color: #AAA;
 }
+.word.humanic {
+    font-weight: bold;
+}
 .show-content-after:after {
     content: " " attr(content-after);
     font-weight: bold;

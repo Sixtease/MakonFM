@@ -474,7 +474,13 @@ MakonFM.merge_subtitles = function(new_subs, old_subs) {
     var $old_subs = $('.word.corrected[data-timestamp="' + new_subs.start + '"]');
     if ($old_subs.length > 0) {
         $old_subs = $old_subs.add($old_subs.nextAll('.corrected'));
-        $old_subs.first().before('TADY_BY_MELY_BYT_NOVE_TITULKY'); // FIXME
+        var $last_added = $old_subs.last();
+        var $added = $();
+        for (var i = 0; i < s.length; i++) {
+            $last_added = MakonFM._add_st_word(s[i], {after: $last_added});
+            $added = $added.add($last_added);
+        }
+        $added.addClass('humanic');
         $old_subs.remove();
     }
 };
