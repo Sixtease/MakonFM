@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS versions;
 DROP TABLE IF EXISTS submissions;
 
 CREATE TABLE submissions (
@@ -10,4 +11,9 @@ CREATE TABLE submissions (
     author text,
     CHECK (start_ts < end_ts),
     UNIQUE (author, sub_ts)
+);
+
+CREATE TABLE versions (
+    key varchar(255) PRIMARY KEY,
+    value integer NOT NULL
 );
