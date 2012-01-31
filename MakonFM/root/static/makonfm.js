@@ -288,7 +288,7 @@ MakonFM.get_subs = function(fn) {
     $('<script>')
     .attr({
         type: 'text/javascript',
-        src: MakonFM.SUBTITLE_BASE + stem + '.sub.js'
+        src: MakonFM.SUBTITLE_BASE + stem + '.sub.js' //FIXME: add sub version
     })
     .appendTo('body')
     .remove();
