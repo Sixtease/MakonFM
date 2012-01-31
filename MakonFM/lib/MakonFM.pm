@@ -60,6 +60,10 @@ sub econf {
     return $rv
 }
 
+sub v {
+    my ($self, $key) = @_;
+    return '?v=' . $self->model->get_version($key)
+}
 
 =head1 NAME
 

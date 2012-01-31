@@ -1,7 +1,8 @@
 package MakonFM::Model::DB;
 
-use strict;
-use base 'Catalyst::Model::DBIC::Schema';
+use Moose;
+use namespace::autoclean;
+BEGIN { extends 'Catalyst::Model::DBIC::Schema' }
 
 __PACKAGE__->config(
     schema_class => 'MakonFM::Schema',
@@ -13,13 +14,19 @@ __PACKAGE__->config(
     }
 );
 
-=head1 NAME
+sub get_version {
+    my ($self, $key) = @_;
+    my $rs = $self->resultset('Version')->find($key);
+    return $rs ? $rs->value : 0
+}
 
-MakonFM::Model::DB - Catalyst DBIC Schema Model
+1
 
-=head1 SYNOPSIS
+__END__
 
-See L<MakonFM>
+1
+
+__END__
 
 =head1 DESCRIPTION
 
@@ -29,15 +36,4 @@ L<Catalyst::Model::DBIC::Schema> Model using schema L<MakonFM::Schema>
 
 Catalyst::Helper::Model::DBIC::Schema - 0.49
 
-=head1 AUTHOR
-
-Jan Oldrich Kruza <sixtease@cpan.org>
-
-=head1 LICENSE
-
-This library is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
-
 =cut
-
-1;

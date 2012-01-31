@@ -6,10 +6,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name='description' content="Archiv nahrávek Karla Makoně" />
     <link href="/static/favicon.ico" rel="icon" type="image/ico" />
-    <link rel="stylesheet" type="text/css" href="/static/makonfm.css" />
-    <link rel="stylesheet" type="text/css" href="/static/jplayer-skins/jplayer.pink.flag.css" />
+    <link rel="stylesheet" type="text/css" href="/static/makonfm.css[% c.v('css') %]" />
+    <link rel="stylesheet" type="text/css" href="/static/jplayer-skins/jplayer.pink.flag.css[% c.v('jplayer') %]" />
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script type="text/javascript" src="/static/jquery.jplayer.min.js"></script>
+    <script type="text/javascript" src="/static/jquery.jplayer.min.js[% c.v('jplayer') %]"></script>
 </head>
 
 <body>
@@ -27,7 +27,7 @@
         $('#ts').change(function(){MakonFM.upd_sub($(this).val());});
     </script>
 
-    <script type="text/javascript" src="/static/makonfm.js"></script>
+    <script type="text/javascript" src="/static/makonfm.js[% c.v('js') %]"></script>
 
 </body>
 
