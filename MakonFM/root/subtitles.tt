@@ -1,13 +1,15 @@
 <div class="subtitles">
 </div>
-<dl class="curword" data-timestamp="3.3">
+<dl class="curword" data-bind="if: inspected_word">
+<!-- ko with: inspected_word -->
     <dt class="occurrence">Výskyt</dt>
-    <dd class="occurrence"></dd>
+    <dd class="occurrence" data-bind="text: occurrence"></dd>
     
     <dt class="fonet">Výslovnost</dt>
-    <dd class="fonet"></dd>
+    <dd class="fonet" data-bind="text: fonet"></dd>
     
     <dt class="wordform">Slovní tvar</dt>
-    <dd class="wordform"></dd>
+    <dd class="wordform" data-bind="text: wordform"></dd>
+<!-- /ko -->
 </dl>
 

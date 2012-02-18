@@ -30,7 +30,7 @@
         </div>
         <div class="jp-title">
             <ul>
-                <li>nepřehrává se</li>
+                <li data-bind="text: current_file">nepřehrává se</li>
             </ul>
         </div>
         <div class="jp-no-solution">

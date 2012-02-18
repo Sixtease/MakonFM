@@ -7,13 +7,37 @@ var MakonFM = {
     WORDS_PRE: 10,
     WORDS_POST: 10,
     CURRENT_INDEX: 0,
-    subtitles: {}
+    subtitles: {},
+    current_file: ko.observable('nepřehrává se'),
+    player_time: ko.observable(0),
+    inspected_word: ko.observable(null),
+    edited_subtitles: ko.observable(null)
 };
+
+MakonFM.current_file.subscribe(function(fn) {
+    MakonFM.jPlayer('setMedia', {
+        mp3: MakonFM.MEDIA_BASE + fn
+    });
+    MakonFM.jPlayer('play');
+    MakonFM.get_subs(fn);
+});
 
 $(document).ready(function() {
     var lh = MakonFM.SUB_LINE_HEIGHT = $('.subtitles').css('lineHeight').replace(/\D+/g, '');
     var lc = MakonFM.SUB_LINE_CNT = Math.round($('.subtitles').height() / lh);
     MakonFM.SUB_MIDDLE_LINE = Math.floor((lc+1) / 2) - 1;
+
+    MakonFM.jPlayer = function(a,b) { $('#jquery_jplayer_1').jPlayer(a,b); };
+    MakonFM.jPlayer({
+        swfPath: "/static",
+        supplied: "mp3",
+        timeupdate: function(evt) {
+            MakonFM.upd_sub(evt.jPlayer.status.currentTime, MakonFM.subs);  // XXX
+            MakonFM.player_time(evt.jPlayer.status.currentTime);
+        }
+    });
+
+    ko.applyBindings(MakonFM);
 });
 
 $('.track-menu li').click(function(evt) {
@@ -23,21 +47,7 @@ $('.track-menu li').click(function(evt) {
 });
 $('.track-menu li>a').click(function(evt) {
     var fn = $(this).text();
-    $('.jp-title li').text(fn);
-    $('#jquery_jplayer_1').jPlayer('setMedia', {
-        mp3: MakonFM.MEDIA_BASE + fn
-    });
-    $('#jquery_jplayer_1').jPlayer('play');
-    MakonFM.get_subs(fn);
-});
-
-$("#jquery_jplayer_1").jPlayer({
-    swfPath: "/static",
-    supplied: "mp3",
-    timeupdate: function(evt) {
-        MakonFM.upd_sub(evt.jPlayer.status.currentTime, MakonFM.subs);
-        ;;; $('#ts').val(evt.jPlayer.status.currentTime);
-    }
+    MakonFM.current_file(fn);
 });
 
 MakonFM._i_by_ts = function(ts, subs, i) {
@@ -49,6 +59,7 @@ MakonFM._i_by_ts = function(ts, subs, i) {
     return i;
 };
 
+// XXX
 MakonFM._add_st_word = function(sub, where) {
     var $word = $('<span>')
     .addClass('word')
@@ -67,6 +78,7 @@ MakonFM._add_st_word = function(sub, where) {
     return $word;
 };
 
+// XXX buďto subscribnout k observablu nebo udělat binding? nebo třeba to půjde rychle naivně
 MakonFM.upd_sub = function (ts, subs, i) {
     var $st = $('.subtitles');
     var $cur_have = $st.find('.word.cur');
@@ -244,15 +256,13 @@ MakonFM._lineno_of = function($word, lh) {
     return Math.floor((pos+lh/2)/lh);
 };
 
+// XXX
 MakonFM.clear_subs = function() {
     MakonFM.subs = [];
     $('.subtitles').empty();
 };
 
 MakonFM.show_word_info = function(word, $cont, subs) {
-    if (!$cont || !$cont.length) {
-        $cont = $('.curword');
-    }
     if (!subs) subs = MakonFM.subs;
     var ts;
     if ($.isNumeric(word)) {
@@ -265,20 +275,16 @@ MakonFM.show_word_info = function(word, $cont, subs) {
         var i = MakonFM._i_by_ts(ts, subs);
         word = subs[i];
     }
-    $cont.find('dd.occurrence').text(word.occurrence);
-    $cont.find('dd.fonet'     ).text(word.fonet     );
-    $cont.find('dd.wordform  ').text(word.wordform  );
+    MakonFM.inspected_word(word);
 };
 
 $('.subtitles .word').live('click', function(evt) {
     if (evt.button != 0) return;
-    var ts = $(evt.target).data('timestamp');
     MakonFM.show_word_info(evt.target);
 });
 
 MakonFM.get_subs = function(fn) {
     var stem = fn.replace(/(?:\.(?:mp3|ogg|sub(?:\.js)?))?$/, '');
-    MakonFM.current_file = stem;
     if (MakonFM.subtitles[stem]) {
         MakonFM.subs = MakonFM.subtitles[stem];
         return;

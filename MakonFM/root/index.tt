@@ -8,8 +8,10 @@
     <link href="/static/favicon.ico" rel="icon" type="image/ico" />
     <link rel="stylesheet" type="text/css" href="/static/makonfm.css[% c.v('css') %]" />
     <link rel="stylesheet" type="text/css" href="/static/jplayer-skins/jplayer.pink.flag.css[% c.v('jplayer') %]" />
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <!--script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script-->
+    <script type="text/javascript" src="/static/jquery.js"></script>
     <script type="text/javascript" src="/static/jquery.jplayer.min.js[% c.v('jplayer') %]"></script>
+    <script type="text/javascript" src="/static/knockout.js[% c.v('knockout') %]"></script>
 </head>
 
 <body>
@@ -21,7 +23,7 @@
     [%- PROCESS 'subtitles.tt' | indent(4) %]
 
     [%# DEBUG %]
-    <input type="number" step="1" id="ts" value="0" />
+    <input type="number" step="1" id="ts" data-bind="value: player_time" />
     <script>
         $('#ts').click(function(){$(this).val($(this).val()-0+1);$(this).change();});
         $('#ts').change(function(){MakonFM.upd_sub($(this).val());});
