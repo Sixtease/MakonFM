@@ -1,4 +1,4 @@
-var MakonFM = new (function() {
+var MakonFM = new (function(instance_name) {
     var m = this;
 //    m.MEDIA_BASE =    'http://commondatastorage.googleapis.com/karel-makon-mp3/';
     m.MEDIA_BASE =    '/static/audio/';
@@ -8,6 +8,8 @@ var MakonFM = new (function() {
     m.WORDS_PRE = 10;
     m.WORDS_POST = 10;
     m.CURRENT_INDEX = 0;
+    m.name = instance_name;
+
     m.subtitles = {};
     var _current_filestem = ko.observable('');
     var _no_file_str = 'nepřehrává se';
@@ -18,11 +20,14 @@ var MakonFM = new (function() {
         write: function(fn) {
             var stem = fn.replace(/\.(mp3|ogg|sub\.js)$/, '');
             _current_filestem(stem);
-        }
+        },
+        owner: m
     });
+
     m.player_time = ko.observable(0);
+
     m.inspected_word = ko.observable(null);
-    m.editation_active = ko.observable(false);
+
     m.edited_subtitles = ko.observable(null);
     m.edited_subtitles.str = ko.computed({
         read: function() {
@@ -34,13 +39,42 @@ var MakonFM = new (function() {
             ).join(' ');
         },
         write: function(str) {
-            m.editation_active(false);
             var $words = m.edited_subtitles();
             $words.addClass('corrected');   // XXX
             m._mark_subtitles_as_corrected($words);
             m.send_subtitles($words, str);
-        }
+            m.edited_subtitles(null);
+        },
+        owner: m
     });
+    m.editation_active = ko.computed(function() {
+        return m.edited_subtitles() !== null;
+    });
+
+    m._current_word = ko.observable(null);
+    m.current_word = ko.computed({
+        read: function() { return m._current_word() },
+        write: function(w) {
+            if (m._current_word()) m._current_word().is_current = false;
+            w.is_current = true;
+            m._current_word(w);
+        },
+        owner: m
+    });
+    m.visible_subs = ko.observableArray();
+    m._get_word_el_by_ts = function(ts) {
+        return $(document.getElementById(m.name + '-word-ts-' + ts));
+    };
+    m._get_word_el = function(sub) {
+        if (!sub) return $();
+        return m._get_word_el_by_ts(sub.timestamp);
+    };
+
+    //FIXME: udělat klásu pro slova, která bude řešit is_corrected atp
+    m._2vis = function(sub) {
+        return sub;
+    };
+    m._2unVis = function() { };
 
     m.current_file.subscribe(function(fn) {
         MakonFM.jPlayer('setMedia', {
@@ -51,18 +85,18 @@ var MakonFM = new (function() {
     });
 
     m.edited_subtitles.subscribe(function($sel) {
-        $('.subedit')
-        .insertBefore($sel.first())
-        .focus();
-    });
-
-    m.editation_active.subscribe(function(active) {
-        if (active) { }
-        else $('.subedit').val('').appendTo('.subedit-shed');
+        if ($sel) {
+            $('.subedit')
+            .insertBefore($sel.first())
+            .focus();
+        }
+        else {
+            $('.subedit').appendTo('.subedit-shed');
+        }
     });
 
     return m;
-});
+}) ('MakonFM');
 
 $(document).ready(function() {
     var lh = MakonFM.SUB_LINE_HEIGHT = $('.subtitles').css('lineHeight').replace(/\D+/g, '');
@@ -74,7 +108,11 @@ $(document).ready(function() {
         swfPath: "/static",
         supplied: "mp3",
         timeupdate: function(evt) {
-            MakonFM.upd_sub(evt.jPlayer.status.currentTime, MakonFM.subs);  // XXX
+            try {
+                MakonFM.upd_sub(evt.jPlayer.status.currentTime, MakonFM.subs);  // XXX
+            } catch(e) {
+                ;;; console.log(e);
+            }
             MakonFM.player_time(evt.jPlayer.status.currentTime);
         }
     });
@@ -95,6 +133,7 @@ $('.track-menu li>a').click(function(evt) {
 MakonFM._i_by_ts = function(ts, subs, i) {
     if (!i) i = MakonFM.CURRENT_INDEX;
     if (subs[i].timestamp == ts) return i;
+    if (ts <= subs[0].timestamp) return 0;
     if (ts >= subs[subs.length-1].timestamp) return subs.length-1;
     while (subs[i++].timestamp < ts) { }
     while (subs[--i].timestamp > ts) { }
@@ -122,11 +161,22 @@ MakonFM._add_st_word = function(sub, where) {
 
 // XXX buďto subscribnout k observablu nebo udělat binding? nebo třeba to půjde rychle naivně
 MakonFM.upd_sub = function (ts, subs, i) {
+    if (!MakonFM.subs) return;
+
     var $st = $('.subtitles');
-    var $cur_have = $st.find('.word.cur');
-    var cur_have = $cur_have.data('timestamp');
-    var next_have = $cur_have.next().data('timestamp');
-    if (cur_have < ts && next_have > ts) return;
+    var vs = MakonFM.visible_subs;
+    
+    var cur_have = MakonFM.current_word();
+    if (cur_have) {
+        var cur_have_idx = vs.indexOf(cur_have);  // držet v proměnné?
+        if (cur_have_idx >= 0) {
+            var next_have_idx = cur_have_idx + 1;
+            var next_have = vs()[ next_have_idx ];
+            if (next_have) {
+                if (cur_have.timestamp < ts && next_have.timestamp > ts) return;
+            }
+        }
+    }
     
     var LEFT = -1;
     var RIGHT = 1;
@@ -136,34 +186,44 @@ MakonFM.upd_sub = function (ts, subs, i) {
     MakonFM.CURRENT_INDEX = i;
     var sub = subs[i];
     
-    var $new_cur = $st.find('.word[data-timestamp="'+sub.timestamp+'"]');
-    if ($new_cur == $cur_have) return;
+    if (sub == cur_have) return;
+    var $new_cur = MakonFM._get_word_el_by_ts(sub.timestamp);
     var $stopper_left = null;
     var $stopper_right = null;
+    var stopper_left = null;
+    var stopper_right = null;
     
     if ($new_cur.length == 0) {
-        var $first_have = $st.find('.word:first');
-        if ($first_have.length == 0) {
-            $new_cur = MakonFM._add_st_word(sub, {onhead:$st});
+        
+        if (vs().length == 0) {
+            vs.push(MakonFM._2vis(sub));
+            $new_cur = $st.find('.word:first');
+        }
+        
+        var first_have = vs()[0];
+        var first_have_ts = first_have.timestamp;
+        var $first_have = MakonFM._get_word_el_by_ts(first_have_ts);
+        
+        if (sub.timestamp < first_have_ts) {
+            vs.unshift(MakonFM._2vis(sub));
+            $new_cur = MakonFM._get_word_el_by_ts(sub.timestamp);
+            $stopper_right = $first_have;
+            stopper_right = first_have;
         }
         else {
-            var first_have = $first_have.data('timestamp');
-            if (sub.timestamp < first_have) {
-                $new_cur = MakonFM._add_st_word(sub, {before:$first_have});
-                $stopper_right = $first_have;
+            var last_have = vs()[ vs().length - 1 ];
+            var last_have_ts = last_have.timestamp;
+            var $last_have = MakonFM._get_word_el_by_ts(last_have_ts);
+            if (sub.timestamp > last_have_ts) {
+                vs.push(MakonFM._2vis(sub));
+                $new_cur = MakonFM._get_word_el_by_ts(sub.timestamp);
+                $stopper_left = $last_have;
+                stopper_left = last_have;
             }
-            else {
-                var $last_have = $st.find('.word:last');
-                var last_have = $last_have.data('timestamp');
-                if (sub.timestamp > last_have) {
-                    $new_cur = MakonFM._add_st_word(sub, {after:$last_have});
-                    $stopper_left = $last_have;
-                }
-                else throw ('No current and not less than leftmost and not more than rightmost?');
-            }
+            else throw ('Neither a current nor less than leftmost nor more than rightmost?');
         }
-        add_adjacent({ant: $new_cur, dir: LEFT,  stopper: $stopper_left });
-        add_adjacent({ant: $new_cur, dir: RIGHT, stopper: $stopper_right});
+        add_adjacent({ant: sub, "$ant": $new_cur, dir: LEFT,  stopper: stopper_left,  "$stopper": $stopper_left });
+        add_adjacent({ant: sub, "$ant": $new_cur, dir: RIGHT, stopper: stopper_right, "$stopper": $stopper_right});
     }
     else {
         var cur_lineno = MakonFM._lineno_of($new_cur);
@@ -171,38 +231,48 @@ MakonFM.upd_sub = function (ts, subs, i) {
         scroll(lines_to_scroll);
     }
     
-    $st.find('.word').removeClass('cur');
-    $new_cur.addClass('cur');
+    MakonFM.current_word(sub);
 
     function add_adjacent(arg) {
         var dir = arg.dir;
         if (!dir) throw('No dir given to add_adjacent in arg', arg);
-        var $ant = arg.ant;
+        var ant = arg.ant;
+        var $ant = arg.$ant;
         if (!$ant || !$ant.length) throw('No ant[ecedant] given to add_adjacent in arg', arg);
-        var $stopper = arg.stopper;
+        var $stopper = arg.$stopper;
+        var stopper = arg.stopper;
         var j = i;
         var $added = $ant;
+        var added = ant;
+        var added_idx = vs.indexOf(added);
         if ($stopper) {
-            var stop_ts = $stopper.data('timestamp');
+            var stop_ts = stopper.timestamp;
         }
         if (dir === LEFT) {
+            var have_br = false;
             if ($stopper) {
-                var $br = $('<br>')
-                .insertAfter($stopper);
+                have_br = true;
+                $stopper.css({display: 'block'});
             }
             var shifted_ref_lineno = MakonFM._lineno_of($ant) + MakonFM.SUB_MIDDLE_LINE;
             while (MakonFM._lineno_of($ant) < shifted_ref_lineno) {
                 j--;
                 if (j<0) break;
                 if (stop_ts && subs[j].timestamp == stop_ts) {
-                    $br.remove();
+                    have_br = false;
+                    $stopper.css({display: ''});
                     break;
                 }
-                $added = MakonFM._add_st_word(subs[j], {before:$added});
+                vs.splice(added_idx, 0, MakonFM._2vis(subs[j]));
+                added = subs[j];
+                $added = MakonFM._get_word_el_by_ts(added.timestamp);
+                // not updating added_idx because it stays unchanged
             }
-            if ($stopper) {
-                if ($br) {
-                    $br.prevAll().add($br).remove();
+            if (stopper) {
+                if (have_br) {
+                    MakonFM._2unVis(
+                        vs.splice( 0, vs.indexOf(stopper)+1 )
+                    );
                 }
                 else {
                     scroll(MakonFM._lineno_of($ant) - MakonFM.SUB_MIDDLE_LINE);
@@ -215,21 +285,27 @@ MakonFM.upd_sub = function (ts, subs, i) {
             while (MakonFM._lineno_of($added) < MakonFM.SUB_LINE_CNT) {
                 j++;
                 if (j >= subs.length) break;
+                
                 if (!do_add) {
-                    $added = $added.next();
-                    $stopper = $added.next();
+                    added = vs()[ ++added_idx ];
+                    $added = MakonFM._get_word_el_by_ts(added.timestamp);
+                    stopper = vs()[ added_idx + 1 ];
+                    $stopper = MakonFM._get_word_el_by_ts(stopper.timestamp);
                     continue;
                 }
                 if (stop_ts && subs[j].timestamp == stop_ts) {
                     do_add = false;
                     continue;
                 }
-                $added = MakonFM._add_st_word(subs[j], {after:$added});
+                
+                vs.splice( ++added_idx, 0, MakonFM._2vis(subs[j]) );
+                added = subs[j];
+                $added = MakonFM._get_word_el_by_ts(added.timestamp);
                 got_too_much = true;
             }
-            if (got_too_much) $added.remove();
-            if ($stopper) {
-                $stopper.nextAll().add($stopper).remove();
+            if (got_too_much) MakonFM._2unVis( vs.splice(added_idx, 1) );
+            if (stopper) {
+                MakonFM._2unVis(vs.splice( vs.indexOf(stopper), vs().length ));
             }
         }
     }
@@ -241,35 +317,40 @@ MakonFM.upd_sub = function (ts, subs, i) {
     }
     function scrollup(n) {
         if (n === undefined) n = 1;
-        var $start = $st.find('.word:first');
-        var i = MakonFM._i_by_ts($start.data('timestamp'), subs);
-        var $added = $start;
+        var start = vs()[0];
+        var $start = MakonFM._get_word_el_by_ts(start.timestamp);
+        var i = MakonFM._i_by_ts(start.timestamp, subs);
         while (MakonFM._lineno_of($start) < n) {
             i--;
             if (i < 0) break;
-            $added = MakonFM._add_st_word(subs[i], {before:$added});
+            vs.unshift(MakonFM._2vis(subs[i]));
         }
-        var $last = $st.find('.word:last');
+        var last = vs()[ vs().length - 1 ];
+        var $last = MakonFM._get_word_el_by_ts(last.timestamp);
         while (MakonFM._lineno_of($last) >= MakonFM.SUB_LINE_CNT) {
-            var $to_remove = $last;
-            $last = $last.prev();
-            $to_remove.remove();
+            MakonFM._2unVis( vs.splice( vs().length-1, 1 ) );
+            last = vs()[ vs().length - 1 ];
+            $last = MakonFM._get_word_el_by_ts(last.timestamp);
         };
     }
     function scrolldown(n) {
         if (n === undefined) n = 1;
-        var $words = $st.find('.word');
+//        var $words = $st.find('.word');
         var lines_added = 0;
         
-        var $added = $words.last();
-        var i = MakonFM._i_by_ts($added.data('timestamp'), subs);
+        var added = vs()[ vs().length - 1 ];
+        var $added = MakonFM._get_word_el_by_ts(added.timestamp);
+        var i = MakonFM._i_by_ts(added.timestamp, subs);
         var prev_lineno;
         var cur_lineno;
         cur_lineno = prev_lineno = MakonFM._lineno_of($added);
         while (cur_lineno < MakonFM.SUB_LINE_CNT + n) {
             i++;
             if (i >= subs.length) break;
-            $added = MakonFM._add_st_word(subs[i], {after:$added});
+            
+            vs.push(MakonFM._2vis(subs[i]));
+            added = subs[i];
+            $added = MakonFM._get_word_el_by_ts(added.timestamp);
             
             cur_lineno = MakonFM._lineno_of($added);
             if (prev_lineno < cur_lineno) lines_added++;
@@ -277,15 +358,14 @@ MakonFM.upd_sub = function (ts, subs, i) {
         }
         // last line is just one word, delete it
         lines_added--;
-        $added.remove();
+        MakonFM._2unVis(vs.pop());
         
-        var $to_remove = $words.first();
         var i = 1;
         var $w;
-        while (MakonFM._lineno_of($w=$words.eq(i++)) < lines_added) {
-            $to_remove = $to_remove.add($w);
+        while (MakonFM._lineno_of(MakonFM._get_word_el_by_ts(vs()[i].timestamp)) < lines_added) {
+            i++;
         }
-        $to_remove.remove();
+        MakonFM._2unVis(vs.splice(0, i));
     }
 };
 
@@ -294,6 +374,7 @@ MakonFM._lineno_of = function($word, lh) {
     if (lh === undefined) {
         lh = MakonFM.SUB_LINE_HEIGHT;
     }
+    ;;; if (!$word.length) { console.log('hu', $word); console.trace() }
     var pos = $word.position().top;
     return Math.floor((pos+lh/2)/lh);
 };
@@ -408,7 +489,6 @@ $('.subtitles').bind({
         if ($sel && $sel.length) {} else return;
         
         $sel.addClass('selected');
-        MakonFM.editation_active(true);
         MakonFM.edited_subtitles($sel);
     }
 });
@@ -435,7 +515,7 @@ MakonFM.send_subtitles = function($orig, submitted, subs) {
     if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
     
     $.post(MakonFM.SEND_SUBTITLES_URL, {
-        filestem: MakonFM.current_file,
+        filestem: MakonFM.current_file(),
         start: start_ts,
         end: end_ts,
         trans: submitted

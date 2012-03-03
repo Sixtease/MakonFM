@@ -1,4 +1,16 @@
-<div class="subtitles" data-bind="css: {edited: editation_active}">
+<div class="subtitles" data-bind="css: {edited: editation_active}, foreach: visible_subs">
+    <span class="word" data-bind="
+        text: occurrence,
+        css: {
+            cur       : $data.is_current,
+            corrected : $data.is_corrected,
+            humanic   : $data.is_humanic,
+            selected  : $data.is_selected
+        },
+        attr: {
+            id: $root.name + '-word-ts-' + timestamp
+        }"
+    ></span>
 </div>
 <dl class="curword" data-bind="if: inspected_word">
 <!-- ko with: inspected_word -->
