@@ -1,4 +1,4 @@
-<div class="subtitles">
+<div class="subtitles" data-bind="css: {edited: editation_active}">
 </div>
 <dl class="curword" data-bind="if: inspected_word">
 <!-- ko with: inspected_word -->
@@ -13,3 +13,6 @@
 <!-- /ko -->
 </dl>
 
+<div style="display: none" class="subedit-shed">
+    <textarea class="subedit" data-bind="value: edited_subtitles.str"></textarea>
+</div>

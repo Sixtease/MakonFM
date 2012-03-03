@@ -1,25 +1,67 @@
-var MakonFM = {
-//    MEDIA_BASE:    'http://commondatastorage.googleapis.com/karel-makon-mp3/',
-    MEDIA_BASE:    '/static/audio/',
-//    SUBTITLE_BASE: 'http://commondatastorage.googleapis.com/karel-makon-sub/',
-    SUBTITLE_BASE: '/static/subs/',
-    SEND_SUBTITLES_URL: '/subsubmit/',
-    WORDS_PRE: 10,
-    WORDS_POST: 10,
-    CURRENT_INDEX: 0,
-    subtitles: {},
-    current_file: ko.observable('nepřehrává se'),
-    player_time: ko.observable(0),
-    inspected_word: ko.observable(null),
-    edited_subtitles: ko.observable(null)
-};
-
-MakonFM.current_file.subscribe(function(fn) {
-    MakonFM.jPlayer('setMedia', {
-        mp3: MakonFM.MEDIA_BASE + fn
+var MakonFM = new (function() {
+    var m = this;
+//    m.MEDIA_BASE =    'http://commondatastorage.googleapis.com/karel-makon-mp3/';
+    m.MEDIA_BASE =    '/static/audio/';
+//    m.SUBTITLE_BASE = 'http://commondatastorage.googleapis.com/karel-makon-sub/';
+    m.SUBTITLE_BASE = '/static/subs/';
+    m.SEND_SUBTITLES_URL = '/subsubmit/';
+    m.WORDS_PRE = 10;
+    m.WORDS_POST = 10;
+    m.CURRENT_INDEX = 0;
+    m.subtitles = {};
+    var _current_filestem = ko.observable('');
+    var _no_file_str = 'nepřehrává se';
+    m.current_file = ko.computed({
+        read: function() {
+            return _current_filestem() || _no_file_str;
+        },
+        write: function(fn) {
+            var stem = fn.replace(/\.(mp3|ogg|sub\.js)$/, '');
+            _current_filestem(stem);
+        }
     });
-    MakonFM.jPlayer('play');
-    MakonFM.get_subs(fn);
+    m.player_time = ko.observable(0);
+    m.inspected_word = ko.observable(null);
+    m.editation_active = ko.observable(false);
+    m.edited_subtitles = ko.observable(null);
+    m.edited_subtitles.str = ko.computed({
+        read: function() {
+            var es = m.edited_subtitles();
+            if (es === null) return '';
+            return $.map(
+                $.makeArray(es),
+                function(x) { return $(x).text(); }
+            ).join(' ');
+        },
+        write: function(str) {
+            m.editation_active(false);
+            var $words = m.edited_subtitles();
+            $words.addClass('corrected');   // XXX
+            m._mark_subtitles_as_corrected($words);
+            m.send_subtitles($words, str);
+        }
+    });
+
+    m.current_file.subscribe(function(fn) {
+        MakonFM.jPlayer('setMedia', {
+            mp3: MakonFM.MEDIA_BASE + fn + '.mp3'
+        });
+        MakonFM.jPlayer('play');
+        MakonFM.get_subs(fn);
+    });
+
+    m.edited_subtitles.subscribe(function($sel) {
+        $('.subedit')
+        .insertBefore($sel.first())
+        .focus();
+    });
+
+    m.editation_active.subscribe(function(active) {
+        if (active) { }
+        else $('.subedit').val('').appendTo('.subedit-shed');
+    });
+
+    return m;
 });
 
 $(document).ready(function() {
@@ -283,8 +325,7 @@ $('.subtitles .word').live('click', function(evt) {
     MakonFM.show_word_info(evt.target);
 });
 
-MakonFM.get_subs = function(fn) {
-    var stem = fn.replace(/(?:\.(?:mp3|ogg|sub(?:\.js)?))?$/, '');
+MakonFM.get_subs = function(stem) {
     if (MakonFM.subtitles[stem]) {
         MakonFM.subs = MakonFM.subtitles[stem];
         return;
@@ -300,7 +341,10 @@ MakonFM.get_subs = function(fn) {
     .remove();
 };
 $(document).bind('got_subtitles.MakonFM', function(evt, arg) {
-    MakonFM.subtitles[arg.fn] = MakonFM.subs = arg.data;
+    if (ko.utils.stringStartsWith(MakonFM.current_file(), arg.fn)) {
+        MakonFM.subs = arg.data;
+    }
+    MakonFM.subtitles[arg.fn] = arg.data;
 });
 
 MakonFM.get_selected_words = function() {
@@ -364,61 +408,11 @@ $('.subtitles').bind({
         if ($sel && $sel.length) {} else return;
         
         $sel.addClass('selected');
-        $('.subtitles').addClass('edited');
-        
-        var $ta = MakonFM._get_sub_textarea($sel);
-        if ($ta) $ta
-        .insertBefore($sel.first())
-        .focus();
-    },
-    done_editing: function(evt, ta) {
-        var $ta = ta ? $(ta) : $(this).find('.subedit');
-        $(this)
-        .removeClass('edited')
-        .find('.selected').removeClass('selected');
-        $ta.data('words').show();
-        $ta
-        .removeData('words')
-        .remove();
+        MakonFM.editation_active(true);
+        MakonFM.edited_subtitles($sel);
     }
 });
-MakonFM._get_sub_textarea = function($words) {
-    if (!$words || $words.length == 0) {
-        throw ('No words for new textarea');
-    }
-    
-    if ($words.filter('.corrected').length > 0) return;
-    
-    var $rv = $('<textarea>')
-    .addClass('subedit')
-    .data({words: $words})
-    .val($.map($.makeArray($words),function(x){return $(x).text()}).join(' '))
-    .bind({
-        blur: blur_cb,
-        change: change_cb,
-        keypress: keypress_cb
-    });
-    
-    return $rv;
-    
-    function blur_cb() {
-        if ($(this).data('changed')) {
-            $words.addClass('corrected');
-            MakonFM._mark_subtitles_as_corrected($words);
-            var submission = $rv.val();
-            MakonFM.send_subtitles($words, submission);
-        }
-        $(this).closest('.subtitles').trigger('done_editing', $rv);
-    }
-    function keypress_cb(evt) {
-        if (evt.keyCode == 27) {
-            $(this).closest('.subtitles').trigger('done_editing', $rv);
-        }
-    }
-    function change_cb() {
-        $(this).data('changed', true);
-    }
-};
+
 MakonFM.send_subtitles = function($orig, submitted, subs) {
     if (!$orig) throw ('send_subtitles needs original words');
     if ($orig.length == 0) throw ('send_subtitles needs more than 0 original words');
