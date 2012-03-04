@@ -212,32 +212,26 @@ MakonFM.upd_sub = function (ts, subs, i) {
     else if ($new_cur.length == 0) {
         var first_have = _vs[0];
         var first_have_ts = first_have.timestamp;
-        var $first_have = MakonFM._get_word_el_by_ts(first_have_ts);
         var stopper_left = null;
-        var $stopper_left = null;
         var stopper_right = null;
-        var $stopper_right = null;
         
         if (sub.timestamp < first_have_ts) {
             vs.unshift(Word(sub));
             $new_cur = MakonFM._get_word_el(sub);
-            $stopper_right = $first_have;
             stopper_right = first_have;
         }
         else {
             var last_have = _vs[ _vs.length - 1 ];
             var last_have_ts = last_have.timestamp;
-            var $last_have = MakonFM._get_word_el_by_ts(last_have_ts);
             if (sub.timestamp > last_have_ts) {
                 vs.push(Word(sub));
                 $new_cur = MakonFM._get_word_el(sub);
-                $stopper_left = $last_have;
                 stopper_left = last_have;
             }
             else throw ('Neither a current nor less than leftmost nor more than rightmost?');
         }
-        add_adjacent({ant: sub, "$ant": $new_cur, dir: LEFT,  stopper: stopper_left,  "$stopper": $stopper_left });
-        add_adjacent({ant: sub, "$ant": $new_cur, dir: RIGHT, stopper: stopper_right, "$stopper": $stopper_right});
+        add_adjacent({ant: sub, "$ant": $new_cur, dir: LEFT,  stopper: stopper_left });
+        add_adjacent({ant: sub, "$ant": $new_cur, dir: RIGHT, stopper: stopper_right});
     }
     else {
         var cur_lineno = MakonFM._lineno_of($new_cur);
@@ -253,18 +247,18 @@ MakonFM.upd_sub = function (ts, subs, i) {
         var ant = arg.ant;
         var $ant = arg.$ant;
         if (!$ant || !$ant.length) throw('No ant[ecedant] given to add_adjacent in arg', arg);
-        var $stopper = arg.$stopper;
         var stopper = arg.stopper;
+        var $stopper = MakonFM._get_word_el(stopper);
         var j = i;
         var $added = $ant;
         var added = ant;
         var added_idx = vs.indexOf(added);
-        if ($stopper) {
+        if (stopper) {
             var stop_ts = stopper.timestamp;
         }
         if (dir === LEFT) {
             var have_br = false;
-            if ($stopper) {
+            if (stopper) {
                 have_br = true;
                 $stopper.css({display: 'block'});
             }
