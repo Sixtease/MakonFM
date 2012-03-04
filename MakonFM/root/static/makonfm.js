@@ -157,27 +157,8 @@ MakonFM._i_by_ts = function(ts, subs, i) {
     return i;
 };
 
-// XXX
-MakonFM._add_st_word = function(sub, where) {
-    var $word = $('<span>')
-    .addClass('word')
-    .attr('data-timestamp', sub.timestamp)
-    .text(sub.occurrence);
-    
-    if      (where.onhead) $word.prependTo   (where.onhead);
-    else if (where.ontail) $word.appendTo    (where.ontail);
-    else if (where.after)  $word.insertAfter (where.after );
-    else if (where.before) $word.insertBefore(where.before);
-    else throw ('no where specified to _add_st_word');
-    
-    if (where.after) $word.before(' ');
-    else             $word.after (' ');
-
-    return $word;
-};
-
 MakonFM.upd_sub = function (ts, subs, i) {
-    if (!MakonFM.subs) return;
+    if (!MakonFM.subs || MakonFM.subs.length == 0) return;
 
     var vs = MakonFM.visible_subs;
     var _vs = vs(); // underlying real array of ko.observableArray
@@ -385,7 +366,7 @@ MakonFM._lineno_of = function($word, lh) {
 // XXX
 MakonFM.clear_subs = function() {
     MakonFM.subs = [];
-    $('.subtitles').empty();
+    MakonFM.visible_subs.removeAll();
 };
 
 MakonFM.show_word_info = function(word, $cont, subs) {
@@ -447,10 +428,17 @@ MakonFM.get_selected_words = function() {
             if ($el.is('.word')) return $el;
             else return false;
         }
+        
         if      ($rv = try_el($(sc))) { }
         else if ($rv = try_el($(sc).parent())) { }
-        else if ($rv = try_el($(sc.nextSibling))) { }
-        else throw ('Failed to find start word');
+        else while (sc && sc.nodeType == 3) { // type 3 is textNode
+            sc = sc.nextSibling;
+            if ($rv = try_el($(sc))) break;
+        }
+        if (!$rv) {
+            ;;; console.log('range:',range);
+            throw ('Failed to find start word');
+        }
         
         var ec = range.endContainer;
         var $end;
@@ -458,8 +446,14 @@ MakonFM.get_selected_words = function() {
         else if ($end = try_el($(ec).parent())) {
             if (range.endOffset == 0) $end = $end.prev();
         }
-        else if ($end = try_el($(ec.previousSibling))) { }
-        else throw ('Failed to find end word');
+        else while (ec && ec.nodeType == 3) {
+            ec = ec.previousSibling;
+            if ($end = try_el($(ec))) break;
+        }
+        if (!$end) {
+            ;;; console.log('range:',range);
+            throw ('Failed to find end word');
+        }
         
         var end_ts = $end.data('timestamp');
         if (!end_ts) throw ('No end timestamp');
@@ -545,26 +539,22 @@ MakonFM.merge_subtitles = function(new_subs, old_subs) {
     }
     
     var s = new_subs.subs;
-    for (var i = 0; i < s.length; i++) {
-        s[i].humanic = true;
-    }
+    $.each(s, function(i,w) {
+        Word(w).is_humanic(true);
+    });
     
     var start = MakonFM._i_by_ts(new_subs.start, old_subs);
-    var  end  = MakonFM._i_by_ts(new_subs. end , old_subs);
+    var end   = MakonFM._i_by_ts(new_subs.end  , old_subs, start);
     var how_many = 1 + end - start;
     old_subs.splice.apply(old_subs, [start, how_many].concat(s));
     
-    var $old_subs = $('.word.corrected[data-timestamp="' + new_subs.start + '"]');
-    if ($old_subs.length > 0) {
-        $old_subs = $old_subs.add($old_subs.nextAll('.corrected'));
-        var $last_added = $old_subs.last();
-        var $added = $();
-        for (var i = 0; i < s.length; i++) {
-            $last_added = MakonFM._add_st_word(s[i], {after: $last_added});
-            $added = $added.add($last_added);
-        }
-        $added.addClass('humanic');
-        $old_subs.remove();
+    // if other subs are displayed than have been edited, don't update visible_subs
+    if (MakonFM.subs == old_subs) {
+        var vs = MakonFM.visible_subs;
+        start = MakonFM._i_by_ts(new_subs.start, vs());
+        end   = MakonFM._i_by_ts(new_subs.end  , vs());
+        how_many = 1 + end - start; // in practice, it should be safe to reuse how_many but just to be sure...
+        vs.splice.apply(vs, [start, how_many].concat(s));
     }
 };
 
