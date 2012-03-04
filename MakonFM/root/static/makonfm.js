@@ -162,7 +162,6 @@ MakonFM._add_st_word = function(sub, where) {
 MakonFM.upd_sub = function (ts, subs, i) {
     if (!MakonFM.subs) return;
 
-    var $st = $('.subtitles');
     var vs = MakonFM.visible_subs;
     
     var cur_have = MakonFM.current_word();
@@ -186,7 +185,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
     var sub = subs[i];
     
     if (sub == cur_have) return;
-    var $new_cur = MakonFM._get_word_el_by_ts(sub.timestamp);
+    var $new_cur = MakonFM._get_word_el(sub);
     var $stopper_left = null;
     var $stopper_right = null;
     var stopper_left = null;
@@ -196,7 +195,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
         
         if (vs().length == 0) {
             vs.push(Word(sub));
-            $new_cur = $st.find('.word:first');
+            $new_cur = MakonFM._get_word_el(sub);
         }
         
         var first_have = vs()[0];
@@ -205,7 +204,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
         
         if (sub.timestamp < first_have_ts) {
             vs.unshift(Word(sub));
-            $new_cur = MakonFM._get_word_el_by_ts(sub.timestamp);
+            $new_cur = MakonFM._get_word_el(sub);
             $stopper_right = $first_have;
             stopper_right = first_have;
         }
@@ -215,7 +214,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
             var $last_have = MakonFM._get_word_el_by_ts(last_have_ts);
             if (sub.timestamp > last_have_ts) {
                 vs.push(Word(sub));
-                $new_cur = MakonFM._get_word_el_by_ts(sub.timestamp);
+                $new_cur = MakonFM._get_word_el(sub);
                 $stopper_left = $last_have;
                 stopper_left = last_have;
             }
@@ -264,7 +263,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
                 }
                 vs.splice(added_idx, 0, Word(subs[j]));
                 added = subs[j];
-                $added = MakonFM._get_word_el_by_ts(added.timestamp);
+                $added = MakonFM._get_word_el(added);
                 // not updating added_idx because it stays unchanged
             }
             if (stopper) {
@@ -285,9 +284,9 @@ MakonFM.upd_sub = function (ts, subs, i) {
                 
                 if (!do_add) {
                     added = vs()[ ++added_idx ];
-                    $added = MakonFM._get_word_el_by_ts(added.timestamp);
+                    $added = MakonFM._get_word_el(added);
                     stopper = vs()[ added_idx + 1 ];
-                    $stopper = MakonFM._get_word_el_by_ts(stopper.timestamp);
+                    $stopper = MakonFM._get_word_el(stopper);
                     continue;
                 }
                 if (stop_ts && subs[j].timestamp == stop_ts) {
@@ -297,7 +296,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
                 
                 vs.splice( ++added_idx, 0, Word(subs[j]) );
                 added = subs[j];
-                $added = MakonFM._get_word_el_by_ts(added.timestamp);
+                $added = MakonFM._get_word_el(added);
                 got_too_much = true;
             }
             if (got_too_much) vs.splice(added_idx, 1);
@@ -315,7 +314,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
     function scrollup(n) {
         if (n === undefined) n = 1;
         var start = vs()[0];
-        var $start = MakonFM._get_word_el_by_ts(start.timestamp);
+        var $start = MakonFM._get_word_el(start);
         var i = MakonFM._i_by_ts(start.timestamp, subs);
         while (MakonFM._lineno_of($start) < n) {
             i--;
@@ -323,20 +322,19 @@ MakonFM.upd_sub = function (ts, subs, i) {
             vs.unshift(Word(subs[i]));
         }
         var last = vs()[ vs().length - 1 ];
-        var $last = MakonFM._get_word_el_by_ts(last.timestamp);
+        var $last = MakonFM._get_word_el(last);
         while (MakonFM._lineno_of($last) >= MakonFM.SUB_LINE_CNT) {
             vs.splice( vs().length-1, 1 );
             last = vs()[ vs().length - 1 ];
-            $last = MakonFM._get_word_el_by_ts(last.timestamp);
+            $last = MakonFM._get_word_el(last);
         };
     }
     function scrolldown(n) {
         if (n === undefined) n = 1;
-//        var $words = $st.find('.word');
         var lines_added = 0;
         
         var added = vs()[ vs().length - 1 ];
-        var $added = MakonFM._get_word_el_by_ts(added.timestamp);
+        var $added = MakonFM._get_word_el(added);
         var i = MakonFM._i_by_ts(added.timestamp, subs);
         var prev_lineno;
         var cur_lineno;
@@ -347,7 +345,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
             
             vs.push(Word(subs[i]));
             added = subs[i];
-            $added = MakonFM._get_word_el_by_ts(added.timestamp);
+            $added = MakonFM._get_word_el(added);
             
             cur_lineno = MakonFM._lineno_of($added);
             if (prev_lineno < cur_lineno) lines_added++;
@@ -359,7 +357,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
         
         var i = 1;
         var $w;
-        while (MakonFM._lineno_of(MakonFM._get_word_el_by_ts(vs()[i].timestamp)) < lines_added) {
+        while (MakonFM._lineno_of(MakonFM._get_word_el(vs()[i])) < lines_added) {
             i++;
         }
         vs.splice(0, i);
