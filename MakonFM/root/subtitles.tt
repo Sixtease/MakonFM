@@ -8,7 +8,8 @@
             selected  : is_selected()
         },
         attr: {
-            id: $root.name + '-word-ts-' + timestamp
+            id: $root.name + '-word-ts-' + timestamp,
+            'data-timestamp': timestamp
         }"
     ></span>
 </div>
@@ -22,6 +23,9 @@
     
     <dt class="wordform">Slovní tvar</dt>
     <dd class="wordform" data-bind="text: wordform"></dd>
+    
+    <dt class="timestamp">Pozice</dt>
+    <dd class="timestamp" data-bind="text: timestamp"></dd>
 <!-- /ko -->
 </dl>
 
