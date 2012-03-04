@@ -30,5 +30,5 @@
 </dl>
 
 <div style="display: none" class="subedit-shed">
-    <textarea class="subedit" data-bind="value: edited_subtitles.str"></textarea>
+    <textarea class="subedit" data-bind="value: edited_subtitles.str, hasfocus: editation_active"></textarea>
 </div>

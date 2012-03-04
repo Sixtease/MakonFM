@@ -52,8 +52,19 @@ var MakonFM = new (function(instance_name) {
         },
         owner: m
     });
-    m.editation_active = ko.computed(function() {
-        return m.edited_subtitles() !== null;
+    m.edited_subtitles.subs = [];
+    m.editation_active = ko.computed({
+        read: function() {
+            return m.edited_subtitles() !== null;
+        },
+        write: function(is_active) {
+            if (is_active) {
+                ;;; console.log('editation_active was explicitly switched on, wtf?');
+            }
+            else {
+                m.edited_subtitles(null);
+            }
+        }
     });
 
     m._current_word = ko.observable(null);
@@ -84,12 +95,26 @@ var MakonFM = new (function(instance_name) {
     });
 
     m.edited_subtitles.subscribe(function($sel) {
+        $.each(m.edited_subtitles.subs, function(i,s) {
+            s.is_selected(false);
+        });
+        
         if ($sel) {
+            var _vs = m.visible_subs();
+            var sel_first_idx = m._i_by_ts($sel.first().data('timestamp'), _vs               );
+            var sel_last_idx  = m._i_by_ts($sel.last ().data('timestamp'), _vs, sel_first_idx);
+            var new_edited_subs = _vs.slice(sel_first_idx, sel_last_idx+1);
+            $.each(new_edited_subs, function(i,s) {
+                s.is_selected(true);
+            });
+            
+            m.edited_subtitles.subs = new_edited_subs;
+            
             $('.subedit')
-            .insertBefore($sel.first())
-            .focus();
+            .insertBefore($sel.first());
         }
         else {
+            m.edited_subtitles.subs = [];
             $('.subedit').appendTo('.subedit-shed');
         }
     });
@@ -363,7 +388,6 @@ MakonFM._lineno_of = function($word, lh) {
     return Math.floor((pos+lh/2)/lh);
 };
 
-// XXX
 MakonFM.clear_subs = function() {
     MakonFM.subs = [];
     MakonFM.visible_subs.removeAll();
@@ -484,8 +508,6 @@ $('.subtitles').bind({
     mouseup: function(evt) {
         var $sel = MakonFM.get_selected_words();
         if ($sel && $sel.length) {} else return;
-        
-        $sel.addClass('selected');
         MakonFM.edited_subtitles($sel);
     }
 });
