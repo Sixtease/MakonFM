@@ -511,6 +511,15 @@ $('.subtitles').bind({
         MakonFM.edited_subtitles($sel);
     }
 });
+$('.subedit').bind({
+    keyup: function(evt) {
+        switch (evt.keyCode) {
+            case 27:
+                MakonFM.editation_active(false);
+                break;
+        }
+    }
+});
 
 MakonFM.send_subtitles = function($orig, submitted, subs) {
     if (!$orig) throw ('send_subtitles needs original words');
