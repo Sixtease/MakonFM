@@ -40,8 +40,13 @@ var MakonFM = new (function(instance_name) {
         },
         write: function(str) {
             var $words = m.edited_subtitles();
-            $words.addClass('corrected');   // XXX
-            m._mark_subtitles_as_corrected($words);
+            var start_idx = MakonFM._i_by_ts($words.first().data('timestamp'), MakonFM.subs);
+            var end_idx   = MakonFM._i_by_ts($words.last ().data('timestamp'), MakonFM.subs);
+            var words = m.subs.slice(start_idx, end_idx+1);
+            if (words.length != $words.length) {
+                ;;; console.log('words and $words differ in length', words, $words);
+            }
+            $.each(words, function(i,w) { w.is_corrected(true) });
             m.send_subtitles($words, str);
             m.edited_subtitles(null);
         },
@@ -554,16 +559,6 @@ MakonFM.merge_subtitles = function(new_subs, old_subs) {
         }
         $added.addClass('humanic');
         $old_subs.remove();
-    }
-};
-
-MakonFM._mark_subtitles_as_corrected = function($words) {
-    var start_ts = $words.first().data('timestamp');
-    var   end_ts = $words. last().data('timestamp');
-    var start = MakonFM._i_by_ts(start_ts, MakonFM.subs);
-    var   end = MakonFM._i_by_ts(  end_ts, MakonFM.subs);
-    for (var i = start; i <= end; i++) {
-        MakonFM.subs[i].corrected = true;
     }
 };
 
