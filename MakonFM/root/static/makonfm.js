@@ -201,24 +201,22 @@ MakonFM.upd_sub = function (ts, subs, i) {
     i = MakonFM._i_by_ts(ts, subs, i);
     MakonFM.CURRENT_INDEX = i;
     var sub = subs[i];
-    
-    if (sub == cur_have) return;
     var $new_cur = MakonFM._get_word_el(sub);
-    var $stopper_left = null;
-    var $stopper_right = null;
-    var stopper_left = null;
-    var stopper_right = null;
     
-    if ($new_cur.length == 0) {
-        
-        if (_vs.length == 0) {
-            vs.push(Word(sub));
-            $new_cur = MakonFM._get_word_el(sub);
-        }
-        
+    if (_vs.length == 0) {
+        vs.push(Word(sub));
+        $new_cur = MakonFM._get_word_el(sub);
+        add_adjacent({ant: sub, "$ant": $new_cur, dir: LEFT});
+        add_adjacent({ant: sub, "$ant": $new_cur, dir: RIGHT});
+    }
+    else if ($new_cur.length == 0) {
         var first_have = _vs[0];
         var first_have_ts = first_have.timestamp;
         var $first_have = MakonFM._get_word_el_by_ts(first_have_ts);
+        var stopper_left = null;
+        var $stopper_left = null;
+        var stopper_right = null;
+        var $stopper_right = null;
         
         if (sub.timestamp < first_have_ts) {
             vs.unshift(Word(sub));
