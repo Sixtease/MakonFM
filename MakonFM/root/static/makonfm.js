@@ -55,8 +55,8 @@ var MakonFM = new (function(instance_name) {
     m.current_word = ko.computed({
         read: function() { return m._current_word() },
         write: function(w) {
-            if (m._current_word()) m._current_word().is_current = false;
-            w.is_current = true;
+            if (m._current_word()) m._current_word().is_current(false);
+            w.is_current(true);
             m._current_word(w);
         },
         owner: m
@@ -69,12 +69,6 @@ var MakonFM = new (function(instance_name) {
         if (!sub) return $();
         return m._get_word_el_by_ts(sub.timestamp);
     };
-
-    //FIXME: udělat klásu pro slova, která bude řešit is_corrected atp
-    m._2vis = function(sub) {
-        return sub;
-    };
-    m._2unVis = function() { };
 
     m.current_file.subscribe(function(fn) {
         MakonFM.jPlayer('setMedia', {
@@ -196,7 +190,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
     if ($new_cur.length == 0) {
         
         if (vs().length == 0) {
-            vs.push(MakonFM._2vis(sub));
+            vs.push(Word(sub));
             $new_cur = $st.find('.word:first');
         }
         
@@ -205,7 +199,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
         var $first_have = MakonFM._get_word_el_by_ts(first_have_ts);
         
         if (sub.timestamp < first_have_ts) {
-            vs.unshift(MakonFM._2vis(sub));
+            vs.unshift(Word(sub));
             $new_cur = MakonFM._get_word_el_by_ts(sub.timestamp);
             $stopper_right = $first_have;
             stopper_right = first_have;
@@ -215,7 +209,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
             var last_have_ts = last_have.timestamp;
             var $last_have = MakonFM._get_word_el_by_ts(last_have_ts);
             if (sub.timestamp > last_have_ts) {
-                vs.push(MakonFM._2vis(sub));
+                vs.push(Word(sub));
                 $new_cur = MakonFM._get_word_el_by_ts(sub.timestamp);
                 $stopper_left = $last_have;
                 stopper_left = last_have;
@@ -263,16 +257,14 @@ MakonFM.upd_sub = function (ts, subs, i) {
                     $stopper.css({display: ''});
                     break;
                 }
-                vs.splice(added_idx, 0, MakonFM._2vis(subs[j]));
+                vs.splice(added_idx, 0, Word(subs[j]));
                 added = subs[j];
                 $added = MakonFM._get_word_el_by_ts(added.timestamp);
                 // not updating added_idx because it stays unchanged
             }
             if (stopper) {
                 if (have_br) {
-                    MakonFM._2unVis(
-                        vs.splice( 0, vs.indexOf(stopper)+1 )
-                    );
+                    vs.splice( 0, vs.indexOf(stopper)+1 )
                 }
                 else {
                     scroll(MakonFM._lineno_of($ant) - MakonFM.SUB_MIDDLE_LINE);
@@ -298,14 +290,14 @@ MakonFM.upd_sub = function (ts, subs, i) {
                     continue;
                 }
                 
-                vs.splice( ++added_idx, 0, MakonFM._2vis(subs[j]) );
+                vs.splice( ++added_idx, 0, Word(subs[j]) );
                 added = subs[j];
                 $added = MakonFM._get_word_el_by_ts(added.timestamp);
                 got_too_much = true;
             }
-            if (got_too_much) MakonFM._2unVis( vs.splice(added_idx, 1) );
+            if (got_too_much) vs.splice(added_idx, 1);
             if (stopper) {
-                MakonFM._2unVis(vs.splice( vs.indexOf(stopper), vs().length ));
+                vs.splice( vs.indexOf(stopper), vs().length );
             }
         }
     }
@@ -323,12 +315,12 @@ MakonFM.upd_sub = function (ts, subs, i) {
         while (MakonFM._lineno_of($start) < n) {
             i--;
             if (i < 0) break;
-            vs.unshift(MakonFM._2vis(subs[i]));
+            vs.unshift(Word(subs[i]));
         }
         var last = vs()[ vs().length - 1 ];
         var $last = MakonFM._get_word_el_by_ts(last.timestamp);
         while (MakonFM._lineno_of($last) >= MakonFM.SUB_LINE_CNT) {
-            MakonFM._2unVis( vs.splice( vs().length-1, 1 ) );
+            vs.splice( vs().length-1, 1 );
             last = vs()[ vs().length - 1 ];
             $last = MakonFM._get_word_el_by_ts(last.timestamp);
         };
@@ -348,7 +340,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
             i++;
             if (i >= subs.length) break;
             
-            vs.push(MakonFM._2vis(subs[i]));
+            vs.push(Word(subs[i]));
             added = subs[i];
             $added = MakonFM._get_word_el_by_ts(added.timestamp);
             
@@ -358,14 +350,14 @@ MakonFM.upd_sub = function (ts, subs, i) {
         }
         // last line is just one word, delete it
         lines_added--;
-        MakonFM._2unVis(vs.pop());
+        vs.pop();
         
         var i = 1;
         var $w;
         while (MakonFM._lineno_of(MakonFM._get_word_el_by_ts(vs()[i].timestamp)) < lines_added) {
             i++;
         }
-        MakonFM._2unVis(vs.splice(0, i));
+        vs.splice(0, i);
     }
 };
 
@@ -573,4 +565,31 @@ MakonFM._mark_subtitles_as_corrected = function($words) {
     for (var i = start; i <= end; i++) {
         MakonFM.subs[i].corrected = true;
     }
+};
+
+var Word = new function() {
+    function get_lazy_observable(field_name, default_value) {
+        if (!field_name) throw "field_name not given";
+        if (arguments.length < 2) default_value = false;
+        return function() {
+            if (field_name in this) {
+                return this[field_name].apply(this, arguments);
+            }
+            if (arguments.length == 0) {
+                this[field_name] = ko.observable(default_value);
+                return this[field_name].apply(this, arguments);
+            }
+            return this[field_name] = ko.observable.apply(ko, arguments);
+        };
+    }
+    
+    var word = {};
+    word.is_current   = get_lazy_observable('current');
+    word.is_corrected = get_lazy_observable('corrected');
+    word.is_humanic   = get_lazy_observable('humanic');
+    word.is_selected  = get_lazy_observable('selected');
+    
+    return function(w) {
+        return $.extend(w, word);
+    };
 };

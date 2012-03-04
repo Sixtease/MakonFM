@@ -2,10 +2,10 @@
     <span class="word" data-bind="
         text: occurrence,
         css: {
-            cur       : $data.is_current,
-            corrected : $data.is_corrected,
-            humanic   : $data.is_humanic,
-            selected  : $data.is_selected
+            cur       : is_current(),
+            corrected : is_corrected(),
+            humanic   : is_humanic(),
+            selected  : is_selected()
         },
         attr: {
             id: $root.name + '-word-ts-' + timestamp
