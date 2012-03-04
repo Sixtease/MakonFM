@@ -180,7 +180,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
     if (!MakonFM.subs) return;
 
     var vs = MakonFM.visible_subs;
-    var _vs = vs();
+    var _vs = vs(); // underlying real array of ko.observableArray
     
     var cur_have = MakonFM.current_word();
     if (cur_have) {
@@ -281,7 +281,6 @@ MakonFM.upd_sub = function (ts, subs, i) {
                 }
                 vs.splice(added_idx, 0, Word(subs[j]));
                 added = subs[j];
-                $added = MakonFM._get_word_el(added);
                 // not updating added_idx because it stays unchanged
             }
             if (stopper) {
@@ -387,7 +386,6 @@ MakonFM._lineno_of = function($word, lh) {
     if (lh === undefined) {
         lh = MakonFM.SUB_LINE_HEIGHT;
     }
-    ;;; if (!$word.length) { console.log('hu', $word); console.trace() }
     var pos = $word.position().top;
     return Math.floor((pos+lh/2)/lh);
 };
