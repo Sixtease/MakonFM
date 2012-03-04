@@ -94,6 +94,19 @@ var MakonFM = new (function(instance_name) {
         }
     });
 
+    m._current_visible_word_index = ko.observable(NaN);
+    m.current_visible_word_index = ko.computed({
+        read: function() {
+            return m._current_visible_word_index();
+        },
+        write: function(i) {
+            m.current_word(m.visible_subs()[i]);
+        }
+    });
+    m.current_word.subscribe(function(w) {
+        m._current_visible_word_index(m._i_by_ts(w.timestamp, m.visible_subs(), m.current_visible_word_index()));
+    });
+
     return m;
 }) ('MakonFM');
 
@@ -130,12 +143,17 @@ $('.track-menu li>a').click(function(evt) {
 });
 
 MakonFM._i_by_ts = function(ts, subs, i) {
-    if (!i) i = MakonFM.CURRENT_INDEX;
+    if (isNaN(i)) i = MakonFM.CURRENT_INDEX;
+    if (i < 0) i = 0;
+    if (i >= subs.length) i = subs.length - 1;
+    
     if (subs[i].timestamp == ts) return i;
     if (ts <= subs[0].timestamp) return 0;
     if (ts >= subs[subs.length-1].timestamp) return subs.length-1;
+    
     while (subs[i++].timestamp < ts) { }
     while (subs[--i].timestamp > ts) { }
+    
     return i;
 };
 
@@ -158,7 +176,6 @@ MakonFM._add_st_word = function(sub, where) {
     return $word;
 };
 
-// XXX buďto subscribnout k observablu nebo udělat binding? nebo třeba to půjde rychle naivně
 MakonFM.upd_sub = function (ts, subs, i) {
     if (!MakonFM.subs) return;
 
@@ -166,7 +183,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
     
     var cur_have = MakonFM.current_word();
     if (cur_have) {
-        var cur_have_idx = vs.indexOf(cur_have);  // držet v proměnné?
+        var cur_have_idx = MakonFM.current_visible_word_index();
         if (cur_have_idx >= 0) {
             var next_have_idx = cur_have_idx + 1;
             var next_have = vs()[ next_have_idx ];
