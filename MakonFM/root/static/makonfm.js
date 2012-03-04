@@ -1,4 +1,4 @@
-var MakonFM = new (function(instance_name) {
+function MakonFM_constructor(instance_name) {
     var m = this;
 //    m.MEDIA_BASE =    'http://commondatastorage.googleapis.com/karel-makon-mp3/';
     m.MEDIA_BASE =    '/static/audio/';
@@ -133,41 +133,11 @@ var MakonFM = new (function(instance_name) {
     });
 
     return m;
-}) ('MakonFM');
+}
+var MakonFMp = MakonFM_constructor.prototype;
+var MakonFM = new MakonFM_constructor('MakonFM');
 
-$(document).ready(function() {
-    var lh = MakonFM.SUB_LINE_HEIGHT = $('.subtitles').css('lineHeight').replace(/\D+/g, '');
-    var lc = MakonFM.SUB_LINE_CNT = Math.round($('.subtitles').height() / lh);
-    MakonFM.SUB_MIDDLE_LINE = Math.floor((lc+1) / 2) - 1;
-
-    MakonFM.jPlayer = function(a,b) { $('#jquery_jplayer_1').jPlayer(a,b); };
-    MakonFM.jPlayer({
-        swfPath: "/static",
-        supplied: "mp3",
-        timeupdate: function(evt) {
-            try {
-                MakonFM.upd_sub(evt.jPlayer.status.currentTime, MakonFM.subs);  // XXX
-            } catch(e) {
-                ;;; console.log(e);
-            }
-            MakonFM.player_time(evt.jPlayer.status.currentTime);
-        }
-    });
-
-    ko.applyBindings(MakonFM);
-});
-
-$('.track-menu li').click(function(evt) {
-    if ($(evt.target).is('li,li>:header')) {} else return;
-    evt.stopPropagation();
-    $(this).toggleClass('show');
-});
-$('.track-menu li>a').click(function(evt) {
-    var fn = $(this).text();
-    MakonFM.current_file(fn);
-});
-
-MakonFM._i_by_ts = function(ts, subs, i) {
+MakonFMp._i_by_ts = function(ts, subs, i) {
     if (isNaN(i)) i = MakonFM.CURRENT_INDEX;
     if (i < 0) i = 0;
     if (i >= subs.length) i = subs.length - 1;
@@ -182,7 +152,7 @@ MakonFM._i_by_ts = function(ts, subs, i) {
     return i;
 };
 
-MakonFM.upd_sub = function (ts, subs, i) {
+MakonFMp.upd_sub = function (ts, subs, i) {
     if (!MakonFM.subs || MakonFM.subs.length == 0) return;
 
     var vs = MakonFM.visible_subs;
@@ -380,7 +350,7 @@ MakonFM.upd_sub = function (ts, subs, i) {
 };
 
 
-MakonFM._lineno_of = function($word, lh) {
+MakonFMp._lineno_of = function($word, lh) {
     if (lh === undefined) {
         lh = MakonFM.SUB_LINE_HEIGHT;
     }
@@ -388,12 +358,12 @@ MakonFM._lineno_of = function($word, lh) {
     return Math.floor((pos+lh/2)/lh);
 };
 
-MakonFM.clear_subs = function() {
+MakonFMp.clear_subs = function() {
     MakonFM.subs = [];
     MakonFM.visible_subs.removeAll();
 };
 
-MakonFM.show_word_info = function(word, $cont, subs) {
+MakonFMp.show_word_info = function(word, $cont, subs) {
     if (!subs) subs = MakonFM.subs;
     var ts;
     if ($.isNumeric(word)) {
@@ -409,12 +379,35 @@ MakonFM.show_word_info = function(word, $cont, subs) {
     MakonFM.inspected_word(word);
 };
 
-$('.subtitles .word').live('click', function(evt) {
-    if (evt.button != 0) return;
-    MakonFM.show_word_info(evt.target);
-});
+MakonFMp.merge_subtitles = function(new_subs, old_subs) {
+    if (!old_subs) {
+        old_subs = MakonFM.subtitles[new_subs.filestem];
+    }
+    if (!old_subs) {
+        throw 'No old subs to receive editation';
+    }
+    
+    var s = new_subs.subs;
+    $.each(s, function(i,w) {
+        Word(w).is_humanic(true);
+    });
+    
+    var start = MakonFM._i_by_ts(new_subs.start, old_subs);
+    var end   = MakonFM._i_by_ts(new_subs.end  , old_subs, start);
+    var how_many = 1 + end - start;
+    old_subs.splice.apply(old_subs, [start, how_many].concat(s));
+    
+    // if other subs are displayed than have been edited, don't update visible_subs
+    if (MakonFM.subs == old_subs) {
+        var vs = MakonFM.visible_subs;
+        start = MakonFM._i_by_ts(new_subs.start, vs());
+        end   = MakonFM._i_by_ts(new_subs.end  , vs());
+        how_many = 1 + end - start; // in practice, it should be safe to reuse how_many but just to be sure...
+        vs.splice.apply(vs, [start, how_many].concat(s));
+    }
+};
 
-MakonFM.get_subs = function(stem) {
+MakonFMp.get_subs = function(stem) {
     if (MakonFM.subtitles[stem]) {
         MakonFM.subs = MakonFM.subtitles[stem];
         return;
@@ -429,14 +422,48 @@ MakonFM.get_subs = function(stem) {
     .appendTo('body')
     .remove();
 };
-$(document).bind('got_subtitles.MakonFM', function(evt, arg) {
-    if (ko.utils.stringStartsWith(MakonFM.current_file(), arg.fn)) {
-        MakonFM.subs = arg.data;
-    }
-    MakonFM.subtitles[arg.fn] = arg.data;
-});
 
-MakonFM.get_selected_words = function() {
+MakonFMp.send_subtitles = function($orig, submitted, subs) {
+    if (!$orig) throw ('send_subtitles needs original words');
+    if ($orig.length == 0) throw ('send_subtitles needs more than 0 original words');
+    if ($orig.filter('.word').length < $orig.length) throw ("send_subtitles needs original .word's");
+    if (typeof submitted !== 'string') throw ('send_subtitles needs string of new subtitles');
+    if (!subs) subs = MakonFM.subs;
+    
+    var start_ts = $orig.first().data('timestamp');
+    if (!$.isNumeric(start_ts)) throw ('invalid start timestamp');
+    
+    var end_ts;
+    var i = MakonFM._i_by_ts($orig.last().data('timestamp'), subs);
+    if (!i) throw ('send_subtitles failed to get index of last selected word');
+    i++;
+    if (i == subs.length) end_ts = Infinity;
+    else if (i < subs.length) {
+        end_ts = subs[i].timestamp;
+    }
+    else throw ('Something smells about indices here in send_subtitles');
+    if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
+    
+    $.post(MakonFM.SEND_SUBTITLES_URL, {
+        filestem: MakonFM.current_file(),
+        start: start_ts,
+        end: end_ts,
+        trans: submitted
+    }).success( function(new_subs) {
+        ;;; console.log('new subs:', new_subs);
+        if (new_subs && new_subs.success === 1) {
+            MakonFM.merge_subtitles(new_subs);
+        }
+        else if (new_subs && new_subs.success === 0) {
+            throw 'Failed matching'; // TODO: negotiate for better transcription
+        }
+        else {
+            throw 'unexpected new subs';
+        }
+    });
+};
+
+MakonFMp.get_selected_words = function() {
     var $rv;
     var range;
     if (window.getSelection) {
@@ -504,6 +531,54 @@ MakonFM.get_selected_words = function() {
     return $rv;
 };
 
+$(document).bind({
+
+    ready: function() {
+        var lh = MakonFMp.SUB_LINE_HEIGHT = $('.subtitles').css('lineHeight').replace(/\D+/g, '');
+        var lc = MakonFMp.SUB_LINE_CNT = Math.round($('.subtitles').height() / lh);
+        MakonFMp.SUB_MIDDLE_LINE = Math.floor((lc+1) / 2) - 1;
+
+        MakonFMp.jPlayer = function(a,b) { $('#jquery_jplayer_1').jPlayer(a,b); };
+        MakonFM.jPlayer({
+            swfPath: "/static",
+            supplied: "mp3",
+            timeupdate: function(evt) {
+                try {
+                    MakonFM.upd_sub(evt.jPlayer.status.currentTime, MakonFM.subs);  // XXX
+                } catch(e) {
+                    ;;; console.log(e);
+                }
+                MakonFM.player_time(evt.jPlayer.status.currentTime);
+            }
+        });
+
+        ko.applyBindings(MakonFM);
+    },
+
+    'got_subtitles.MakonFM': function(evt, arg) {
+        if (ko.utils.stringStartsWith(MakonFM.current_file(), arg.fn)) {
+            MakonFM.subs = arg.data;
+        }
+        MakonFM.subtitles[arg.fn] = arg.data;
+    }
+
+});
+
+$('.track-menu li').click(function(evt) {
+    if ($(evt.target).is('li,li>:header')) {} else return;
+    evt.stopPropagation();
+    $(this).toggleClass('show');
+});
+$('.track-menu li>a').click(function(evt) {
+    var fn = $(this).text();
+    MakonFM.current_file(fn);
+});
+
+$('.subtitles .word').live('click', function(evt) {
+    if (evt.button != 0) return;
+    MakonFM.show_word_info(evt.target);
+});
+
 $('.subtitles').bind({
     mouseup: function(evt) {
         var $sel = MakonFM.get_selected_words();
@@ -520,74 +595,6 @@ $('.subedit').bind({
         }
     }
 });
-
-MakonFM.send_subtitles = function($orig, submitted, subs) {
-    if (!$orig) throw ('send_subtitles needs original words');
-    if ($orig.length == 0) throw ('send_subtitles needs more than 0 original words');
-    if ($orig.filter('.word').length < $orig.length) throw ("send_subtitles needs original .word's");
-    if (typeof submitted !== 'string') throw ('send_subtitles needs string of new subtitles');
-    if (!subs) subs = MakonFM.subs;
-    
-    var start_ts = $orig.first().data('timestamp');
-    if (!$.isNumeric(start_ts)) throw ('invalid start timestamp');
-    
-    var end_ts;
-    var i = MakonFM._i_by_ts($orig.last().data('timestamp'), subs);
-    if (!i) throw ('send_subtitles failed to get index of last selected word');
-    i++;
-    if (i == subs.length) end_ts = Infinity;
-    else if (i < subs.length) {
-        end_ts = subs[i].timestamp;
-    }
-    else throw ('Something smells about indices here in send_subtitles');
-    if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
-    
-    $.post(MakonFM.SEND_SUBTITLES_URL, {
-        filestem: MakonFM.current_file(),
-        start: start_ts,
-        end: end_ts,
-        trans: submitted
-    }).success( function(new_subs) {
-        ;;; console.log('new subs:', new_subs);
-        if (new_subs && new_subs.success === 1) {
-            MakonFM.merge_subtitles(new_subs);
-        }
-        else if (new_subs && new_subs.success === 0) {
-            throw 'Failed matching'; // TODO: negotiate for better transcription
-        }
-        else {
-            throw 'unexpected new subs';
-        }
-    });
-};
-
-MakonFM.merge_subtitles = function(new_subs, old_subs) {
-    if (!old_subs) {
-        old_subs = MakonFM.subtitles[new_subs.filestem];
-    }
-    if (!old_subs) {
-        throw 'No old subs to receive editation';
-    }
-    
-    var s = new_subs.subs;
-    $.each(s, function(i,w) {
-        Word(w).is_humanic(true);
-    });
-    
-    var start = MakonFM._i_by_ts(new_subs.start, old_subs);
-    var end   = MakonFM._i_by_ts(new_subs.end  , old_subs, start);
-    var how_many = 1 + end - start;
-    old_subs.splice.apply(old_subs, [start, how_many].concat(s));
-    
-    // if other subs are displayed than have been edited, don't update visible_subs
-    if (MakonFM.subs == old_subs) {
-        var vs = MakonFM.visible_subs;
-        start = MakonFM._i_by_ts(new_subs.start, vs());
-        end   = MakonFM._i_by_ts(new_subs.end  , vs());
-        how_many = 1 + end - start; // in practice, it should be safe to reuse how_many but just to be sure...
-        vs.splice.apply(vs, [start, how_many].concat(s));
-    }
-};
 
 var Word = new function() {
     function get_lazy_observable(field_name, default_value) {
