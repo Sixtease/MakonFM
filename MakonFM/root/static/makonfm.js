@@ -554,7 +554,7 @@ $(document).bind({
         var lc = MakonFMp.SUB_LINE_CNT = Math.round($('.subtitles').height() / lh);
         MakonFMp.SUB_MIDDLE_LINE = Math.floor((lc+1) / 2) - 1;
 
-        MakonFMp.jPlayer = function(a,b) { $('#jquery_jplayer_1').jPlayer(a,b); };
+        MakonFM.jPlayer = function(a,b) { $('#jquery_jplayer_1').jPlayer(a,b); };
         MakonFM.jPlayer({
             swfPath: "/static",
             supplied: "mp3",
