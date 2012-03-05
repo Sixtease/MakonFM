@@ -68,6 +68,16 @@ sub get_subs {
             $_->{wordform} ne 'silence'
         } @{ MakonFM::Util::HTKout2subs::get_subs($splits, $aligned_fh) }
     };
+    
+    # prefer human-given occurrences when word forms corresponding
+    for my $i (0 .. $#subs) {
+        next if not exists $words[$i];
+        my $s = $subs[$i];
+        my $w = $words[$i];
+        if ($s->{wordform} eq lc($w->{ucform})) {
+            $s->{occurrence} = $w->{occurrence};
+        }
+    }
 
     my $success = 1;
     if (scalar(@words) xor scalar(@subs)) {

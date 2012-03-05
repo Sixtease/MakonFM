@@ -63,6 +63,11 @@ __PACKAGE__->table("submissions");
   data_type: 'text'
   is_nullable: 1
 
+=head2 matched_ok
+
+  data_type: 'boolean'
+  is_nullable: 0
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -90,12 +95,15 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
   "author",
   { data_type => "text", is_nullable => 1 },
+  "matched_ok",
+  { data_type => "boolean", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("submissions_author_sub_ts_key", ["author", "sub_ts"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-01-28 22:37:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:uQQaq5NKRKdRRrZmJ9n0Yw
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-03-05 19:12:15
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:z9jLlaA8d0XD9I/a3fTXMQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

@@ -20,21 +20,22 @@ sub index :Path :Args(0) {
     my $start = $c->request->parameters->{start};
     my $end   = $c->request->parameters->{ end };
     
-    my $rv = MakonFM::Util::MatchChunk::get_subs(\$trans, $audio_fn, $start, $end);
-    $rv->{filestem} = $filestem;
-    $rv->{start} = $start;
-    $rv->{end} = $end;
+    my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans, $audio_fn, $start, $end);
+    $subs->{filestem} = $filestem;
+    $subs->{start} = $start;
+    $subs->{end} = $end;
     
     $c->model->resultset('Submission')->create({
         filestem => $filestem,
         start_ts => $start,
         end_ts   => $end,
         transcription => $trans,
-        # author => $c->session->{user}, #TODO
+        author => $c->request->address,
+        matched_ok => $subs->{success},
     });
     
     $c->response->content_type('text/json');
-    $c->response->body(encode_utf8(JSON->new->pretty->encode($rv)));
+    $c->response->body(encode_utf8(JSON->new->pretty->encode($subs)));
 }
 
 __PACKAGE__->meta->make_immutable;

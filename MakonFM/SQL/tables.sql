@@ -9,6 +9,7 @@ CREATE TABLE submissions (
     end_ts real NOT NULL CHECK (end_ts > 0),
     transcription text NOT NULL,
     author text,
+    matched_ok boolean NOT NULL,
     CHECK (start_ts < end_ts),
     UNIQUE (author, sub_ts)
 );
