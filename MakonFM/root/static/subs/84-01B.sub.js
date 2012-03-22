@@ -1,4 +1,4 @@
-jQuery(document).trigger('got_subtitles.MakonFM', { fn: '84-01B', data: [
+jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data": [
    {
       "occurrence" : "Jí.",
       "timestamp" : 0.98,
