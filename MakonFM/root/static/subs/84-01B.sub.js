@@ -4858,52 +4858,53 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "ryb"
    },
    {
+      "humanic" : 1,
       "occurrence" : "U",
-      "timestamp" : 370.33,
+      "timestamp" : 370.38,
       "fonet" : "u",
       "wordform" : "u"
    },
    {
+      "humanic" : 1,
       "occurrence" : "těch",
-      "timestamp" : 370.48,
+      "timestamp" : 370.5,
       "fonet" : "tj e x sp",
       "wordform" : "těch"
    },
    {
-      "occurrence" : "předejít",
-      "timestamp" : 371.23,
-      "fonet" : "p rsh e d e j ii t sp",
-      "wordform" : "předejít"
+      "humanic" : 1,
+      "occurrence" : "slepých,",
+      "timestamp" : 371.27,
+      "fonet" : "s l e p ii x sp",
+      "wordform" : "slepých"
    },
    {
-      "occurrence" : "jeviště",
-      "timestamp" : 371.89,
-      "fonet" : "j e v i sh tj e sp",
-      "wordform" : "jeviště"
+      "humanic" : 1,
+      "occurrence" : "který",
+      "timestamp" : 371.8,
+      "fonet" : "k t e r ii sp",
+      "wordform" : "který"
    },
    {
-      "occurrence" : "i",
-      "timestamp" : 372.34,
-      "fonet" : "i sp",
-      "wordform" : "i"
+      "humanic" : 1,
+      "occurrence" : "chtěli",
+      "timestamp" : 372.12,
+      "fonet" : "x tj e l i sp",
+      "wordform" : "chtěli"
    },
    {
-      "occurrence" : "my",
-      "timestamp" : 372.39,
-      "fonet" : "m i sp",
-      "wordform" : "my"
+      "humanic" : 1,
+      "occurrence" : "být",
+      "timestamp" : 372.54,
+      "fonet" : "b ii t sp",
+      "wordform" : "být"
    },
    {
-      "occurrence" : "nad",
-      "timestamp" : 372.52,
-      "fonet" : "n a t",
-      "wordform" : "nad"
-   },
-   {
-      "occurrence" : "uzdravení",
-      "timestamp" : 372.7,
-      "fonet" : "u z d r a v e nj ii sp",
-      "wordform" : "uzdravení"
+      "humanic" : 1,
+      "occurrence" : "uzdraveni",
+      "timestamp" : 372.73,
+      "fonet" : "u z d r a v e nj i sp",
+      "wordform" : "uzdraveni"
    },
    {
       "occurrence" : "a",
@@ -4924,46 +4925,53 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "jsem"
    },
    {
+      "humanic" : 1,
       "occurrence" : "museli",
-      "timestamp" : 375.22,
+      "timestamp" : 375.26,
       "fonet" : "m u s e l i sp",
       "wordform" : "museli"
    },
    {
-      "occurrence" : "zdá",
-      "timestamp" : 375.67,
-      "fonet" : "z d aa sp",
-      "wordform" : "zdá"
+      "humanic" : 1,
+      "occurrence" : "vzdát",
+      "timestamp" : 375.69,
+      "fonet" : "v z d aa t sp",
+      "wordform" : "vzdát"
    },
    {
-      "occurrence" : "ostré",
-      "timestamp" : 376.04,
-      "fonet" : "o s t r ee sp",
-      "wordform" : "ostré"
+      "humanic" : 1,
+      "occurrence" : "své",
+      "timestamp" : 376.08,
+      "fonet" : "s v ee sp",
+      "wordform" : "své"
    },
    {
-      "occurrence" : "nové",
-      "timestamp" : 376.43,
-      "fonet" : "n o v ee sp",
-      "wordform" : "nové"
+      "humanic" : 1,
+      "occurrence" : "vůle,",
+      "timestamp" : 376.57,
+      "fonet" : "v uu l e sp",
+      "wordform" : "vůle"
    },
    {
+      "humanic" : 1,
       "occurrence" : "ale",
-      "timestamp" : 377.04,
+      "timestamp" : 377.09,
       "fonet" : "a l e sp",
       "wordform" : "ale"
    },
    {
+      "humanic" : 1,
       "occurrence" : "které",
-      "timestamp" : 377.29,
+      "timestamp" : 377.31,
       "fonet" : "k t e r ee sp",
       "wordform" : "které"
    },
    {
-      "occurrence" : "můj",
-      "timestamp" : 378.08,
-      "fonet" : "m uu j sp",
-      "wordform" : "můj"
+      "humanic" : 1,
+      "occurrence" : "vůle?",
+      "timestamp" : 378.1,
+      "fonet" : "v uu l e sp",
+      "wordform" : "vůle"
    },
    {
       "occurrence" : "a",

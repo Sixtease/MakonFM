@@ -1,4 +1,4 @@
-jQuery(document).trigger('got_subtitles.MakonFM', { fn: '78-Kaly-CD12-tr04', data: [
+jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "78-Kaly-CD12-tr04", "data": [
     {
         timestamp: 0,
         occurrence: "Jářku.",
