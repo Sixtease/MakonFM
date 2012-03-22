@@ -25,7 +25,7 @@ sub index :Path :Args(0) {
     $subs->{filestem} = $filestem;
     $subs->{start} = $start;
     $subs->{end} = $end;
-    $_->{humanic} = 1 for @{ $subs->{subs} };
+    $_->{humanic} = 1 for @{ $subs->{data} };
     
     $c->model->resultset('Submission')->create({
         filestem => $filestem,

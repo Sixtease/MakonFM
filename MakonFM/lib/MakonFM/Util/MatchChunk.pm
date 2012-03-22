@@ -85,7 +85,7 @@ sub get_subs {
     }
 
     return {
-        subs => \@subs,
+        data => \@subs,
         success => $success,
     }
 

@@ -415,7 +415,7 @@ MakonFMp.merge_subtitles = function(new_subs, old_subs) {
         throw 'No old subs to receive editation';
     }
     
-    var s = new_subs.subs;
+    var s = new_subs.data;
     $.each(s, function(i,w) {
         Word(w);
     });
@@ -603,10 +603,10 @@ $(document).bind({
     },
 
     'got_subtitles.MakonFM': function(evt, arg) {
-        if (ko.utils.stringStartsWith(MakonFM.current_file(), arg.fn)) {
+        if (ko.utils.stringStartsWith(MakonFM.current_file(), arg.filestem)) {
             MakonFM.subs = arg.data;
         }
-        MakonFM.subtitles[arg.fn] = arg.data;
+        MakonFM.subtitles[arg.filestem] = arg.data;
     }
 
 });

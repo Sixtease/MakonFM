@@ -77,7 +77,7 @@ sub convert {
     close $splits_fh;
     
     my $json = JSON->new->pretty;
-    print "jQuery(document).trigger('got_subtitles.MakonFM', { fn: '$subfn', data: ", $json->encode(\@subs), '});';
+    print qq/jQuery(document).trigger('got_subtitles.MakonFM', { "filestem": "$subfn", "data": /, $json->encode(\@subs), '});';
 }
 
 1
