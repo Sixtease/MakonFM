@@ -25,7 +25,6 @@ sub merge {
         save_subs_local($merged);
     }
     save_subs_gs($merged, $stem);
-    # gs
 }
 
 sub get_subs_local {
@@ -44,7 +43,7 @@ sub get_subs_gs {
     my ($stem) = @_;
     my $c = MakonFM->config;
     my $url = $c->{subs}{gs_root} . "$stem.sub.js";
-    my $get_subs_command = qq($c->{paths}{gsutil} gsutil cat $url);
+    my $get_subs_command = qq($c->{paths}{gsutil}gsutil cat "$url");
     my $subs_str = `$get_subs_command`;
     if (!$subs_str) {
         warn "Failed to get subs from GS: $!";
@@ -69,7 +68,24 @@ sub save_subs_local {
 
 sub save_subs_gs {
     my ($subs) = @_;
+    my $stem = $subs->{filestem};
+    my $subs_jsonp = subs_to_jsonp($subs);
+    my $c = MakonFM->config;
+    my $url = $c->{subs}{gs_root} . "$stem.sub.js";
     
+    $SIG{CHLD} = 'IGNORE'; # FIXME
+    my $forked = fork();
+    if (not defined $forked) {
+        die "Fork failed: $!"
+    }
+    elsif ($forked == 0) {
+        open my $gs_fh, '|-', qq($c->{paths}{gsutil}gsutil cp - "$url") or do {
+            warn 'Failed to open gsutil command for piping';
+            return
+        };
+        print {$gs_fh} $subs_jsonp;
+        close $gs_fh;
+    }
 }
 
 sub merge_subs {

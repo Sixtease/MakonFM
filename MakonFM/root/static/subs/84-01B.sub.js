@@ -4907,22 +4907,25 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "uzdraveni"
    },
    {
-      "occurrence" : "a",
-      "timestamp" : 374.04,
-      "fonet" : "a sp",
-      "wordform" : "a"
+      "humanic" : 1,
+      "occurrence" : "Totiž",
+      "timestamp" : 374.52,
+      "fonet" : "t o tj i sh sp",
+      "wordform" : "totiž"
    },
    {
-      "occurrence" : "těžko",
-      "timestamp" : 374.51,
-      "fonet" : "tj e sh k o sp",
-      "wordform" : "těžko"
+      "humanic" : 1,
+      "occurrence" : "oni",
+      "timestamp" : 374.76,
+      "fonet" : "o nj i sp",
+      "wordform" : "oni"
    },
    {
-      "occurrence" : "jsem",
-      "timestamp" : 374.81,
-      "fonet" : "j s e m sp",
-      "wordform" : "jsem"
+      "humanic" : 1,
+      "occurrence" : "se",
+      "timestamp" : 374.92,
+      "fonet" : "s e sp",
+      "wordform" : "se"
    },
    {
       "humanic" : 1,
@@ -4980,170 +4983,163 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "a"
    },
    {
-      "occurrence" : "prosí",
-      "timestamp" : 380.34,
-      "fonet" : "p r o s ii sp",
-      "wordform" : "prosí"
+      "humanic" : 1,
+      "occurrence" : "Tady",
+      "timestamp" : 380.38,
+      "fonet" : "t a d i sp",
+      "wordform" : "tady"
    },
    {
-      "occurrence" : "přes",
-      "timestamp" : 380.73,
-      "fonet" : "p rsh e s sp",
-      "wordform" : "přes"
+      "humanic" : 1,
+      "occurrence" : "musí",
+      "timestamp" : 380.53,
+      "fonet" : "m u s ii sp",
+      "wordform" : "musí"
    },
    {
-      "occurrence" : "večer",
-      "timestamp" : 380.99,
-      "fonet" : "v e ch e r sp",
-      "wordform" : "večer"
+      "humanic" : 1,
+      "occurrence" : "člověk",
+      "timestamp" : 380.77,
+      "fonet" : "ch l o v j e k sp",
+      "wordform" : "člověk"
    },
    {
-      "occurrence" : "vyšla",
-      "timestamp" : 381.49,
-      "fonet" : "v i sh l a sp",
-      "wordform" : "vyšla"
+      "humanic" : 1,
+      "occurrence" : "přesně",
+      "timestamp" : 381.14,
+      "fonet" : "p rsh e s nj e sp",
+      "wordform" : "přesně"
    },
    {
-      "occurrence" : "umění.",
-      "timestamp" : 381.86,
-      "fonet" : "u m nj e nj ii sp",
-      "wordform" : "umění"
+      "humanic" : 1,
+      "occurrence" : "rozlišovat",
+      "timestamp" : 381.47,
+      "fonet" : "r o z l i sh o v a t sp",
+      "wordform" : "rozlišovat"
    },
    {
+      "humanic" : 1,
+      "occurrence" : "vůli,",
+      "timestamp" : 382.02,
+      "fonet" : "v uu l i sp",
+      "wordform" : "vůli"
+   },
+   {
+      "humanic" : 1,
       "occurrence" : "Která",
-      "timestamp" : 383.45,
+      "timestamp" : 383.49,
       "fonet" : "k t e r aa sp",
       "wordform" : "která"
    },
    {
-      "occurrence" : "a",
-      "timestamp" : 384.71,
-      "fonet" : "a sp",
-      "wordform" : "a"
+      "humanic" : 1,
+      "occurrence" : "hrne",
+      "timestamp" : 384.67,
+      "fonet" : "h r n e sp",
+      "wordform" : "hrne"
    },
    {
-      "occurrence" : "jemné",
-      "timestamp" : 384.86,
-      "fonet" : "j e m n ee sp",
-      "wordform" : "jemné"
+      "humanic" : 1,
+      "occurrence" : "vodu",
+      "timestamp" : 385.51,
+      "fonet" : "v o d u sp",
+      "wordform" : "vodu"
    },
    {
-      "occurrence" : "tu",
-      "timestamp" : 385.48,
-      "fonet" : "t u sp",
-      "wordform" : "tu"
+      "humanic" : 1,
+      "occurrence" : "na",
+      "timestamp" : 386.64,
+      "fonet" : "n a",
+      "wordform" : "na"
    },
    {
-      "occurrence" : "bohu",
-      "timestamp" : 385.67,
-      "fonet" : "b o h u sp",
-      "wordform" : "bohu"
-   },
-   {
-      "occurrence" : "ti",
-      "timestamp" : 386.62,
-      "fonet" : "tj i sp",
-      "wordform" : "ti"
-   },
-   {
-      "occurrence" : "nám",
-      "timestamp" : 386.69,
-      "fonet" : "n aa m sp",
-      "wordform" : "nám"
-   },
-   {
+      "humanic" : 1,
       "occurrence" : "vlastní",
       "timestamp" : 386.95,
       "fonet" : "v l a s t nj ii sp",
       "wordform" : "vlastní"
    },
    {
-      "occurrence" : "není.",
-      "timestamp" : 387.59,
-      "fonet" : "n e nj ii sp",
-      "wordform" : "není"
+      "humanic" : 1,
+      "occurrence" : "mlýn,",
+      "timestamp" : 387.62,
+      "fonet" : "m l ii n sp",
+      "wordform" : "mlýn"
    },
    {
-      "occurrence" : "Ta",
-      "timestamp" : 389.58,
-      "fonet" : "t a sp",
-      "wordform" : "ta"
+      "humanic" : 1,
+      "occurrence" : "a",
+      "timestamp" : 389.63,
+      "fonet" : "a sp",
+      "wordform" : "a"
    },
    {
-      "occurrence" : "los",
-      "timestamp" : 389.72,
-      "fonet" : "l o s sp",
-      "wordform" : "los"
+      "humanic" : 1,
+      "occurrence" : "musí",
+      "timestamp" : 389.74,
+      "fonet" : "m u s ii sp",
+      "wordform" : "musí"
    },
    {
-      "occurrence" : "vede",
-      "timestamp" : 389.98,
-      "fonet" : "v e d e sp",
-      "wordform" : "vede"
+      "humanic" : 1,
+      "occurrence" : "rozlišovat",
+      "timestamp" : 390.04,
+      "fonet" : "r o z l i sh o v a t sp",
+      "wordform" : "rozlišovat"
    },
    {
-      "occurrence" : "žal",
-      "timestamp" : 390.21,
-      "fonet" : "zh a l sp",
-      "wordform" : "žal"
+      "humanic" : 1,
+      "occurrence" : "od",
+      "timestamp" : 390.57,
+      "fonet" : "o t",
+      "wordform" : "od"
    },
    {
-      "occurrence" : "ho",
-      "timestamp" : 390.47,
-      "fonet" : "h o sp",
-      "wordform" : "ho"
+      "humanic" : 1,
+      "occurrence" : "vůle,",
+      "timestamp" : 390.83,
+      "fonet" : "v uu l e sp",
+      "wordform" : "vůle"
    },
    {
-      "occurrence" : "umělé",
-      "timestamp" : 390.63,
-      "fonet" : "u m nj e l ee sp",
-      "wordform" : "umělé"
+      "humanic" : 1,
+      "occurrence" : "která",
+      "timestamp" : 392.72,
+      "fonet" : "k t e r aa sp",
+      "wordform" : "která"
    },
    {
-      "occurrence" : "krásy",
-      "timestamp" : 392.66,
-      "fonet" : "k r aa s i sp",
-      "wordform" : "krásy"
+      "humanic" : 1,
+      "occurrence" : "si",
+      "timestamp" : 393.13,
+      "fonet" : "s i sp",
+      "wordform" : "si"
    },
    {
-      "occurrence" : "naše",
-      "timestamp" : 393.4,
-      "fonet" : "n a sh e sp",
-      "wordform" : "naše"
+      "humanic" : 1,
+      "occurrence" : "přeje",
+      "timestamp" : 393.43,
+      "fonet" : "p rsh e j e sp",
+      "wordform" : "přeje"
    },
    {
-      "occurrence" : "mé",
-      "timestamp" : 393.74,
-      "fonet" : "m ee sp",
-      "wordform" : "mé"
+      "humanic" : 1,
+      "occurrence" : "následovat",
+      "timestamp" : 394.62,
+      "fonet" : "n aa s l e d o v a t sp",
+      "wordform" : "následovat"
    },
    {
-      "occurrence" : "nás",
-      "timestamp" : 394.6,
-      "fonet" : "n aa s sp",
-      "wordform" : "nás"
+      "humanic" : 1,
+      "occurrence" : "vůli",
+      "timestamp" : 395.71,
+      "fonet" : "v uu l i sp",
+      "wordform" : "vůli"
    },
    {
-      "occurrence" : "se",
-      "timestamp" : 395.02,
-      "fonet" : "s e sp",
-      "wordform" : "se"
-   },
-   {
-      "occurrence" : "dává",
-      "timestamp" : 395.17,
-      "fonet" : "d aa v aa sp",
-      "wordform" : "dává"
-   },
-   {
-      "occurrence" : "stupňují",
-      "timestamp" : 395.61,
-      "fonet" : "s t u p nj u j ii sp",
-      "wordform" : "stupňují"
-   },
-   {
-      "occurrence" : "boží",
-      "timestamp" : 396.22,
+      "humanic" : 1,
+      "occurrence" : "boží.",
+      "timestamp" : 396.24,
       "fonet" : "b o zh ii sp",
       "wordform" : "boží"
    },
@@ -5370,28 +5366,39 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "přeje"
    },
    {
-      "occurrence" : "opustili",
-      "timestamp" : 413.82,
+      "humanic" : 1,
+      "occurrence" : "opustili,",
+      "timestamp" : 413.88,
       "fonet" : "o p u s tj i l i sp",
       "wordform" : "opustili"
    },
    {
-      "occurrence" : "ideu",
+      "humanic" : 1,
+      "occurrence" : "jemu",
       "timestamp" : 415.34,
-      "fonet" : "i d e u sp",
-      "wordform" : "ideu"
+      "fonet" : "j e m u sp",
+      "wordform" : "jemu"
    },
    {
-      "occurrence" : "komůrky",
-      "timestamp" : 415.78,
-      "fonet" : "k o m uu r k i sp",
-      "wordform" : "komůrky"
+      "humanic" : 1,
+      "occurrence" : "tu",
+      "timestamp" : 415.8,
+      "fonet" : "t u sp",
+      "wordform" : "tu"
    },
    {
-      "occurrence" : "předání",
-      "timestamp" : 416.16,
-      "fonet" : "p rsh e d aa nj ii sp",
-      "wordform" : "předání"
+      "humanic" : 1,
+      "occurrence" : "svoji",
+      "timestamp" : 415.9,
+      "fonet" : "s v o j i sp",
+      "wordform" : "svoji"
+   },
+   {
+      "humanic" : 1,
+      "occurrence" : "předali",
+      "timestamp" : 416.19,
+      "fonet" : "p rsh e d a l i sp",
+      "wordform" : "předali"
    },
    {
       "occurrence" : "ta",
@@ -5508,74 +5515,51 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "mohou"
    },
    {
+      "humanic" : 1,
       "occurrence" : "Pak",
-      "timestamp" : 424.74,
+      "timestamp" : 424.78,
       "fonet" : "p a k sp",
       "wordform" : "pak"
    },
    {
+      "humanic" : 1,
       "occurrence" : "nemůžeme",
-      "timestamp" : 424.97,
+      "timestamp" : 425,
       "fonet" : "n e m uu zh e m e sp",
       "wordform" : "nemůžeme"
    },
    {
-      "occurrence" : "jaké",
-      "timestamp" : 425.57,
-      "fonet" : "j a k ee sp",
-      "wordform" : "jaké"
+      "humanic" : 1,
+      "occurrence" : "ničím",
+      "timestamp" : 425.94,
+      "fonet" : "nj i ch ii m sp",
+      "wordform" : "ničím"
    },
    {
-      "occurrence" : "to",
-      "timestamp" : 425.91,
-      "fonet" : "t o sp",
-      "wordform" : "to"
+      "humanic" : 1,
+      "occurrence" : "jiným",
+      "timestamp" : 426.51,
+      "fonet" : "j i n ii m sp",
+      "wordform" : "jiným"
    },
    {
-      "occurrence" : "ses",
-      "timestamp" : 426.04,
-      "fonet" : "s e s sp",
-      "wordform" : "ses"
+      "humanic" : 1,
+      "occurrence" : "uspět",
+      "timestamp" : 427.16,
+      "fonet" : "u s p j e t sp",
+      "wordform" : "uspět"
    },
    {
-      "occurrence" : "tě",
-      "timestamp" : 426.48,
-      "fonet" : "tj e sp",
-      "wordform" : "tě"
-   },
-   {
-      "occurrence" : "učí",
-      "timestamp" : 427.15,
-      "fonet" : "u ch ii sp",
-      "wordform" : "učí"
-   },
-   {
-      "occurrence" : "ní",
-      "timestamp" : 427.73,
-      "fonet" : "nj ii sp",
-      "wordform" : "ní"
-   },
-   {
-      "occurrence" : "hloupost",
-      "timestamp" : 428.05,
-      "fonet" : "h l ow p o s t sp",
-      "wordform" : "hloupost"
-   },
-   {
-      "occurrence" : "je",
-      "timestamp" : 428.54,
-      "fonet" : "j e sp",
-      "wordform" : "je"
-   },
-   {
+      "humanic" : 1,
       "occurrence" : "než",
-      "timestamp" : 428.76,
+      "timestamp" : 428.79,
       "fonet" : "n e sh sp",
       "wordform" : "než"
    },
    {
+      "humanic" : 1,
       "occurrence" : "technikou.",
-      "timestamp" : 429.03,
+      "timestamp" : 429.06,
       "fonet" : "t e x n i k ow sp",
       "wordform" : "technikou"
    },
@@ -6090,64 +6074,53 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "tisíce"
    },
    {
-      "occurrence" : "Také",
-      "timestamp" : 462.85,
-      "fonet" : "t a k ee sp",
-      "wordform" : "také"
+      "humanic" : 1,
+      "occurrence" : "A",
+      "timestamp" : 462.91,
+      "fonet" : "a sp",
+      "wordform" : "a"
    },
    {
-      "occurrence" : "proto",
-      "timestamp" : 463.28,
-      "fonet" : "p r o t o sp",
-      "wordform" : "proto"
-   },
-   {
-      "occurrence" : "by",
-      "timestamp" : 464.31,
-      "fonet" : "b i sp",
-      "wordform" : "by"
-   },
-   {
-      "occurrence" : "že",
-      "timestamp" : 464.41,
-      "fonet" : "zh e sp",
-      "wordform" : "že"
-   },
-   {
-      "occurrence" : "nás",
-      "timestamp" : 464.58,
-      "fonet" : "n aa s sp",
-      "wordform" : "nás"
-   },
-   {
-      "occurrence" : "za",
-      "timestamp" : 464.86,
-      "fonet" : "z a",
-      "wordform" : "za"
-   },
-   {
-      "occurrence" : "u",
-      "timestamp" : 465.01,
-      "fonet" : "u",
-      "wordform" : "u"
-   },
-   {
-      "occurrence" : "je",
-      "timestamp" : 465.07,
-      "fonet" : "j e sp",
-      "wordform" : "je"
-   },
-   {
+      "humanic" : 1,
       "occurrence" : "to",
-      "timestamp" : 465.22,
+      "timestamp" : 463.05,
       "fonet" : "t o sp",
       "wordform" : "to"
    },
    {
-      "occurrence" : "s",
-      "timestamp" : 465.34,
-      "fonet" : "s",
-      "wordform" : "s"
+      "humanic" : 1,
+      "occurrence" : "je",
+      "timestamp" : 463.14,
+      "fonet" : "j e sp",
+      "wordform" : "je"
+   },
+   {
+      "humanic" : 1,
+      "occurrence" : "proto,",
+      "timestamp" : 463.31,
+      "fonet" : "p r o t o sp",
+      "wordform" : "proto"
+   },
+   {
+      "humanic" : 1,
+      "occurrence" : "že",
+      "timestamp" : 464.35,
+      "fonet" : "zh e sp",
+      "wordform" : "že"
+   },
+   {
+      "humanic" : 1,
+      "occurrence" : "máš",
+      "timestamp" : 464.6,
+      "fonet" : "m aa sh sp",
+      "wordform" : "máš"
+   },
+   {
+      "humanic" : 1,
+      "occurrence" : "zaujatost.",
+      "timestamp" : 464.88,
+      "fonet" : "z aw j a t o s t sp",
+      "wordform" : "zaujatost"
    },
    {
       "occurrence" : "tom",
@@ -6204,94 +6177,74 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "tvé"
    },
    {
-      "occurrence" : "tu",
-      "timestamp" : 471,
+      "humanic" : 1,
+      "occurrence" : "Tu",
+      "timestamp" : 471.06,
       "fonet" : "t u sp",
       "wordform" : "tu"
    },
    {
-      "occurrence" : "za",
-      "timestamp" : 471.14,
-      "fonet" : "z a",
-      "wordform" : "za"
+      "humanic" : 1,
+      "occurrence" : "zaujatost",
+      "timestamp" : 471.17,
+      "fonet" : "z aw j a t o s t sp",
+      "wordform" : "zaujatost"
    },
    {
-      "occurrence" : "ve",
-      "timestamp" : 471.35,
-      "fonet" : "v e sp",
-      "wordform" : "ve"
-   },
-   {
-      "occurrence" : "to",
-      "timestamp" : 471.56,
-      "fonet" : "t o sp",
-      "wordform" : "to"
-   },
-   {
-      "occurrence" : "s",
-      "timestamp" : 471.68,
-      "fonet" : "s",
-      "wordform" : "s"
-   },
-   {
+      "humanic" : 1,
       "occurrence" : "na",
-      "timestamp" : 471.85,
+      "timestamp" : 471.86,
       "fonet" : "n a",
       "wordform" : "na"
    },
    {
+      "humanic" : 1,
       "occurrence" : "sebe",
-      "timestamp" : 471.97,
+      "timestamp" : 472,
       "fonet" : "s e b e sp",
       "wordform" : "sebe"
    },
    {
+      "humanic" : 1,
       "occurrence" : "bere",
-      "timestamp" : 472.27,
+      "timestamp" : 472.3,
       "fonet" : "b e r e sp",
       "wordform" : "bere"
    },
    {
-      "occurrence" : "mistr",
-      "timestamp" : 472.56,
+      "humanic" : 1,
+      "occurrence" : "mistr,",
+      "timestamp" : 472.58,
       "fonet" : "m i s t r sp",
       "wordform" : "mistr"
    },
    {
-      "occurrence" : "dei",
-      "timestamp" : 473.87,
-      "fonet" : "d e i sp",
-      "wordform" : "dei"
+      "humanic" : 1,
+      "occurrence" : "který",
+      "timestamp" : 473.86,
+      "fonet" : "k t e r ii sp",
+      "wordform" : "který"
    },
    {
+      "humanic" : 1,
       "occurrence" : "už",
-      "timestamp" : 474.11,
+      "timestamp" : 474.12,
       "fonet" : "u sh sp",
       "wordform" : "už"
    },
    {
-      "occurrence" : "jen",
-      "timestamp" : 474.25,
-      "fonet" : "j e n sp",
-      "wordform" : "jen"
+      "humanic" : 1,
+      "occurrence" : "je",
+      "timestamp" : 474.27,
+      "fonet" : "j e sp",
+      "wordform" : "je"
    },
    {
-      "occurrence" : "a",
-      "timestamp" : 474.38,
-      "fonet" : "a sp",
-      "wordform" : "a"
-   },
-   {
-      "occurrence" : "u",
-      "timestamp" : 474.49,
-      "fonet" : "u",
-      "wordform" : "u"
-   },
-   {
-      "occurrence" : "já.",
-      "timestamp" : 474.55,
-      "fonet" : "j aa sp",
-      "wordform" : "já"
+      "humanic" : 1,
+      "occurrence" : "zaujat.",
+      "timestamp" : 474.36,
+      "fonet" : "z aw j a t sp",
+      "wordform" : "zaujat"
    },
    {
       "occurrence" : "Ta",
@@ -6312,38 +6265,44 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "toho"
    },
    {
-      "occurrence" : "žádá",
-      "timestamp" : 476.37,
-      "fonet" : "zh aa d aa sp",
-      "wordform" : "žádá"
+      "humanic" : 1,
+      "occurrence" : "žáka",
+      "timestamp" : 476.45,
+      "fonet" : "zh aa k a sp",
+      "wordform" : "žáka"
    },
    {
-      "occurrence" : "tedy",
-      "timestamp" : 477.38,
-      "fonet" : "t e d i sp",
-      "wordform" : "tedy"
+      "humanic" : 1,
+      "occurrence" : "vede",
+      "timestamp" : 477.41,
+      "fonet" : "v e d e sp",
+      "wordform" : "vede"
    },
    {
-      "occurrence" : "chápu",
-      "timestamp" : 477.61,
-      "fonet" : "x aa p u sp",
-      "wordform" : "chápu"
+      "humanic" : 1,
+      "occurrence" : "k",
+      "timestamp" : 477.63,
+      "fonet" : "k",
+      "wordform" : "k"
    },
    {
-      "occurrence" : "židé",
-      "timestamp" : 478.08,
-      "fonet" : "zh i d ee sp",
-      "wordform" : "židé"
+      "humanic" : 1,
+      "occurrence" : "určité",
+      "timestamp" : 477.99,
+      "fonet" : "u r ch i t ee sp",
+      "wordform" : "určité"
    },
    {
+      "humanic" : 1,
       "occurrence" : "technice",
-      "timestamp" : 478.54,
+      "timestamp" : 478.57,
       "fonet" : "t e x n i c e sp",
       "wordform" : "technice"
    },
    {
+      "humanic" : 1,
       "occurrence" : "myšlení",
-      "timestamp" : 479.04,
+      "timestamp" : 479.07,
       "fonet" : "m i sh l e nj ii sp",
       "wordform" : "myšlení"
    },
@@ -6378,46 +6337,53 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "ta"
    },
    {
+      "humanic" : 1,
       "occurrence" : "Na",
-      "timestamp" : 483.39,
+      "timestamp" : 483.46,
       "fonet" : "n a",
       "wordform" : "na"
    },
    {
-      "occurrence" : "postačí",
-      "timestamp" : 483.7,
-      "fonet" : "p o s t a ch ii sp",
-      "wordform" : "postačí"
+      "humanic" : 1,
+      "occurrence" : "to",
+      "timestamp" : 483.72,
+      "fonet" : "t o sp",
+      "wordform" : "to"
    },
    {
-      "occurrence" : "jaký",
-      "timestamp" : 484.22,
-      "fonet" : "j a k ii sp",
-      "wordform" : "jaký"
+      "humanic" : 1,
+      "occurrence" : "stačí,",
+      "timestamp" : 483.83,
+      "fonet" : "s t a ch ii sp",
+      "wordform" : "stačí"
    },
    {
-      "occurrence" : "čelit",
-      "timestamp" : 484.6,
-      "fonet" : "ch e l i t sp",
-      "wordform" : "čelit"
+      "humanic" : 1,
+      "occurrence" : "aby",
+      "timestamp" : 484.26,
+      "fonet" : "a b i sp",
+      "wordform" : "aby"
    },
    {
-      "occurrence" : "onou",
-      "timestamp" : 485.14,
-      "fonet" : "o n ow sp",
-      "wordform" : "onou"
+      "humanic" : 1,
+      "occurrence" : "věřil",
+      "timestamp" : 484.62,
+      "fonet" : "v j e rzh i l sp",
+      "wordform" : "věřil"
    },
    {
-      "occurrence" : "punc",
-      "timestamp" : 486.02,
-      "fonet" : "p u n c sp",
-      "wordform" : "punc"
+      "humanic" : 1,
+      "occurrence" : "tomu",
+      "timestamp" : 485.13,
+      "fonet" : "t o m u sp",
+      "wordform" : "tomu"
    },
    {
-      "occurrence" : "li",
-      "timestamp" : 486.41,
-      "fonet" : "l i sp",
-      "wordform" : "li"
+      "humanic" : 1,
+      "occurrence" : "vůdci.",
+      "timestamp" : 486.06,
+      "fonet" : "v uu t c i sp",
+      "wordform" : "vůdci"
    },
    {
       "occurrence" : "č",
@@ -6426,40 +6392,53 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "č"
    },
    {
-      "occurrence" : "kdežto",
-      "timestamp" : 490,
+      "humanic" : 1,
+      "occurrence" : "Kdežto",
+      "timestamp" : 490.06,
       "fonet" : "g d e sh t o sp",
       "wordform" : "kdežto"
    },
    {
-      "occurrence" : "matky",
-      "timestamp" : 490.58,
-      "fonet" : "m a t k i sp",
-      "wordform" : "matky"
+      "humanic" : 1,
+      "occurrence" : "ty",
+      "timestamp" : 490.61,
+      "fonet" : "t i sp",
+      "wordform" : "ty"
    },
    {
-      "occurrence" : "jako",
-      "timestamp" : 490.9,
-      "fonet" : "j a k o sp",
-      "wordform" : "jako"
+      "humanic" : 1,
+      "occurrence" : "na",
+      "timestamp" : 490.98,
+      "fonet" : "n a",
+      "wordform" : "na"
    },
    {
-      "occurrence" : "leží",
-      "timestamp" : 491.24,
-      "fonet" : "l e zh ii sp",
-      "wordform" : "leží"
+      "humanic" : 1,
+      "occurrence" : "to",
+      "timestamp" : 491.16,
+      "fonet" : "t o sp",
+      "wordform" : "to"
    },
    {
+      "humanic" : 1,
+      "occurrence" : "jdeš",
+      "timestamp" : 491.25,
+      "fonet" : "j d e sh sp",
+      "wordform" : "jdeš"
+   },
+   {
+      "humanic" : 1,
       "occurrence" : "bez",
-      "timestamp" : 491.64,
+      "timestamp" : 491.53,
       "fonet" : "b e s",
       "wordform" : "bez"
    },
    {
-      "occurrence" : "znění",
-      "timestamp" : 491.85,
-      "fonet" : "z nj e nj ii sp",
-      "wordform" : "znění"
+      "humanic" : 1,
+      "occurrence" : "víry.",
+      "timestamp" : 491.97,
+      "fonet" : "v ii r i sp",
+      "wordform" : "víry"
    },
    {
       "occurrence" : "čí",
@@ -6468,58 +6447,60 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "čí"
    },
    {
-      "occurrence" : "k",
-      "timestamp" : 494.2,
-      "fonet" : "k",
-      "wordform" : "k"
-   },
-   {
-      "occurrence" : "jak",
+      "humanic" : 1,
+      "occurrence" : "Ty",
       "timestamp" : 494.25,
-      "fonet" : "j a k sp",
-      "wordform" : "jak"
+      "fonet" : "t i sp",
+      "wordform" : "ty"
    },
    {
-      "occurrence" : "ješt",
+      "humanic" : 1,
+      "occurrence" : "na",
+      "timestamp" : 494.35,
+      "fonet" : "n a",
+      "wordform" : "na"
+   },
+   {
+      "humanic" : 1,
+      "occurrence" : "to",
+      "timestamp" : 494.45,
+      "fonet" : "t o sp",
+      "wordform" : "to"
+   },
+   {
+      "humanic" : 1,
+      "occurrence" : "jdeš",
       "timestamp" : 494.54,
-      "fonet" : "j e sh t sp",
-      "wordform" : "ješt"
+      "fonet" : "j d e sh sp",
+      "wordform" : "jdeš"
    },
    {
-      "occurrence" : "a",
-      "timestamp" : 494.89,
-      "fonet" : "a sp",
-      "wordform" : "a"
+      "humanic" : 1,
+      "occurrence" : "na",
+      "timestamp" : 494.82,
+      "fonet" : "n a",
+      "wordform" : "na"
    },
    {
-      "occurrence" : "dále",
+      "humanic" : 1,
+      "occurrence" : "základě",
       "timestamp" : 495.02,
-      "fonet" : "d aa l e sp",
-      "wordform" : "dále"
+      "fonet" : "z aa k l a dj e sp",
+      "wordform" : "základě"
    },
    {
-      "occurrence" : "je",
-      "timestamp" : 495.26,
-      "fonet" : "j e sp",
-      "wordform" : "je"
-   },
-   {
-      "occurrence" : "nám",
+      "humanic" : 1,
+      "occurrence" : "nějaké",
       "timestamp" : 495.37,
-      "fonet" : "n aa m sp",
-      "wordform" : "nám"
+      "fonet" : "nj e j a k ee sp",
+      "wordform" : "nějaké"
    },
    {
-      "occurrence" : "kéž",
-      "timestamp" : 495.66,
-      "fonet" : "k ee sh sp",
-      "wordform" : "kéž"
-   },
-   {
-      "occurrence" : "zkušeností",
-      "timestamp" : 496.16,
-      "fonet" : "s k u sh e n o s tj ii sp",
-      "wordform" : "zkušeností"
+      "humanic" : 1,
+      "occurrence" : "zkušenosti.",
+      "timestamp" : 495.9,
+      "fonet" : "s k u sh e n o s tj i sp",
+      "wordform" : "zkušenosti"
    },
    {
       "occurrence" : "ty",
@@ -6660,22 +6641,18 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "jako"
    },
    {
-      "occurrence" : "dynamická",
-      "timestamp" : 509.75,
-      "fonet" : "d i n a m i c k aa sp",
-      "wordform" : "dynamická"
+      "humanic" : 1,
+      "occurrence" : "nadlidská",
+      "timestamp" : 509.94,
+      "fonet" : "n a d l i t s k aa sp",
+      "wordform" : "nadlidská"
    },
    {
-      "occurrence" : "schopnost",
-      "timestamp" : 510.74,
+      "humanic" : 1,
+      "occurrence" : "schopnost.",
+      "timestamp" : 510.79,
       "fonet" : "s x o p n o s t sp",
       "wordform" : "schopnost"
-   },
-   {
-      "occurrence" : "s.",
-      "timestamp" : 511.58,
-      "fonet" : "s",
-      "wordform" : "s"
    },
    {
       "occurrence" : "Na",
