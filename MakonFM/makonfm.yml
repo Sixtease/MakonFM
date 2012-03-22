@@ -4,7 +4,11 @@ paths:
     HTK: ''
     sox: ''
     audio:
-        mp3: $home/root/static/audio/
+        mp3: '[% home %]/root/static/audio/'
 Util:
     MatchChunk:
-        workpath: $home/temp/match_chunk/
+        workpath: '[% home %]/temp/match_chunk/'
+subs:
+    jsonp_start: "jQuery(document).trigger('got_subtitles.MakonFM', { fn: '[% stem %]', data: "
+    jsonp_end:   "});"
+    path: '[% home %]/root/static/subs' 

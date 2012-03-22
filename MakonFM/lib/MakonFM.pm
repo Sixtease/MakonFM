@@ -52,11 +52,16 @@ __PACKAGE__->setup();
 # $c->config->{home} . '/HTK'
 sub econf {
     my ($c, @keys) = @_;
-    my $rv = $c->config;
+    my $conf = my $config = $c->config;
     while (my $key = shift @keys) {
-        $rv = $rv->{$key};
+        $conf = $conf->{$key};
     }
-    $rv =~ s/\$(\w+)/$c->config->{$1}/e;
+    my $rv;
+    Template->new->process(
+        \$conf,
+        $config,
+        \$rv,
+    );
     return $rv
 }
 

@@ -3,6 +3,7 @@ use Moose;
 use namespace::autoclean;
 use Encode;
 use MakonFM::Util::MatchChunk;
+use MakonFM::Util::Subs;
 use JSON ();
 
 BEGIN { extends 'Catalyst::Controller' }
@@ -24,6 +25,7 @@ sub index :Path :Args(0) {
     $subs->{filestem} = $filestem;
     $subs->{start} = $start;
     $subs->{end} = $end;
+    $_->{humanic} = 1 for @{ $subs->{subs} };
     
     $c->model->resultset('Submission')->create({
         filestem => $filestem,
@@ -33,6 +35,10 @@ sub index :Path :Args(0) {
         author => $c->request->address,
         matched_ok => $subs->{success},
     });
+    
+    if ($subs->{success}) {
+        MakonFM::Util::Subs::merge($subs);
+    }
     
     $c->response->content_type('text/json');
     $c->response->body(encode_utf8(JSON->new->pretty->encode($subs)));

@@ -13,12 +13,20 @@ function MakonFM_constructor(instance_name) {
     m.subtitles = {};
     var _current_filestem = ko.observable('');
     var _no_file_str = 'nepřehrává se';
+    m.requested_position = ko.observable(0);
     m.current_file = ko.computed({
         read: function() {
             return _current_filestem() || _no_file_str;
         },
-        write: function(fn) {
+        write: function(fnpos) {
+            var fp = fnpos.split('#');
+            var fn  = fp[0];
+            var pos = fp[1];
             var stem = fn.replace(/\.(mp3|ogg|sub\.js)$/, '');
+            if (pos) m.requested_position(pos);
+            if (location.hash.split('#')[1] !== stem) {
+                location.hash = stem;
+            }
             _current_filestem(stem);
         },
         owner: m
@@ -90,8 +98,13 @@ function MakonFM_constructor(instance_name) {
         m.jPlayer('setMedia', {
             mp3: m.MEDIA_BASE + fn + '.mp3'
         });
-        m.jPlayer('play');
+        // TODO wait with play for position to get loaded
+        m.jPlayer('play', m.requested_position());
         m.get_subs(fn);
+    });
+
+    m.requested_position.subscribe(function(pos) {
+        location.hash = [m.current_file(), pos].join('#');
     });
 
     m.edited_subtitles.subscribe(function($sel) {
@@ -214,6 +227,9 @@ MakonFMp.upd_sub = function (ts, subs, i) {
         add_adjacent({ant: sub, "$ant": $new_cur, dir: RIGHT, stopper: stopper_right});
     }
     else {
+        while (m._lineno_of(m._get_word_el(_vs[ _vs.length - 1 ])) > m.SUB_LINE_CNT-1) {
+            vs.pop();
+        }
         var cur_lineno = m._lineno_of($new_cur);
         var lines_to_scroll = cur_lineno - m.SUB_MIDDLE_LINE;
         scroll(lines_to_scroll);
@@ -401,12 +417,12 @@ MakonFMp.merge_subtitles = function(new_subs, old_subs) {
     
     var s = new_subs.subs;
     $.each(s, function(i,w) {
-        Word(w).is_humanic(true);
+        Word(w);
     });
     
     var start = m._i_by_ts(new_subs.start, old_subs);
     var end   = m._i_by_ts(new_subs.end  , old_subs, start);
-    var how_many = 1 + end - start;
+    var how_many = end - start;
     old_subs.splice.apply(old_subs, [start, how_many].concat(s));
     
     // if other subs are displayed than have been edited, don't update visible_subs
@@ -414,7 +430,7 @@ MakonFMp.merge_subtitles = function(new_subs, old_subs) {
         var vs = m.visible_subs;
         start = m._i_by_ts(new_subs.start, vs());
         end   = m._i_by_ts(new_subs.end  , vs());
-        how_many = 1 + end - start; // in practice, it should be safe to reuse how_many but just to be sure...
+        how_many = end - start; // in practice, it should be safe to reuse how_many but just to be sure...
         vs.splice.apply(vs, [start, how_many].concat(s));
     }
 };
@@ -565,6 +581,21 @@ $(document).bind({
                     ;;; console.log(e);
                 }
                 MakonFM.player_time(evt.jPlayer.status.currentTime);
+            },
+            ready: function() {
+                if (location.hash.length > 1) {
+                    var fn = location.hash.substr(1);
+                    MakonFM.current_file(fn);
+                }
+            },
+            seeked: function() {
+                ;;; console.log('seeked', this, arguments); //FIXME
+            },
+            seeking: function() {
+                ;;; console.log('seeking', this, arguments); //FIXME
+            },
+            pause: function(evt) {
+                MakonFM.requested_position(evt.jPlayer.status.currentTime);
             }
         });
 
@@ -618,6 +649,9 @@ var Word = new function() {
         if (arguments.length < 2) default_value = false;
         return function() {
             if (field_name in this) {
+                if (typeof this[field_name] !== 'function') {
+                    this[field_name] = ko.observable(this[field_name]);
+                }
                 return this[field_name].apply(this, arguments);
             }
             if (arguments.length == 0) {
