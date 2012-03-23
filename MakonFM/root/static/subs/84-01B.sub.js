@@ -4708,52 +4708,46 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "tvé"
    },
    {
-      "occurrence" : "také",
-      "timestamp" : 356.98,
-      "fonet" : "t a k ee sp",
-      "wordform" : "také"
+      "humanic" : 1,
+      "occurrence" : "Tak",
+      "timestamp" : 358.68,
+      "fonet" : "t a k sp",
+      "wordform" : "tak"
    },
    {
-      "occurrence" : "tvé",
-      "timestamp" : 358.3,
-      "fonet" : "t v ee sp",
-      "wordform" : "tvé"
+      "humanic" : 1,
+      "occurrence" : "ona,",
+      "timestamp" : 359.34,
+      "fonet" : "o n a sp",
+      "wordform" : "ona"
    },
    {
-      "occurrence" : "ta",
-      "timestamp" : 358.66,
-      "fonet" : "t a sp",
-      "wordform" : "ta"
+      "humanic" : 1,
+      "occurrence" : "zatím",
+      "timestamp" : 359.9,
+      "fonet" : "z a tj ii m sp",
+      "wordform" : "zatím"
    },
    {
-      "occurrence" : "nám",
-      "timestamp" : 358.77,
-      "fonet" : "n aa m sp",
-      "wordform" : "nám"
+      "humanic" : 1,
+      "occurrence" : "ji",
+      "timestamp" : 360.29,
+      "fonet" : "j i sp",
+      "wordform" : "ji"
    },
    {
-      "occurrence" : "nám",
-      "timestamp" : 359.46,
-      "fonet" : "n aa m sp",
-      "wordform" : "nám"
+      "humanic" : 1,
+      "occurrence" : "nechám",
+      "timestamp" : 360.35,
+      "fonet" : "n e x aa m sp",
+      "wordform" : "nechám"
    },
    {
-      "occurrence" : "daří",
-      "timestamp" : 359.97,
-      "fonet" : "d a rzh ii sp",
-      "wordform" : "daří"
-   },
-   {
-      "occurrence" : "nikam",
-      "timestamp" : 360.24,
-      "fonet" : "nj i k a m sp",
-      "wordform" : "nikam"
-   },
-   {
-      "occurrence" : "stanoví.",
-      "timestamp" : 360.58,
-      "fonet" : "s t a n o v ii sp",
-      "wordform" : "stanoví"
+      "humanic" : 1,
+      "occurrence" : "stranou,",
+      "timestamp" : 360.6,
+      "fonet" : "s t r a n ow sp",
+      "wordform" : "stranou"
    },
    {
       "occurrence" : "Ta",

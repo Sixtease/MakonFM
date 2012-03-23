@@ -1,3 +1,5 @@
+$.ajaxSetup({ cache: true });
+
 function MakonFM_constructor(instance_name) {
     var m = this;
 //    m.MEDIA_BASE =    'http://commondatastorage.googleapis.com/karel-makon-mp3/';
@@ -462,7 +464,7 @@ MakonFMp.get_subs = function(stem) {
     $('<script>')
     .attr({
         type: 'text/javascript',
-        src: m.SUBTITLE_BASE + stem + '.sub.js' //FIXME: add sub version
+        src: m.SUBTITLE_BASE + stem + '.sub.js?v=' + (SUB_VERSION[stem]||0)
     })
     .appendTo('body')
     .remove();
@@ -492,6 +494,7 @@ MakonFMp.send_subtitles = function($orig, submitted, subs) {
     if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
     
     $.post(m.SEND_SUBTITLES_URL, {
+        cache: false,
         filestem: m.current_file(),
         start: start_ts,
         end: end_ts,
@@ -603,13 +606,8 @@ $(document).bind({
                     MakonFM.current_file(fn);
                 }
             },
-            seeked: function() {
-                ;;; console.log('seeked', this, arguments); //FIXME
-            },
-            seeking: function() {
-                ;;; console.log('seeking', this, arguments); //FIXME
-            },
             pause: function(evt) {
+                // FIXME: opravit pro stop
                 MakonFM.requested_position(evt.jPlayer.status.currentTime);
             }
         });
@@ -624,6 +622,10 @@ $(document).bind({
         MakonFM.subtitles[arg.filestem] = arg.data;
     }
 
+});
+
+$(window).bind('unload', function() {
+    MakonFM.jPlayer('pause');
 });
 
 $('.track-menu li').click(function(evt) {
