@@ -73,7 +73,7 @@ sub save_subs_gs {
     my $c = MakonFM->config;
     my $url = $c->{subs}{gs_root} . "$stem.sub.js";
     
-    $SIG{CHLD} = 'IGNORE'; # FIXME
+    $SIG{CHLD} = 'IGNORE';
     my $forked = fork();
     if (not defined $forked) {
         die "Fork failed: $!"
@@ -85,6 +85,7 @@ sub save_subs_gs {
         };
         print {$gs_fh} $subs_jsonp;
         close $gs_fh;
+        exit 0
     }
 }
 
