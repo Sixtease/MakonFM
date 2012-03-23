@@ -142,12 +142,69 @@ function MakonFM_constructor(instance_name) {
             
             $('.subedit')
             .insertBefore($sel.first());
+            
+            m._limit_playback_to_editation_span();
         }
         else {
             m.edited_subtitles.subs = [];
             $('.subedit').appendTo('.subedit-shed');
+            
+            m._cancel_playback_limit();
         }
     });
+
+    (function() {
+        var window_start, window_end;
+        function autostop_cb(evt) {
+            var d = m._stop_time - evt.jPlayer.status.currentTime;
+            if (d < 0) {
+                m.jPlayer('pause', window_start);
+            }
+            else if (d < 0.25) {
+                setTimeout( function() {
+                    m.jPlayer('pause', window_start);
+                }, 1000*d);
+            }
+        }
+/*        function override_stop_cb(evt) {
+            $(document).one( function(evt) {
+                
+            });
+        }*/
+        m._limit_playback_to_editation_span = function() {
+            m.jPlayer('pause');
+            var edited_subs = m.edited_subtitles.subs;
+            if (edited_subs[0]) {
+                var first_sub = edited_subs[0];
+                window_start = first_sub.timestamp;
+                var last_sub  = edited_subs[ edited_subs.length - 1 ];
+                var last_sub_i = m._i_by_ts(last_sub.timestamp, m.subs);
+                var after_last_sub = m.subs[ last_sub_i + 1 ];
+                if (after_last_sub) {
+                    window_end = after_last_sub.timestamp;
+                }
+            }
+            else {
+                ;;; console.log('editation activated but no edited subs?');
+                return;
+            }
+            $(document).one($.jPlayer.event.pause, function(evt) {
+                m._stored_position = evt.jPlayer.status.currentTime;
+            });
+            m.jPlayer('pause', window_start);
+            if (window_end) {
+                m._stop_time = window_end;
+                $(document).bind($.jPlayer.event.timeupdate, autostop_cb);
+            }
+        };
+        m._cancel_playback_limit = function() {
+            $(document).unbind($.jPlayer.event.timeupdate, autostop_cb);
+            if (m._stored_position !== undefined) {
+                // FIXME: restoring broken
+                m.jPlayer('pause', +m._stored_position);
+            }
+        };
+    })();
 
     m._current_visible_word_index = ko.observable(NaN);
     m.current_visible_word_index = ko.computed({
@@ -593,6 +650,7 @@ $(document).bind({
             swfPath: "/static",
             supplied: "mp3",
             timeupdate: function(evt) {
+                if (MakonFM.editation_active()) return;
                 try {
                     MakonFM.upd_sub(evt.jPlayer.status.currentTime, MakonFM.subs);  // XXX
                 } catch(e) {
