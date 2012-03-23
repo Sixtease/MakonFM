@@ -13,7 +13,14 @@ function MakonFM_constructor(instance_name) {
     m.subtitles = {};
     var _current_filestem = ko.observable('');
     var _no_file_str = 'nepřehrává se';
-    m.requested_position = ko.observable(0);
+    m._requested_position = ko.observable(0);
+    m.requested_position = ko.computed({
+        read: function() { return m._requested_position(); },
+        write: function(pos) {
+            m._requested_position(+pos);
+            location.hash = [m.current_file(), pos].join('#');
+        }
+    });
     m.current_file = ko.computed({
         read: function() {
             return _current_filestem() || _no_file_str;
@@ -23,9 +30,12 @@ function MakonFM_constructor(instance_name) {
             var fn  = fp[0];
             var pos = fp[1];
             var stem = fn.replace(/\.(mp3|ogg|sub\.js)$/, '');
-            if (pos) m.requested_position(pos);
+            if (pos) m._requested_position(+pos);
+            else m._requested_position(0);
             if (location.hash.split('#')[1] !== stem) {
-                location.hash = stem;
+                var new_hash = stem;
+                if (pos) new_hash += '#' + pos;
+                location.hash = new_hash;
             }
             _current_filestem(stem);
         },
@@ -96,15 +106,20 @@ function MakonFM_constructor(instance_name) {
 
     m.current_file.subscribe(function(fn) {
         m.jPlayer('setMedia', {
-            mp3: m.MEDIA_BASE + fn + '.mp3'
+            mp3: m.MEDIA_BASE + fn + '.mp3',
+            oga: m.MEDIA_MASE + fn + '.ogg'
         });
-        // TODO wait with play for position to get loaded
-        m.jPlayer('play', m.requested_position());
+        // FIXME
+        var pos = m.requested_position();
+        if (pos) {
+            m.jPlayer('pause', +pos);
+            // FIXME: don't use literal ID but bind jPlayer to MakonFM instance
+            $('#jquery_jplayer_1').one($.jPlayer.event.seeked, function() {
+                m.jPlayer('play');
+            });
+        }
+        else m.jPlayer('play');
         m.get_subs(fn);
-    });
-
-    m.requested_position.subscribe(function(pos) {
-        location.hash = [m.current_file(), pos].join('#');
     });
 
     m.edited_subtitles.subscribe(function($sel) {
