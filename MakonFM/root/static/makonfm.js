@@ -168,6 +168,7 @@ function MakonFM_constructor(instance_name) {
                 var last_sub_i = m._i_by_ts(last_sub.timestamp, m.subs);
                 var after_last_sub = m.subs[ last_sub_i + 1 ];
                 if (after_last_sub) {
+                    m._dont_play_end = true;
                     m.window_end(after_last_sub.timestamp);
                 }
             }
@@ -212,6 +213,7 @@ function MakonFM_constructor(instance_name) {
     m._minimum_window_length = 0.5;
     m.window_start.subscribe(function (v) {
         if (m.window_end() - v < m._minimum_window_length) {
+            m._dont_play_end = true;
             m.window_end( v + m._minimum_window_length + 0.1 );
         }
     });
@@ -220,6 +222,11 @@ function MakonFM_constructor(instance_name) {
         if (v - m.window_start() < m._minimum_window_length) {
             m.window_start( v - m._minimum_window_length - 0.1 );
         }
+        
+        var dont = m._dont_play_end;
+        delete m._dont_play_end;
+        if (dont) { return }
+        
         if (end_play_timeout) clearTimeout(end_play_timeout);
         end_play_timeout = setTimeout(play_end, 500);
     });
