@@ -62,18 +62,22 @@ body {
 
 .subedit textarea {
     width: 100%;
-    margin: -5px -5px 5px;
+    margin: 5px -5px;
 }
 
 .subedit .Window-edges {
-    text-align: justify;
+    overflow: hidden;
 }
-.subedit .Window-edges > * {
-    display: inline-block;
+.subedit .Window-edges .Start {
     padding: 0 10%;
+    float: left;
+}
+.subedit .Window-edges .End {
+    padding: 0 10%;
+    float: right;
 }
 .subedit .Window-edges input {
-    width: 47px;
+    width: 50px;
 }
 
 .edited .selected {

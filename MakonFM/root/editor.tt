@@ -3,12 +3,12 @@
         <div class="Window-edges">
             <div class="Start">
                 <button data-bind="click: dec_window_start">-</button>
-                <input type="number" data-bind="value: window_start" />
+                <input type="time" data-bind="value: window_start.formatted" />
                 <button data-bind="click: inc_window_start">+</button>
             </div>
             <div class="End">
                 <button data-bind="click: dec_window_end">-</button>
-                <input type="number" data-bind="value: window_end" />
+                <input type="time" data-bind="value: window_end.formatted" />
                 <button data-bind="click: inc_window_end">+</button>
             </div>
         </div>

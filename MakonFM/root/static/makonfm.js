@@ -218,6 +218,36 @@ function MakonFM_constructor(instance_name) {
             m.window_start( v - m._minimum_window_length - 0.1 );
         }
     });
+    m.window_start.formatted = ko.computed({
+        read: format_time,
+        write: parse_formatted_time,
+        owner: m.window_start
+    });
+    m.window_end.formatted = ko.computed({
+        read: format_time,
+        write: parse_formatted_time,
+        owner: m.window_end
+    });
+    function format_time() {
+        var t = this();
+        var rv = Math.floor(t / 60) + ':';
+        var min = t % 60;
+        var pre_min = '';
+        if (min < 10) pre_min = '0';
+        rv += pre_min + min;
+        return rv;
+    }
+    function parse_formatted_time(str) {
+        var fields = str.split(':');
+        fields.reverse();
+        var t = 0;
+        var order = 1;
+        $.each(fields, function(i,v) {
+            t += order * v;
+            order *= 60;
+        });
+        this(t);
+    }
 
     m._current_visible_word_index = ko.observable(NaN);
     m.current_visible_word_index = ko.computed({
