@@ -137,17 +137,17 @@ function MakonFM_constructor(instance_name) {
         }
     });
 
-    m._window_start = null;
-    m._window_end   = null;
+    m.window_start = ko.observable(null);
+    m.window_end   = ko.observable(null);
     (function() {
         function autostop_cb(evt) {
             var d = m._stop_time - evt.jPlayer.status.currentTime;
             if (d < 0) {
-                m.jPlayer('pause', m._window_start);
+                m.jPlayer('pause', m.window_start());
             }
             else if (d < 0.25) {
                 setTimeout( function() {
-                    m.jPlayer('pause', m._window_start);
+                    m.jPlayer('pause', m.window_start());
                 }, 1000*d);
             }
         }
@@ -161,12 +161,12 @@ function MakonFM_constructor(instance_name) {
             var edited_subs = m.edited_subtitles.subs;
             if (edited_subs[0]) {
                 var first_sub = edited_subs[0];
-                m._window_start = first_sub.timestamp;
+                m.window_start(first_sub.timestamp);
                 var last_sub  = edited_subs[ edited_subs.length - 1 ];
                 var last_sub_i = m._i_by_ts(last_sub.timestamp, m.subs);
                 var after_last_sub = m.subs[ last_sub_i + 1 ];
                 if (after_last_sub) {
-                    m._window_end = after_last_sub.timestamp;
+                    m.window_end(after_last_sub.timestamp);
                 }
             }
             else {
@@ -176,20 +176,49 @@ function MakonFM_constructor(instance_name) {
             $(document).one($.jPlayer.event.pause, function(evt) {
                 m._stored_position = evt.jPlayer.status.currentTime;
             });
-            if (m._window_end !== null) {
-                m._stop_time = m._window_end;
+            if (m.window_end() !== null) {
+                m._stop_time = m.window_end();
                 $(document).bind($.jPlayer.event.timeupdate, autostop_cb);
             }
         };
         m._cancel_playback_limit = function() {
             $(document).unbind($.jPlayer.event.timeupdate, autostop_cb);
-            m._window_start = m._window_end = null;
+            m.window_start(null);
+            m.window_end(null);
             if (m._stored_position !== undefined) {
                 // FIXME: restoring broken
                 m.jPlayer('pause', +m._stored_position);
             }
         };
     })();
+
+    m._window_step = 0.2;
+    m.inc_window_start = function() {
+        move_window(m.window_start, 1);
+    };
+    m.dec_window_start = function() {
+        move_window(m.window_start, -1);
+    };
+    m.inc_window_end = function() {
+        move_window(m.window_end, 1);
+    };
+    m.dec_window_end = function() {
+        move_window(m.window_end, -1);
+    };
+    function move_window(obs, dir) {
+        obs( obs() + dir * m._window_step );
+    }
+    m._minimum_window_length = 0.5;
+    m.window_start.subscribe(function (v) {
+        if (m.window_end() - v < m._minimum_window_length) {
+            m.window_end( v + m._minimum_window_length + 0.1 );
+        }
+    });
+    m.window_end.subscribe(function(v) {
+        if (v - m.window_start() < m._minimum_window_length) {
+            m.window_start( v - m._minimum_window_length - 0.1 );
+        }
+    });
 
     m._current_visible_word_index = ko.observable(NaN);
     m.current_visible_word_index = ko.computed({
@@ -625,11 +654,11 @@ MakonFMp.get_selected_words = function() {
 
 MakonFMp.play_window = function() {
     var m = this;
-    m.jPlayer('play', +m._window_start);
+    m.jPlayer('play', +m.window_start());
 };
 MakonFMp.stop_window = function() {
     var m = this;
-    m.jPlayer('pause', +m._window_start);
+    m.jPlayer('pause', +m.window_start());
 };
 
 MakonFMp.save_editation = function() {

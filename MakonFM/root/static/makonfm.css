@@ -64,6 +64,18 @@ body {
     width: 100%;
     margin: -5px -5px 5px;
 }
+
+.subedit .Window-edges {
+    text-align: justify;
+}
+.subedit .Window-edges > * {
+    display: inline-block;
+    padding: 0 10%;
+}
+.subedit .Window-edges input {
+    width: 30px;
+}
+
 .edited .selected {
     background-color: #444;
     color: #BBB;

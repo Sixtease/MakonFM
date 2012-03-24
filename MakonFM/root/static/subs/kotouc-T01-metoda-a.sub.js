@@ -15173,16 +15173,18 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "kotouc-T01-meto
       "wordform" : "pro"
    },
    {
+      "humanic" : 1,
       "occurrence" : "potřeby",
-      "timestamp" : 1038.84,
+      "timestamp" : 1038.97,
       "fonet" : "p o t rsh e b i sp",
       "wordform" : "potřeby"
    },
    {
-      "occurrence" : "pozoruje",
-      "timestamp" : 1040.22,
-      "fonet" : "p o z o r u j e sp",
-      "wordform" : "pozoruje"
+      "humanic" : 1,
+      "occurrence" : "porozumět",
+      "timestamp" : 1040.26,
+      "fonet" : "p o r o z u m nj e t sp",
+      "wordform" : "porozumět"
    },
    {
       "occurrence" : "sebe",
