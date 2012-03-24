@@ -14347,64 +14347,74 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "kotouc-T01-meto
       "wordform" : "co"
    },
    {
+      "humanic" : 1,
       "occurrence" : "ale",
-      "timestamp" : 983.32,
+      "timestamp" : 983.47,
       "fonet" : "a l e sp",
       "wordform" : "ale"
    },
    {
+      "humanic" : 1,
       "occurrence" : "přednost",
-      "timestamp" : 983.92,
+      "timestamp" : 983.97,
       "fonet" : "p rsh e d n o s t sp",
       "wordform" : "přednost"
    },
    {
+      "humanic" : 1,
       "occurrence" : "že",
-      "timestamp" : 984.43,
+      "timestamp" : 984.48,
       "fonet" : "zh e sp",
       "wordform" : "že"
    },
    {
+      "humanic" : 1,
       "occurrence" : "má",
-      "timestamp" : 984.65,
+      "timestamp" : 984.69,
       "fonet" : "m aa sp",
       "wordform" : "má"
    },
    {
+      "humanic" : 1,
       "occurrence" : "už",
-      "timestamp" : 985.13,
+      "timestamp" : 985.17,
       "fonet" : "u sh sp",
       "wordform" : "už"
    },
    {
+      "humanic" : 1,
+      "occurrence" : "v",
+      "timestamp" : 985.42,
+      "fonet" : "f",
+      "wordform" : "v"
+   },
+   {
+      "humanic" : 1,
       "occurrence" : "té",
-      "timestamp" : 985.47,
+      "timestamp" : 985.51,
       "fonet" : "t ee sp",
       "wordform" : "té"
    },
    {
-      "occurrence" : "doby",
-      "timestamp" : 985.69,
-      "fonet" : "d o b i sp",
-      "wordform" : "doby"
+      "humanic" : 1,
+      "occurrence" : "době",
+      "timestamp" : 985.74,
+      "fonet" : "d o b j e sp",
+      "wordform" : "době"
    },
    {
-      "occurrence" : "lépe",
-      "timestamp" : 985.98,
-      "fonet" : "l ee p e sp",
-      "wordform" : "lépe"
+      "humanic" : 1,
+      "occurrence" : "duchovní",
+      "timestamp" : 986.76,
+      "fonet" : "d u x o v nj ii sp",
+      "wordform" : "duchovní"
    },
    {
-      "occurrence" : "duchovnímu",
-      "timestamp" : 986.73,
-      "fonet" : "d u x o v nj ii m u sp",
-      "wordform" : "duchovnímu"
-   },
-   {
-      "occurrence" : "cítit",
-      "timestamp" : 987.31,
-      "fonet" : "c ii tj i t sp",
-      "wordform" : "cítit"
+      "humanic" : 1,
+      "occurrence" : "cíl.",
+      "timestamp" : 987.36,
+      "fonet" : "c ii l sp",
+      "wordform" : "cíl"
    },
    {
       "occurrence" : "pochopil",

@@ -22,6 +22,7 @@ body {
     height: 66px;
     overflow: hidden;
     position: relative;
+    margin-top: 58px;
 }
 .subtitles.edited {
     height: auto;
@@ -30,11 +31,43 @@ body {
     background-color: rgb(255,255,130);
 }
 .subedit {
-    display: block;
+    top: 150px;
+    margin: 0;
+    padding: 10px;
+}
+.subedit .Icn {
+    display: inline-block;
+    width: 99px;
+    height: 34px;
+    background: url('/static/jplayer-skins/jplayer.pink.flag.jpg') no-repeat scroll transparent;
+}
+.subedit .Icn.Play {
+    background-position: 0 -40px;
+}
+.subedit .Icn.Stop {
+    background-position: 0 -80px;
+}
+.subedit .Icn.Play:hover {
+    background-position: -100px -40px;
+}
+.subedit .Icn.Stop:hover {
+    background-position: -100px -80px;
+}
+.subedit .Icn.Save {
+    background-image: url('/static/images/sprite.jpg');
+}
+.subedit .Icn.Save:hover {
+    background-position: -100px 0;
+}
+
+.subedit textarea {
     width: 100%;
+    margin: -5px -5px 5px;
 }
 .edited .selected {
-    display: none;
+    background-color: #444;
+    color: #BBB;
+    outline: 3px solid #444;
 }
 .word.corrected {
     color: #AAA;
@@ -51,4 +84,11 @@ body div.jp-audio {
     position: fixed;
     top: 0;
     right: 0;
+}
+
+.safe-hidden .generic-safe-hider {
+    display: none;
+}
+.safe-hidden .jplayer-safe-hider {
+    visibility: hidden;
 }

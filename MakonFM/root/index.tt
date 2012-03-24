@@ -6,8 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name='description' content="Archiv nahrávek Karla Makoně" />
     <link href="/static/favicon.ico" rel="icon" type="image/ico" />
-    <link rel="stylesheet" type="text/css" href="/static/makonfm.css[% c.v('css') %]" />
     <link rel="stylesheet" type="text/css" href="/static/jplayer-skins/jplayer.pink.flag.css[% c.v('jplayer') %]" />
+    <link rel="stylesheet" type="text/css" href="/static/makonfm.css[% c.v('css') %]" />
     <!--script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script-->
     <script type="text/javascript" src="/static/jquery.js"></script>
     <script type="text/javascript" src="/static/jquery.jplayer.min.js[% c.v('jplayer') %]"></script>
@@ -16,11 +16,25 @@
 
 <body>
 
-    [%- PROCESS 'tracklist.tt' | indent(4) %]
+    <div data-bind="css: { 'safe-hidden': editation_active() }">
+        <div class="jplayer-safe-hider">
 
-    [%- PROCESS 'jplayer.tt'   | indent(4) %]
+            [%- PROCESS 'jplayer.tt'   | indent(12) %]
 
-    [%- PROCESS 'subtitles.tt' | indent(4) %]
+        </div>
+        <div class="generic-safe-hider">
+
+            [%- PROCESS 'tracklist.tt' | indent(12) %]
+
+            [%- PROCESS 'subtitles.tt' | indent(12) %]
+
+        </div>
+    </div>
+    <div data-bind="visible: editation_active">
+
+        [%- PROCESS 'editor.tt'    | indent(8) %]
+
+    </div>
 
     [%# DEBUG %]
     <input type="number" step="1" id="ts" data-bind="value: player_time" />
