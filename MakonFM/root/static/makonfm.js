@@ -137,6 +137,8 @@ function MakonFM_constructor(instance_name) {
         }
     });
 
+    m.cancel_editation = function() { m.editation_active(false); };
+
     m.window_start = ko.observable(null);
     m.window_end   = ko.observable(null);
     (function() {

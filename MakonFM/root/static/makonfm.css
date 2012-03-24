@@ -31,9 +31,9 @@ body {
     background-color: rgb(255,255,130);
 }
 .subedit {
-    top: 150px;
     margin: 0;
     padding: 10px;
+    position: relative;
 }
 .subedit .Icn {
     display: inline-block;
@@ -78,6 +78,17 @@ body {
 }
 .subedit .Window-edges input {
     width: 50px;
+}
+.subedit .Close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-weight: bold;
+    border: solid 1px gray;
+    border-radius: 3px;
+    background-color: #463851;
+    padding: 0 3px;
+    cursor: pointer;
 }
 
 .edited .selected {

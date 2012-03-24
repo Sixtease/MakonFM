@@ -22,5 +22,6 @@
         <a class="Icn Stop" title="stop"    data-bind="click: stop_window"   ></a>
         <a class="Icn Save" title="uložit"  data-bind="click: save_editation"></a>
     </div>
+    <a class="Close-button" data-bind="click: cancel_editation">&#9747;</a>
 </div>
 
