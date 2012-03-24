@@ -215,10 +215,13 @@ function MakonFM_constructor(instance_name) {
             m.window_end( v + m._minimum_window_length + 0.1 );
         }
     });
+    var end_play_timeout;
     m.window_end.subscribe(function(v) {
         if (v - m.window_start() < m._minimum_window_length) {
             m.window_start( v - m._minimum_window_length - 0.1 );
         }
+        if (end_play_timeout) clearTimeout(end_play_timeout);
+        end_play_timeout = setTimeout(play_end, 500);
     });
     m.window_start.formatted = ko.computed({
         read: format_time,
@@ -249,6 +252,13 @@ function MakonFM_constructor(instance_name) {
             order *= 60;
         });
         this(t);
+    }
+
+    function play_end() {
+        var end = m.window_end();
+        if (!end) return;
+        m.jPlayer('play', end - m._minimum_window_length);
+        end_play_timeout = null;
     }
 
     m._current_visible_word_index = ko.observable(NaN);

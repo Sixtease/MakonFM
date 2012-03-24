@@ -15131,22 +15131,32 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "kotouc-T01-meto
       "wordform" : "to"
    },
    {
-      "occurrence" : "může",
-      "timestamp" : 1035.52,
-      "fonet" : "m uu zh e sp",
-      "wordform" : "může"
+      "humanic" : 1,
+      "occurrence" : "bohužel,",
+      "timestamp" : 1035.62,
+      "fonet" : "b o h u zh e l sp",
+      "wordform" : "bohužel"
    },
    {
-      "occurrence" : "a.",
-      "timestamp" : 1035.86,
-      "fonet" : "a sp",
-      "wordform" : "a"
-   },
-   {
-      "occurrence" : "Tato",
-      "timestamp" : 1037.06,
+      "humanic" : 1,
+      "occurrence" : "tato",
+      "timestamp" : 1036.12,
       "fonet" : "t a t o sp",
       "wordform" : "tato"
+   },
+   {
+      "humanic" : 1,
+      "occurrence" : "řeč,",
+      "timestamp" : 1036.83,
+      "fonet" : "rzh e ch sp",
+      "wordform" : "řeč"
+   },
+   {
+      "humanic" : 1,
+      "occurrence" : "která",
+      "timestamp" : 1037.06,
+      "fonet" : "k t e r aa sp",
+      "wordform" : "která"
    },
    {
       "occurrence" : "řeč",
