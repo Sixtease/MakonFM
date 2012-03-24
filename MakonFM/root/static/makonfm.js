@@ -141,7 +141,7 @@ function MakonFM_constructor(instance_name) {
     m.window_end   = ko.observable(null);
     (function() {
         function autostop_cb(evt) {
-            var d = m._stop_time - evt.jPlayer.status.currentTime;
+            var d = m.window_end() - evt.jPlayer.status.currentTime;
             if (d < 0) {
                 m.jPlayer('pause', m.window_start());
             }
@@ -177,7 +177,6 @@ function MakonFM_constructor(instance_name) {
                 m._stored_position = evt.jPlayer.status.currentTime;
             });
             if (m.window_end() !== null) {
-                m._stop_time = m.window_end();
                 $(document).bind($.jPlayer.event.timeupdate, autostop_cb);
             }
         };
