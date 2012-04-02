@@ -18,9 +18,9 @@
     </div>
     <textarea data-bind="value: edited_subtitles.str" class="js-subedit"></textarea>
     <div class="Button-pane">
-        <a class="Icn Play" title="přehrát" data-bind="click: play_window"   ></a>
-        <a class="Icn Stop" title="stop"    data-bind="click: stop_window"   ></a>
-        <a class="Icn Save" title="uložit"  data-bind="click: save_editation"></a>
+        <a class="icn Play" title="přehrát" data-bind="click: play_window"   ></a>
+        <a class="icn Stop" title="stop"    data-bind="click: stop_window"   ></a>
+        <a class="icn Save" title="uložit"  data-bind="click: save_editation"></a>
     </div>
     <a class="Close-button" data-bind="click: cancel_editation">&#9747;</a>
 </div>

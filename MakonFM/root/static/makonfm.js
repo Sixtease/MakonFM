@@ -33,10 +33,13 @@ function MakonFM_constructor(instance_name) {
             var pos = fp[1];
             var stem = fn.replace(/\.(mp3|ogg|sub\.js)$/, '');
             if (pos) m._requested_position(+pos);
-            else m._requested_position(0);
+            else {
+                pos = 0;
+                m._requested_position(0);
+            }
             if (location.hash.split('#')[1] !== stem) {
                 var new_hash = stem;
-                if (pos) new_hash += '#' + pos;
+                if (pos !== undefined) new_hash += '#' + pos;
                 location.hash = new_hash;
             }
             _current_filestem(stem);
@@ -231,24 +234,27 @@ function MakonFM_constructor(instance_name) {
         end_play_timeout = setTimeout(play_end, 500);
     });
     m.window_start.formatted = ko.computed({
-        read: format_time,
+        read: _format_time_this,
         write: parse_formatted_time,
         owner: m.window_start
     });
     m.window_end.formatted = ko.computed({
-        read: format_time,
+        read: _format_time_this,
         write: parse_formatted_time,
         owner: m.window_end
     });
-    function format_time() {
-        var t = this();
+    function _format_time_this() {
+        return format_time(this());
+    }
+    function format_time(t) {
         var rv = Math.floor(t / 60) + ':';
         var min = t % 60;
         var pre_min = '';
         if (min < 10) pre_min = '0';
-        rv += pre_min + min;
+        rv += pre_min + min.toFixed(2);
         return rv;
     }
+    m.format_time = format_time;
     function parse_formatted_time(str) {
         var fields = str.split(':');
         fields.reverse();
@@ -722,6 +728,11 @@ MakonFMp.save_editation = function() {
     $.each(words, function(i,w) { w.is_corrected(true) });
     m.send_subtitles($words, str);
     m.editation_active(false);
+};
+
+MakonFMp.play_from_word = function(w) {
+    var m = this;
+    m.jPlayer('play', w.timestamp);
 };
 
 $(document).bind({

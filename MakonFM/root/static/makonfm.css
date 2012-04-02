@@ -1,6 +1,21 @@
 body {
     font-family: verdana;
+    margin: 0;
 }
+a {
+    cursor: pointer;
+}
+
+h1 {
+    margin: 0;
+    background: url('/static/images/header-bg.jpg') center top;
+    height: 174px;
+    line-height: 174px;
+    text-align: center;
+    font-style: italic;
+    text-shadow: white 0 0 3px;
+}
+
 .track-menu  li { cursor: pointer; }
 .track-menu  li h2:hover,
 .track-menu  li h3:hover,
@@ -35,30 +50,6 @@ body {
     padding: 10px;
     position: relative;
 }
-.subedit .Icn {
-    display: inline-block;
-    width: 99px;
-    height: 34px;
-    background: url('/static/jplayer-skins/jplayer.pink.flag.jpg') no-repeat scroll transparent;
-}
-.subedit .Icn.Play {
-    background-position: 0 -40px;
-}
-.subedit .Icn.Stop {
-    background-position: 0 -80px;
-}
-.subedit .Icn.Play:hover {
-    background-position: -100px -40px;
-}
-.subedit .Icn.Stop:hover {
-    background-position: -100px -80px;
-}
-.subedit .Icn.Save {
-    background-image: url('/static/images/sprite.jpg');
-}
-.subedit .Icn.Save:hover {
-    background-position: -100px 0;
-}
 
 .subedit textarea {
     width: 100%;
@@ -88,7 +79,38 @@ body {
     border-radius: 3px;
     background-color: #463851;
     padding: 0 3px;
-    cursor: pointer;
+}
+
+.icn {
+    display: inline-block;
+    width: 99px;
+    height: 34px;
+    background: url('/static/jplayer-skins/jplayer.pink.flag.jpg') no-repeat scroll transparent;
+}
+.icn.Play {
+    background-position: 0 -40px;
+}
+.icn.Play:hover {
+    background-position: -100px -40px;
+}
+.icn.Stop {
+    background-position: 0 -80px;
+}
+.icn.Stop:hover {
+    background-position: -100px -80px;
+}
+.icn.Save {
+    background-image: url('/static/images/sprite.jpg');
+}
+.icn.Save:hover {
+    background-position: -100px 0;
+}
+.small-play-button {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    background: url('/static/jplayer-skins/jplayer.pink.flag.jpg') no-repeat scroll -32px -40px transparent;
+    border-radius: 17px;
 }
 
 .edited .selected {

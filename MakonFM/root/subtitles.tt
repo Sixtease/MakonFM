@@ -29,6 +29,8 @@
     <dd class="wordform" data-bind="text: wordform"></dd>
     
     <dt class="timestamp">Pozice</dt>
-    <dd class="timestamp" data-bind="text: timestamp"></dd>
+    <dd class="timestamp" data-bind="text: $root.format_time(timestamp)"></dd>
+    
+    <dt><a data-bind="click: function(){$root.play_from_word($data)}">&#9654; přehrát</a></dt>
 <!-- /ko -->
 </dl>
