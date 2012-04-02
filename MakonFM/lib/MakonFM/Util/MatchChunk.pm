@@ -116,18 +116,72 @@ sub txt2mlf {
     return $rv
 }
 
+my %allowed_non_word = (
+    '-' => 1,
+    '--' => 1,
+    '..' => 1,
+    '...' => 1,
+);
+my %right_glued_non_word = (
+    '(' => 1,   # )
+    '[' => 1,   # ]
+    '{' => 1,   # }
+    '`' => 1,   # '
+    '``'=> 1,   # ''
+);
+
 sub parse_words {
     my ($fh) = @_;
+    my $trans = do { local $/; <$fh> };
+    
+    $trans =~ s/^\s+|\s+$//g;
+    
+    if ($trans !~ /\w/ and not $allowed_non_word{$trans}) {
+        die "Garbage transcription: '$trans'";
+    }
+    
+    $trans =~ s/(?<=\w[;,])\b/ /g;  # jeden,dva => jeden, dva
+    $trans =~ s/(?<=\w[.!?])(?=[[:upper:]])/ /g;    # Karle!Ahoj! => Karle! Ahoj!
+    my @w = split /\s+/, $trans;
+    
+    print STDERR "\n\ntrans:$trans\n\n\@w:@w\n\n";
+    
     my @words;
-    while (<$fh>) {
-        for (split /\s+/) {
-            my $ucform = uc occ2form($_);
-            push @words, {
-                occurrence => $_,
-                fonet => vyslov($ucform),
-                ucform => $ucform,
-            };
+    WORD:
+    while ( my($i, $w) = each @w ) {
+        
+        if ($w !~ /\w/ and not $allowed_non_word{$_}) {
+            if ($right_glued_non_word{$w}) {
+                if (exists $w[$i+1]) {
+                    $w[$i+1] = join(' ', $w, $w[$i+1]);
+                }
+                elsif (@words) {
+                    $words[-1]{occurrence} .= " $w";
+                }
+                else {
+                    die "Algorithmic error: garbage transcription ($trans) caught too late"
+                }
+            }
+            else {
+                if (@words) {
+                    $words[-1]{occurrence} .= " $w";
+                }
+                elsif (exists $w[$i+1]) {
+                    $w[$i+1] = join(' ', $w, $w[$i+1]);
+                }
+                else {
+                    die "Algorithmic error: garbage transcription ($trans) caught too late"
+                }
+            }
+            next WORD
         }
+        
+        my $ucform = uc occ2form($w);
+        push @words, {
+            occurrence => $w,
+            fonet => vyslov($ucform),
+            ucform => $ucform,
+        };
     }
     return @words
 }
@@ -135,6 +189,10 @@ sub parse_words {
 sub occ2form {
     for (my ($tmp) = @_) {
         s/\W+//g;
+        if (length == 0) {
+            return $_[0] if $allowed_non_word{$_};
+            die "Non-allowed non-word: $_"
+        }
         return lc
     }
 }
