@@ -1,7 +1,3 @@
-<script type="text/javascript">
-    SUB_VERSION = [% sub_versions %];
-</script>
-
 <div class="subtitles" data-bind="css: {edited: editation_active}, foreach: visible_subs">
     <span class="word" data-bind="
         text: occurrence,

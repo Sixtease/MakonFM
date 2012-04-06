@@ -27,10 +27,13 @@ The root page (/)
 
 =cut
 
-sub index :Path :Args(0) {
+sub index :Path :Args(0) { }
+
+sub subversions :Local {
     my ($self, $c) = @_;
     my %sub_versions = map {; $_->key => $_->value } $c->model->resultset('Version')->all();
-    $c->stash(sub_versions => JSON->new->encode(\%sub_versions));
+    $c->response->content_type('text/json');
+    $c->response->body( JSON->new->encode(\%sub_versions) );
 }
 
 =head2 default

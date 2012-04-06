@@ -845,3 +845,8 @@ var Word = new function() {
         return $.extend(w, word);
     };
 };
+
+var SUB_VERSION = {};
+$.get('/subversions/').done(function(data) {
+    SUB_VERSION = data;
+});
