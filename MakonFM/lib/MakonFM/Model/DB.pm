@@ -9,8 +9,9 @@ __PACKAGE__->config(
     
     connect_info => {
         dsn => 'dbi:Pg:dbname=MakonFM',
-        user => 'sixtease',
-        password => '',
+        user => MakonFM->config->{db}{user},
+        password => MakonFM->config->{db}{password},
+        AutoCommit => '1',
     }
 );
 

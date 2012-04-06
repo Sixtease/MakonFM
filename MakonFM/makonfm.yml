@@ -13,3 +13,6 @@ subs:
     jsonp_end:   "});"
     path: '[% home %]/root/static/subs' 
     gs_root: 'gs://karel-makon-sub/'
+db:
+    user: ''
+    password: ''

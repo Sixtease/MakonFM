@@ -760,40 +760,32 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
       "wordform" : "chtěla"
    },
    {
-      "occurrence" : "ježíši",
-      "timestamp" : 60.88,
-      "fonet" : "j e zh ii sh i sp",
-      "wordform" : "ježíši"
+      "humanic" : 1,
+      "occurrence" : "trošičku",
+      "timestamp" : 61,
+      "fonet" : "t r o sh i ch k u sp",
+      "wordform" : "trošičku"
    },
    {
-      "occurrence" : "do",
-      "timestamp" : 61.28,
-      "fonet" : "d o",
-      "wordform" : "do"
+      "humanic" : 1,
+      "occurrence" : "když",
+      "timestamp" : 61.44,
+      "fonet" : "g d i sh sp",
+      "wordform" : "když"
    },
    {
-      "occurrence" : "ve",
-      "timestamp" : 61.38,
-      "fonet" : "v e sp",
-      "wordform" : "ve"
+      "humanic" : 1,
+      "occurrence" : "dovolíte",
+      "timestamp" : 61.86,
+      "fonet" : "d o v o l ii t e sp",
+      "wordform" : "dovolíte"
    },
    {
-      "occurrence" : "židé",
-      "timestamp" : 61.48,
-      "fonet" : "zh i d ee sp",
-      "wordform" : "židé"
-   },
-   {
-      "occurrence" : "potom",
-      "timestamp" : 61.83,
-      "fonet" : "p o t o m sp",
-      "wordform" : "potom"
-   },
-   {
-      "occurrence" : "nestará.",
-      "timestamp" : 62.08,
-      "fonet" : "n e s t a r aa sp",
-      "wordform" : "nestará"
+      "humanic" : 1,
+      "occurrence" : "rozvést",
+      "timestamp" : 62.44,
+      "fonet" : "r o z v ee s t sp",
+      "wordform" : "rozvést"
    },
    {
       "occurrence" : "Že",
