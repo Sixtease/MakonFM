@@ -58,11 +58,6 @@ __PACKAGE__->table("submissions");
   data_type: 'text'
   is_nullable: 0
 
-=head2 author
-
-  data_type: 'text'
-  is_nullable: 1
-
 =head2 matched_ok
 
   data_type: 'boolean'
@@ -93,17 +88,31 @@ __PACKAGE__->add_columns(
   { data_type => "real", is_nullable => 0 },
   "transcription",
   { data_type => "text", is_nullable => 0 },
-  "author",
-  { data_type => "text", is_nullable => 1 },
   "matched_ok",
   { data_type => "boolean", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id");
-__PACKAGE__->add_unique_constraint("submissions_author_sub_ts_key", ["author", "sub_ts"]);
+
+=head1 RELATIONS
+
+=head2 sub_infos
+
+Type: has_many
+
+Related object: L<MakonFM::Schema::Result::SubInfo>
+
+=cut
+
+__PACKAGE__->has_many(
+  "sub_infos",
+  "MakonFM::Schema::Result::SubInfo",
+  { "foreign.submission" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-03-05 19:12:15
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:z9jLlaA8d0XD9I/a3fTXMQ
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-04-06 11:22:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8wW8eepxdUzZKjpZ4xxRqg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

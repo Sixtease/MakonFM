@@ -32,8 +32,21 @@ sub index :Path :Args(0) {
         start_ts => $start,
         end_ts   => $end,
         transcription => $trans,
-        author => $c->request->address,
         matched_ok => $subs->{success},
+        sub_infos => [
+            {
+                name => 'ip_address',
+                value => $c->request->address,
+            },
+            {
+                name => 'author',
+                value => $c->session->{author} || '',
+            },
+            {
+                name => 'session',
+                value => $c->sessionid,
+            },
+        ],
     });
     
     if ($subs->{success}) {
