@@ -144,7 +144,8 @@ sub parse_words {
     
     my @words;
     WORD:
-    while ( my($i, $w) = each @w ) {
+    for my $i (0 .. $#w) {
+        my $w = $w[$i];
         
         if ($w !~ /\w/ and not $allowed_non_word{$_}) {
             if ($right_glued_non_word{$w}) {
