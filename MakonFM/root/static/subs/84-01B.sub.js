@@ -99,7 +99,7 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "Nijak.",
-      "timestamp" : 10.92,
+      "timestamp" : 11,
       "fonet" : "nj i j a k sp",
       "wordform" : "nijak"
    },
@@ -141,7 +141,7 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "je",
-      "timestamp" : 13.9,
+      "timestamp" : 13.43,
       "fonet" : "j e sp",
       "wordform" : "je"
    },
@@ -169,14 +169,14 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "Ne?",
-      "timestamp" : 15.56,
+      "timestamp" : 15.61,
       "fonet" : "n e sp",
       "wordform" : "ne"
    },
    {
       "humanic" : 1,
       "occurrence" : "Tam",
-      "timestamp" : 17.17,
+      "timestamp" : 17.14,
       "fonet" : "t a m sp",
       "wordform" : "tam"
    },
@@ -211,7 +211,7 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "Žádné",
-      "timestamp" : 19.25,
+      "timestamp" : 19.19,
       "fonet" : "zh aa d n ee sp",
       "wordform" : "žádné"
    },
@@ -225,14 +225,14 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "hodnoty",
-      "timestamp" : 19.86,
+      "timestamp" : 19.89,
       "fonet" : "h o d n o t i sp",
       "wordform" : "hodnoty"
    },
    {
       "humanic" : 1,
       "occurrence" : "nikde",
-      "timestamp" : 20.16,
+      "timestamp" : 20.17,
       "fonet" : "nj i g d e sp",
       "wordform" : "nikde"
    },
@@ -246,21 +246,21 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "Čili",
-      "timestamp" : 21.73,
+      "timestamp" : 21.58,
       "fonet" : "ch i l i sp",
       "wordform" : "čili"
    },
    {
       "humanic" : 1,
       "occurrence" : "každý",
-      "timestamp" : 21.95,
+      "timestamp" : 21.96,
       "fonet" : "k a zh d ii sp",
       "wordform" : "každý"
    },
    {
       "humanic" : 1,
       "occurrence" : "z",
-      "timestamp" : 22.17,
+      "timestamp" : 22.18,
       "fonet" : "s",
       "wordform" : "z"
    },
@@ -316,14 +316,14 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "A",
-      "timestamp" : 25.69,
+      "timestamp" : 25.6,
       "fonet" : "a sp",
       "wordform" : "a"
    },
    {
       "humanic" : 1,
       "occurrence" : "Ježíš",
-      "timestamp" : 25.75,
+      "timestamp" : 25.68,
       "fonet" : "j e zh ii sh sp",
       "wordform" : "ježíš"
    },
@@ -344,7 +344,7 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "to",
-      "timestamp" : 26.29,
+      "timestamp" : 26.3,
       "fonet" : "t o sp",
       "wordform" : "to"
    },
@@ -358,21 +358,21 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "Protože",
-      "timestamp" : 27.57,
+      "timestamp" : 27.32,
       "fonet" : "p r o t o zh e sp",
       "wordform" : "protože"
    },
    {
       "humanic" : 1,
       "occurrence" : "říkal:",
-      "timestamp" : 28.01,
+      "timestamp" : 27.66,
       "fonet" : "rzh ii k a l sp",
       "wordform" : "říkal"
    },
    {
       "humanic" : 1,
       "occurrence" : "\"Milovati",
-      "timestamp" : 28.4,
+      "timestamp" : 28.39,
       "fonet" : "m i l o v a tj i sp",
       "wordform" : "milovati"
    },
@@ -386,14 +386,14 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "On",
-      "timestamp" : 30.53,
+      "timestamp" : 30.5,
       "fonet" : "o n sp",
       "wordform" : "on"
    },
    {
       "humanic" : 1,
       "occurrence" : "to",
-      "timestamp" : 30.69,
+      "timestamp" : 30.68,
       "fonet" : "t o sp",
       "wordform" : "to"
    },
@@ -407,7 +407,7 @@ jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "84-01B", "data"
    {
       "humanic" : 1,
       "occurrence" : "nařizoval.",
-      "timestamp" : 31.27,
+      "timestamp" : 31.26,
       "fonet" : "n a rzh i z o v a l sp",
       "wordform" : "nařizoval"
    },

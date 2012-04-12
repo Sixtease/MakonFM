@@ -29,7 +29,7 @@ $MakonFM::Util::HTKout2subs::quiet = 1;
 
 sub get_subs {
 
-    my ($trans_fn, $audio_fn, $start_pos, $end_pos) = @_;
+    my ($trans_fn, $mfcc_fn, $start_pos, $end_pos) = @_;
 
     local $CWD = $workpath if $workpath;
 
@@ -49,17 +49,13 @@ sub get_subs {
     print {$dict_fh} $dict;
     close $dict_fh;
 
-    my $wav_fn = 'chunk0.wav';
-    unlink $wav_fn;
-    system(qq(${soxpath}sox "$audio_fn" "$wav_fn" trim $start_pos =$end_pos));
-
-    my $mfc_fn = 'chunk0.mfc';
-    unlink $mfc_fn;
-    system(qq(${HTKpath}HCopy -C config0 "$wav_fn" "$mfc_fn"));
+    my $mfc_chunk_fn = 'chunk0.mfc';
+    unlink $mfc_chunk_fn;
+    system(qq(${HTKpath}HCopy -C config-mfcc2mfcc -s ${start_pos}e7 -e ${end_pos}e7 "$mfcc_fn" "$mfc_chunk_fn"));
 
     my $aligned_fn = 'aligned.mlf';
     unlink $aligned_fn;
-    system(qq(LANG=C ${HTKpath}HVite -l '*' -b silence -C config1 -a -H hmmmacros -H hmmdefs -i $aligned_fn -m -t 500.0 -I "$trans_mlf_fn" -y lab "$dict_fn" monophones1 "$mfc_fn"));
+    system(qq(LANG=C ${HTKpath}HVite -l '*' -b silence -C config1 -a -H hmmmacros -H hmmdefs -i $aligned_fn -m -t 500.0 -I "$trans_mlf_fn" -y lab "$dict_fn" monophones1 "$mfc_chunk_fn"));
 
     my @subs = do {
         open my $aligned_fh, '<', $aligned_fn or die "Couldn't open '$aligned_fn': $!";

@@ -13,15 +13,15 @@ sub index :Path :Args(0) {
     
     my $trans = decode_utf8 $c->request->parameters->{trans};
     my $filestem = $c->request->parameters->{filestem};
-    my $audio_fn = 
-        $c->econf(qw{paths audio mp3})
+    my $mfcc_fn = 
+        $c->econf(qw{paths audio mfcc})
         . $filestem
-        . '.mp3'
+        . '.mfcc'
     ;
     my $start = $c->request->parameters->{start};
     my $end   = $c->request->parameters->{ end };
     
-    my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans, $audio_fn, $start, $end);
+    my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans, $mfcc_fn, $start, $end);
     $subs->{filestem} = $filestem;
     $subs->{start} = $start;
     $subs->{end} = $end;

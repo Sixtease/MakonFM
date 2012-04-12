@@ -4,7 +4,8 @@ paths:
     HTK: ''
     sox: ''
     audio:
-        mp3: '[% home %]/root/static/audio/'
+        mp3:  '[% home %]/root/static/audio/'
+        mfcc: '[% home %]/root/static/mfcc/'
 Util:
     MatchChunk:
         workpath: '[% home %]/temp/match_chunk/'
