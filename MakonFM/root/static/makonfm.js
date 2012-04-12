@@ -2,10 +2,10 @@ $.ajaxSetup({ cache: true });
 
 function MakonFM_constructor(instance_name) {
     var m = this;
-//    m.MEDIA_BASE =    'http://commondatastorage.googleapis.com/karel-makon-mp3/';
-    m.MEDIA_BASE =    '/static/audio/';
-//    m.SUBTITLE_BASE = 'http://commondatastorage.googleapis.com/karel-makon-sub/';
-    m.SUBTITLE_BASE = '/static/subs/';
+    m.MEDIA_BASE =    'http://commondatastorage.googleapis.com/karel-makon-mp3/';
+//    m.MEDIA_BASE =    '/static/audio/';
+    m.SUBTITLE_BASE = 'http://commondatastorage.googleapis.com/karel-makon-sub/';
+//    m.SUBTITLE_BASE = '/static/subs/';
     m.SEND_SUBTITLES_URL = '/subsubmit/';
     m.WORDS_PRE = 10;
     m.WORDS_POST = 10;
