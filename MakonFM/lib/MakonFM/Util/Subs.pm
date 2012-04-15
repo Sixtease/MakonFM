@@ -140,7 +140,7 @@ sub subs_from_jsonp {
     undef $@;
     my $subs = eval { JSON->new->decode($subs_jsonp) };
     if (not $subs) {
-        die ("JSON parse failed: $@");
+        die ("JSON parse failed: $@")
     }
     return $subs
 }
