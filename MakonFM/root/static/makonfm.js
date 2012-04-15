@@ -7,6 +7,7 @@ function MakonFM_constructor(instance_name) {
     m.SUBTITLE_BASE = 'http://commondatastorage.googleapis.com/karel-makon-sub/';
 //    m.SUBTITLE_BASE = '/static/subs/';
     m.SEND_SUBTITLES_URL = '/subsubmit/';
+    m.SUBVERSIONS_URL = '/subversions/';
     m.WORDS_PRE = 10;
     m.WORDS_POST = 10;
     m.CURRENT_INDEX = 0;
@@ -847,6 +848,6 @@ var Word = new function() {
 };
 
 var SUB_VERSION = {};
-$.get('/subversions/').done(function(data) {
+$.get(MakonFM.SUBVERSIONS_URL).done(function(data) {
     SUB_VERSION = data;
 });

@@ -33,6 +33,7 @@ sub subversions :Local {
     my ($self, $c) = @_;
     my %sub_versions = map {; $_->key => $_->value } $c->model->resultset('Version')->all();
     $c->response->content_type('text/json');
+    $c->response->header('Access-Control-Allow-Origin' => 'http://makon.fm http://www.makon.fm');
     $c->response->body( JSON->new->encode(\%sub_versions) );
 }
 
