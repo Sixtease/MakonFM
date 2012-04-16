@@ -176,6 +176,7 @@ function MakonFM_constructor(instance_name) {
                     m._dont_play_end = true;
                     m.window_end(after_last_sub.timestamp);
                 }
+                m.jPlayer('pause', m.window_start());
             }
             else {
                 ;;; console.log('editation activated but no edited subs?');
@@ -740,6 +741,16 @@ MakonFMp.play_from_word = function(w) {
     m.jPlayer('play', w.timestamp);
 };
 
+MakonFMp.toggle_playback = function() {
+    var m = this;
+    if (m.playback_active()) {
+        m.jPlayer('pause');
+    }
+    else {
+        m.jPlayer('play');
+    }
+};
+
 $(document).bind({
 
     ready: function() {
@@ -784,8 +795,19 @@ $(document).bind({
             MakonFM.subs = arg.data;
         }
         MakonFM.subtitles[arg.filestem] = arg.data;
-    }
+    },
 
+    keyup: function(evt) {
+        if (evt.ctrlKey && evt.keyCode == 32) { // ctrl+space
+            evt.preventDefault();
+            MakonFM.toggle_playback();
+        }
+        if (evt.ctrlKey && (evt.keyCode == 10 || evt.keyCode == 13)) { // ctrl-enter
+            if (MakonFM.editation_active()) {
+                MakonFM.save_editation();
+            }
+        }
+    }
 });
 
 $(window).bind('unload', function() {
