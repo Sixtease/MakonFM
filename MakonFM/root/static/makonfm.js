@@ -49,6 +49,7 @@ function MakonFM_constructor(instance_name) {
     });
 
     m.player_time = ko.observable(0);
+    m.playback_active = ko.observable(false);
 
     m.inspected_word = ko.observable(null);
 
@@ -180,21 +181,17 @@ function MakonFM_constructor(instance_name) {
                 ;;; console.log('editation activated but no edited subs?');
                 return;
             }
-            $(document).one($.jPlayer.event.pause, function(evt) {
-                m._stored_position = evt.jPlayer.status.currentTime;
-            });
             if (m.window_end() !== null) {
                 $(document).bind($.jPlayer.event.timeupdate, autostop_cb);
             }
         };
         m._cancel_playback_limit = function() {
             $(document).unbind($.jPlayer.event.timeupdate, autostop_cb);
+            var end = m.window_end();
             m.window_start(null);
             m.window_end(null);
-            if (m._stored_position !== undefined) {
-                // FIXME: restoring broken
-                m.jPlayer('pause', +m._stored_position);
-            }
+            // set head after the edited window
+            m.jPlayer('pause', +end);
         };
     })();
 
@@ -530,10 +527,10 @@ MakonFMp.clear_subs = function() {
     m.visible_subs.removeAll();
 };
 
-MakonFMp.show_word_info = function(word, $cont, subs) {
+MakonFMp.show_word_info = function(word) {
     var m = this;
     
-    if (!subs) subs = m.subs;
+    var subs = m.subs;
     var ts;
     if ($.isNumeric(word)) {
         ts = word;
@@ -546,6 +543,7 @@ MakonFMp.show_word_info = function(word, $cont, subs) {
         word = subs[i];
     }
     m.inspected_word(word);
+    return word;
 };
 
 MakonFMp.merge_subtitles = function(new_subs, old_subs) {
@@ -765,6 +763,10 @@ $(document).bind({
             pause: function(evt) {
                 // FIXME: opravit pro stop
                 MakonFM.requested_position(evt.jPlayer.status.currentTime);
+                MakonFM.playback_active(false);
+            },
+            play: function(evt) {
+                MakonFM.playback_active(true);
             }
         });
 
@@ -797,7 +799,8 @@ $('.track-menu li>a').click(function(evt) {
 
 $('.subtitles .word').live('click', function(evt) {
     if (evt.button != 0) return;
-    MakonFM.show_word_info(evt.target);
+    var word = MakonFM.show_word_info(evt.target);
+    MakonFM.jPlayer('pause', word.timestamp);
 });
 
 $('.subtitles').bind({
