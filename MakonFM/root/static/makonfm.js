@@ -371,7 +371,13 @@ MakonFMp.upd_sub = function (ts, subs, i) {
             vs.pop();
         }
         var cur_lineno = m._lineno_of($new_cur);
-        var lines_to_scroll = cur_lineno - m.SUB_MIDDLE_LINE;
+        var lines_to_scroll;
+        if (cur_lineno >= 0 && cur_lineno <= m.SUB_MIDDLE_LINE) {
+            lines_to_scroll = 0;
+        }
+        else {
+            lines_to_scroll = cur_lineno - m.SUB_MIDDLE_LINE;
+        }
         scroll(lines_to_scroll);
     }
     
