@@ -69,7 +69,8 @@ sub get_subs {
 }
 
 sub convert {
-    ...; # pass a HTK-out filehandle to get_subs or remove this function
+    #...; # pass a HTK-out filehandle to get_subs or remove this function
+    die('yadda yadda yadda');
     my ($splits_fn, $subfn) = @_;
     
     open my $splits_fh, '<', $splits_fn or die "Couldn't open $splits_fn: $!";
