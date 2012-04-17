@@ -872,7 +872,13 @@ var Word = new function() {
 };
 
 var SUB_VERSION = {};
-$.getScript(MakonFM.SUBVERSIONS_URL);
 $(document).one('subversions_arrived', function(evt, data) {
     SUB_VERSION = data;
 });
+$('<script>')
+.attr({
+    src: MakonFM.SUBVERSIONS_URL + '?v=' + new Date().getTime(),
+    type: 'text/javascript'
+})
+.appendTo('body')
+.remove();
