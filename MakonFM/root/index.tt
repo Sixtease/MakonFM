@@ -41,13 +41,6 @@
 
     </div>
 
-    [%# DEBUG %]
-    <input type="number" step="1" id="ts" data-bind="value: player_time" />
-    <script>
-        $('#ts').click(function(){$(this).val($(this).val()-0+1);$(this).change();});
-        $('#ts').change(function(){MakonFM.upd_sub($(this).val());});
-    </script>
-
     <script type="text/javascript">
         [%~ PROCESS 'js_init.js' | indent(8) %]
     </script>
