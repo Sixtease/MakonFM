@@ -1,5 +1,6 @@
 name: MakonFM
 default_model: DB
+server_base: 'http://rwis.cz:8080'
 paths:
     HTK: ''
     sox: ''

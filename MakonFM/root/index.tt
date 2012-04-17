@@ -8,8 +8,11 @@
     <link href="/static/favicon.ico" rel="icon" type="image/ico" />
     <link rel="stylesheet" type="text/css" href="/static/jplayer-skins/jplayer.pink.flag.css[% c.v('jplayer') %]" />
     <link rel="stylesheet" type="text/css" href="/static/makonfm.css[% c.v('css') %]" />
+    [%~ IF c.config.local %]
+    <script type="text/javascript" src="/static/jquery.js"></script>
+    [%~ ELSE %]
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <!--script type="text/javascript" src="/static/jquery.js"></script-->
+    [%~ END %]
     <script type="text/javascript" src="/static/jquery.jplayer.min.js[% c.v('jplayer') %]"></script>
     <script type="text/javascript" src="/static/knockout.js[% c.v('knockout') %]"></script>
 </head>
@@ -45,6 +48,9 @@
         $('#ts').change(function(){MakonFM.upd_sub($(this).val());});
     </script>
 
+    <script type="text/javascript">
+        [%~ PROCESS 'js_init.js' | indent(8) %]
+    </script>
     <script type="text/javascript" src="/static/makonfm.js[% c.v('js') %]"></script>
 
 </body>
