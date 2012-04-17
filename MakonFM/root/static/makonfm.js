@@ -753,7 +753,7 @@ $(document).bind({
 
         MakonFM.jPlayer = function(a,b) { $('#jquery_jplayer_1').jPlayer(a,b); };
         MakonFM.jPlayer({
-            swfPath: "/static",
+            swfPath: MakonFM.STATIC_BASE,
             supplied: "mp3",
             timeupdate: function(evt) {
                 if (MakonFM.editation_active()) return;

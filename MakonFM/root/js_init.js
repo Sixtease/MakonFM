@@ -11,3 +11,4 @@ MAKONFM_CONFIG.SUBTITLE_BASE = 'http://commondatastorage.googleapis.com/karel-ma
 MAKONFM_CONFIG.SEND_SUBTITLES_URL = '[% c.config.server_base %]/subsubmit/';
 MAKONFM_CONFIG.SUBVERSIONS_URL    = '[% c.config.server_base %]/subversions/';
 [%- END -%]
+MAKONFM_CONFIG.STATIC_BASE = '[% c.config.static_base %]';
