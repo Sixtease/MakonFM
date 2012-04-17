@@ -5,16 +5,16 @@
     <title>Makoň.fm</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name='description' content="Archiv nahrávek Karla Makoně" />
-    <link href="/static/favicon.ico" rel="icon" type="image/ico" />
-    <link rel="stylesheet" type="text/css" href="/static/jplayer-skins/jplayer.pink.flag.css[% c.v('jplayer') %]" />
-    <link rel="stylesheet" type="text/css" href="/static/makonfm.css[% c.v('css') %]" />
+    <link href="[% c.config.static_base %]/favicon.ico" rel="icon" type="image/ico" />
+    <link rel="stylesheet" type="text/css" href="[% c.config.static_base %]/jplayer-skins/jplayer.pink.flag.css[% c.v('jplayer') %]" />
+    <link rel="stylesheet" type="text/css" href="[% c.config.static_base %]/makonfm.css[% c.v('css') %]" />
     [%~ IF c.config.local %]
-    <script type="text/javascript" src="/static/jquery.js"></script>
+    <script type="text/javascript" src="[% c.config.static_base %]/jquery.js"></script>
     [%~ ELSE %]
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     [%~ END %]
-    <script type="text/javascript" src="/static/jquery.jplayer.min.js[% c.v('jplayer') %]"></script>
-    <script type="text/javascript" src="/static/knockout.js[% c.v('knockout') %]"></script>
+    <script type="text/javascript" src="[% c.config.static_base %]/jquery.jplayer.min.js[% c.v('jplayer') %]"></script>
+    <script type="text/javascript" src="[% c.config.static_base %]/knockout.js[% c.v('knockout') %]"></script>
 </head>
 
 <body>
@@ -51,7 +51,7 @@
     <script type="text/javascript">
         [%~ PROCESS 'js_init.js' | indent(8) %]
     </script>
-    <script type="text/javascript" src="/static/makonfm.js[% c.v('js') %]"></script>
+    <script type="text/javascript" src="[% c.config.static_base %]/makonfm.js[% c.v('js') %]"></script>
 
 </body>
 
