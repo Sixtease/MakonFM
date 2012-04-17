@@ -54,7 +54,7 @@ sub index :Path :Args(0) {
     }
     
     $c->response->content_type('text/json');
-    $c->response->header('Access-Control-Allow-Origin' => 'http://makon.fm http://www.makon.fm');
+    $c->response->header('Access-Control-Allow-Origin' => '*');
     $c->response->body(encode_utf8(JSON->new->pretty->encode($subs)));
 }
 
