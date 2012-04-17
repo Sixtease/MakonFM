@@ -617,12 +617,17 @@ MakonFMp.send_subtitles = function($orig, submitted, subs) {
     else throw ('Something smells about indices here in send_subtitles');
     if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
     
-    $.post(m.SEND_SUBTITLES_URL, {
+    $.ajax({
+        url: m.SEND_SUBTITLES_URL,
+        type: 'post',
         cache: false,
-        filestem: m.current_file(),
-        start: start_ts,
-        end: end_ts,
-        trans: submitted
+        dataType: 'json',
+        data: {
+            filestem: m.current_file(),
+            start: start_ts,
+            end: end_ts,
+            trans: submitted
+        }
     }).success( function(new_subs) {
         ;;; console.log('new subs:', new_subs);
         if (new_subs && new_subs.success === 1) {
