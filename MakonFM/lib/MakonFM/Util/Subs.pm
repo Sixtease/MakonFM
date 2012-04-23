@@ -79,7 +79,7 @@ sub save_subs_gs {
         die "Fork failed: $!"
     }
     elsif ($forked == 0) {
-        open my $gs_fh, '|-', qq($c->{paths}{gsutil}gsutil cp - "$url") or do {
+        open my $gs_fh, '|-:utf8', qq($c->{paths}{gsutil}gsutil cp - "$url") or do {
             warn 'Failed to open gsutil command for piping';
             return
         };
