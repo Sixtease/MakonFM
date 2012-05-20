@@ -603,18 +603,10 @@ MakonFMp.send_subtitles = function($orig, submitted, subs) {
     if (typeof submitted !== 'string') throw ('send_subtitles needs string of new subtitles');
     if (!subs) subs = m.subs;
     
-    var start_ts = $orig.first().data('timestamp');
+    var start_ts = m.window_start();
     if (!$.isNumeric(start_ts)) throw ('invalid start timestamp');
     
-    var end_ts;
-    var i = m._i_by_ts($orig.last().data('timestamp'), subs);
-    if (!i) throw ('send_subtitles failed to get index of last selected word');
-    i++;
-    if (i == subs.length) end_ts = Infinity;
-    else if (i < subs.length) {
-        end_ts = subs[i].timestamp;
-    }
-    else throw ('Something smells about indices here in send_subtitles');
+    var end_ts = m.window_end();
     if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
     
     $.ajax({
