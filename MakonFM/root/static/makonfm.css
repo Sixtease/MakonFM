@@ -141,3 +141,9 @@ body div.jp-audio {
 .safe-hidden .jplayer-safe-hider {
     visibility: hidden;
 }
+
+.jp-controls .Button {
+    display: block;
+    width: 100%;
+    height: 100%;
+}

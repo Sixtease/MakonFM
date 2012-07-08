@@ -14,7 +14,8 @@ function MakonFM_constructor(instance_name) {
         read: function() { return m._requested_position(); },
         write: function(pos) {
             m._requested_position(+pos);
-            location.hash = [m.current_file(), pos].join('#');
+            var new_hash = [m.current_file(), pos].join('#');
+            m.set_hash(new_hash);
         }
     });
     m.current_file = ko.computed({
@@ -34,15 +35,41 @@ function MakonFM_constructor(instance_name) {
             if (location.hash.split('#')[1] !== stem) {
                 var new_hash = stem;
                 if (pos !== undefined) new_hash += '#' + pos;
-                location.hash = new_hash;
+                m.set_hash(new_hash);
             }
-            _current_filestem(stem);
+            
+            if (_current_filestem() != stem) {
+                m.jPlayer('setMedia', {
+                    mp3: m.MEDIA_BASE + stem + '.mp3',
+                    oga: m.MEDIA_BASE + stem + '.ogg'
+                });
+                _current_filestem(stem);
+                m.get_subs(stem);
+            }
+            
+            // FIXME
+            //m.jPlayer('play', +pos);
+            if (pos > m.jp.status.duration) {
+                m.jPlayer('pause', +pos);
+                // FIXME: don't use literal ID but bind jPlayer to MakonFM instance
+                $('#jquery_jplayer_1').one($.jPlayer.event.seeked, function() {
+                    m.jPlayer('play');
+                });
+            }
+            else {
+                m.jPlayer('play', +pos);
+            }
         },
         owner: m
     });
+    m.file_selected = ko.computed( function() {
+        return _current_filestem() ? true : false;
+    });
 
     m.player_time = ko.observable(0);
-    m.playback_active = ko.observable(false);
+    m.playback_active = function() {
+        return m.jp.status.paused ? false : true;
+    }
 
     m.inspected_word = ko.observable(null);
 
@@ -92,24 +119,6 @@ function MakonFM_constructor(instance_name) {
         if (!sub) return $();
         return m._get_word_el_by_ts(sub.timestamp);
     };
-
-    m.current_file.subscribe(function(fn) {
-        m.jPlayer('setMedia', {
-            mp3: m.MEDIA_BASE + fn + '.mp3',
-            oga: m.MEDIA_MASE + fn + '.ogg'
-        });
-        // FIXME
-        var pos = m.requested_position();
-        if (pos) {
-            m.jPlayer('pause', +pos);
-            // FIXME: don't use literal ID but bind jPlayer to MakonFM instance
-            $('#jquery_jplayer_1').one($.jPlayer.event.seeked, function() {
-                m.jPlayer('play');
-            });
-        }
-        else m.jPlayer('play');
-        m.get_subs(fn);
-    });
 
     m.edited_subtitles.subscribe(function($sel) {
         $.each(m.edited_subtitles.subs, function(i,s) {
@@ -279,6 +288,8 @@ function MakonFM_constructor(instance_name) {
         m._current_visible_word_index(m._i_by_ts(w.timestamp, m.visible_subs(), m.current_visible_word_index()));
     });
 
+    m._ignore_hashchange = 0;
+
     return m;
 }
 var MakonFMp = MakonFM_constructor.prototype;
@@ -366,12 +377,12 @@ MakonFMp.upd_sub = function (ts, subs, i) {
         }
         var cur_lineno = m._lineno_of($new_cur);
         var lines_to_scroll;
-        if (cur_lineno >= 0 && cur_lineno <= m.SUB_MIDDLE_LINE) {
+/*        if (cur_lineno >= 0 && cur_lineno <= m.SUB_MIDDLE_LINE) {
             lines_to_scroll = 0;
         }
-        else {
+        else {*/
             lines_to_scroll = cur_lineno - m.SUB_MIDDLE_LINE;
-        }
+//        }
         scroll(lines_to_scroll);
     }
     
@@ -621,7 +632,7 @@ MakonFMp.send_subtitles = function($orig, submitted, subs) {
             trans: submitted
         }
     }).success( function(new_subs) {
-        ;;; console.log('new subs:', new_subs);
+        //;;; console.log('new subs:', new_subs);
         if (new_subs && new_subs.success === 1) {
             m.merge_subtitles(new_subs);
         }
@@ -735,13 +746,20 @@ MakonFMp.toggle_playback = function() {
     var m = this;
     if (m.playback_active()) {
         m.jPlayer('pause');
+        m.requested_position(m.jp.status.currentTime);
     }
     else {
         m.jPlayer('play');
     }
 };
 
-$(document).bind({
+MakonFMp.set_hash = function(hash) {
+    var m = this;
+    m._ignore_hashchange++;
+    location.hash = hash;
+};
+
+$(document).on({
 
     ready: function() {
         var lh = MakonFMp.SUB_LINE_HEIGHT = $('.subtitles').css('lineHeight').replace(/\D+/g, '');
@@ -766,16 +784,9 @@ $(document).bind({
                     var fn = location.hash.substr(1);
                     MakonFM.current_file(fn);
                 }
-            },
-            pause: function(evt) {
-                // FIXME: opravit pro stop
-                MakonFM.requested_position(evt.jPlayer.status.currentTime);
-                MakonFM.playback_active(false);
-            },
-            play: function(evt) {
-                MakonFM.playback_active(true);
             }
         });
+        MakonFM.jp = $('#jquery_jplayer_1').data('jPlayer');
 
         ko.applyBindings(MakonFM);
     },
@@ -800,35 +811,47 @@ $(document).bind({
     }
 });
 
-$(window).bind('unload', function() {
-    MakonFM.jPlayer('pause');
+$(window).on({
+    unload: function() {
+        MakonFM.requested_position(MakonFM.jp.status.currentTime);
+    },
+    hashchange: function(evt) {
+        if (MakonFM._ignore_hashchange) {
+            MakonFM._ignore_hashchange--;
+            return;
+        }
+        var fn = location.hash.substr(1);
+        MakonFM.current_file(fn);
+    }
 });
 
 $('.track-menu li').click(function(evt) {
+    if (evt.button != 0) return;
     if ($(evt.target).is('li,li>:header')) {} else return;
     evt.stopPropagation();
     $(this).toggleClass('show');
 });
 $('.track-menu li>a').click(function(evt) {
+    if (evt.button != 0) return;
     var fn = $(this).text();
     MakonFM.current_file(fn);
     $('.track-menu>li').removeClass('show');
 });
 
-$('.subtitles .word').live('click', function(evt) {
+$(document).on('click', '.subtitles .word', function(evt) {
     if (evt.button != 0) return;
     var word = MakonFM.show_word_info(evt.target);
     MakonFM.jPlayer('pause', word.timestamp);
 });
 
-$('.subtitles').bind({
+$('.subtitles').on({
     mouseup: function(evt) {
         var $sel = MakonFM.get_selected_words();
         if ($sel && $sel.length) {} else return;
         MakonFM.edited_subtitles($sel);
     }
 });
-$('.js-subedit').bind({
+$('.js-subedit').on({
     keyup: function(evt) {
         switch (evt.keyCode) {
             case 27:
@@ -836,6 +859,26 @@ $('.js-subedit').bind({
                 break;
         }
     }
+});
+function rnd(arr) {
+    return arr[ Math.floor( Math.random() * arr.length ) ];
+}
+$('.play.Button').on('click', function(evt) {
+    if (evt.button != 0) return;
+    if (MakonFM.file_selected()) {}
+    else {
+        var file = rnd( $.makeArray( $('.track-menu a') ) );
+        var fn = $(file).text();
+        MakonFM.current_file(fn);
+    }
+});
+$('.pause.Button').on('click', function(evt) {
+    if (evt.button != 0) return;
+    MakonFM.requested_position(MakonFM.jp.status.currentTime);
+});
+$('.stop.Button').on('click', function(evt) {
+    if (evt.button != 0) return;
+    MakonFM.requested_position(0);
 });
 
 var Word = new function() {
