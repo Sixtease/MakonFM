@@ -746,7 +746,9 @@ MakonFMp.toggle_playback = function() {
     var m = this;
     if (m.playback_active()) {
         m.jPlayer('pause');
-        m.requested_position(m.jp.status.currentTime);
+        if (m.editation_active()) {} else {
+            m.requested_position(m.jp.status.currentTime);
+        }
     }
     else {
         m.jPlayer('play');
