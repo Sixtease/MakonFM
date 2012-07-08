@@ -5,6 +5,7 @@ use utf8;
 use JSON ();
 use Template;
 
+# Merges sent chunk of subtitles into the corresponding subtitle file and saves
 sub merge {
     my ($s) = @_;
     my $stem = $s->{filestem};
@@ -89,6 +90,7 @@ sub save_subs_gs {
     }
 }
 
+# merges a chunk of new subtitles into old subtitles, updating the old ones
 sub merge_subs {
     my ($new_subs, $old_subs) = @_;
     my $start = $new_subs->{start};
