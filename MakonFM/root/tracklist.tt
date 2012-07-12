@@ -6,30 +6,31 @@
             <li>
                 <h4>1973</h4>
                 <ul>
-                    <li><a>prevzate/73-01A</a></li>
-                    <li><a>prevzate/73-01B</a></li>
-                    <li><a>prevzate/73-02A</a></li>
+                    <li><a>73-01</a></li>
+                    <li><a>73-02</a></li>
                 </ul>
             </li>
             <li>
                 <h4>1974</h4>
                 <ul>
-                    <li><a>prevzate/74-01</a></li>
+                    <li><a>74-01</a></li>
+                    <li><a>74-02-tatry</a></li>
+                    <li><a>74-03-Tatry-pohadka_o_Honzovi</a></li>
                     <li><a>prevzate/74-01B</a></li>
-                    <li><a>prevzate/74-02</a></li>
-                    <li><a>prevzate/74-03</a></li>
                 </ul>
             </li>
             <li>
                 <h4>1975</h4>
                 <ul>
-                    <li><a>prevzate/75-01A</a></li>
-                    <li><a>prevzate/75-01B</a></li>
+                    <li><a>75-01A-Kaly</a></li>
+                    <li><a>75-01B-Kaly</a></li>
                 </ul>
             </li>
             <li>
                 <h4>1976</h4>
                 <ul>
+                    <li><a>76-01-Kaly</a></li>
+                    <li><a>76-02-Kaly</a></li>
                     <li><a>76-03A-Kaly-5</a></li>
                     <li><a>76-03B-Kaly-6</a></li>
                     <li><a>76-04A-Kaly-7-IEOUA</a></li>
@@ -38,18 +39,6 @@
                     <li><a>76-05B-Kaly-10</a></li>
                     <li><a>76-06A-Kaly-11</a></li>
                     <li><a>76-06B-Kaly-12</a></li>
-                    <li><a>prevzate/76-01A</a></li>
-                    <li><a>prevzate/76-01B</a></li>
-                    <li><a>prevzate/76-02A</a></li>
-                    <li><a>prevzate/76-02B</a></li>
-                    <li><a>prevzate/76-03A</a></li>
-                    <li><a>prevzate/76-03B</a></li>
-                    <li><a>prevzate/76-04A</a></li>
-                    <li><a>prevzate/76-04B</a></li>
-                    <li><a>prevzate/76-05A</a></li>
-                    <li><a>prevzate/76-05B</a></li>
-                    <li><a>prevzate/76-06A</a></li>
-                    <li><a>prevzate/76-06B</a></li>
                 </ul>
             </li>
             <li>
@@ -69,18 +58,6 @@
                     <li><a>77-06B-Praha</a></li>
                     <li><a>77-07A-78-01A-obrac._sled_stop</a></li>
                     <li><a>77-07B-78-01B-obrac._sled_stop</a></li>
-                    <li><a>prevzate/77-01A</a></li>
-                    <li><a>prevzate/77-01B</a></li>
-                    <li><a>prevzate/77-02A</a></li>
-                    <li><a>prevzate/77-02B</a></li>
-                    <li><a>prevzate/77-03A</a></li>
-                    <li><a>prevzate/77-03B</a></li>
-                    <li><a>prevzate/77-04A</a></li>
-                    <li><a>prevzate/77-04B</a></li>
-                    <li><a>prevzate/77-05A</a></li>
-                    <li><a>prevzate/77-05B</a></li>
-                    <li><a>prevzate/77-06A</a></li>
-                    <li><a>prevzate/77-06B-PROBE</a></li>
                 </ul>
             </li>
             <li>
@@ -96,33 +73,17 @@
                     <li><a>78-05B-Kaly</a></li>
                     <li><a>78-06A-Kaly</a></li>
                     <li><a>78-06B-Kaly</a></li>
-                    <li><a>prevzate/78-01A</a></li>
-                    <li><a>prevzate/78-01B</a></li>
-                    <li><a>prevzate/78-02A</a></li>
-                    <li><a>prevzate/78-02B</a></li>
-                    <li><a>prevzate/78-03A</a></li>
-                    <li><a>prevzate/78-03B</a></li>
-                    <li><a>prevzate/78-04A</a></li>
-                    <li><a>prevzate/78-04B</a></li>
-                    <li><a>prevzate/78-05A</a></li>
-                    <li><a>prevzate/78-05B</a></li>
-                    <li><a>prevzate/78-06A</a></li>
-                    <li><a>prevzate/78-06B</a></li>
-                    <li><a>prevzate/78-07A</a></li>
+                    <li><a>78-07--79-01</a></li>
                 </ul>
             </li>
             <li>
                 <h4>1979</h4>
                 <ul>
-                    <li><a>prevzate/79-01B</a></li>
-                    <li><a>prevzate/79-06A</a></li>
-                    <li><a>prevzate/79-06B</a></li>
-                    <li><a>prevzate/79-07A</a></li>
-                    <li><a>prevzate/79-07B</a></li>
-                    <li><a>prevzate/79-08A</a></li>
-                    <li><a>prevzate/79-08B</a></li>
-                    <li><a>prevzate/79-09A</a></li>
-                    <li><a>prevzate/79-09B</a></li>
+                    <li><a>79-01</a></li>
+                    <li><a>79-06-Praha-G</a></li>
+                    <li><a>79-07-G.-Zliv</a></li>
+                    <li><a>79-08-Zliv</a></li>
+                    <li><a>79-09-Zliv-Kaly-P</a></li>
                     <li><a>prevzate/79-10A</a></li>
                 </ul>
             </li>
@@ -148,13 +109,15 @@
                     <li><a>80-10B</a></li>
                     <li><a>80-11A</a></li>
                     <li><a>80-11B</a></li>
-                    <li><a>80-16A</a></li>
-                    <li><a>80-16B</a></li>
+                    <li><a>80-12</a></li>
+                    <li><a>80-13</a></li>
+                    <li><a>80-14</a></li>
+                    <li><a>80-16</a></li>
                     <li><a>80-17A</a></li>
                     <li><a>80-17B</a></li>
-                    <li><a>80-18A</a></li>
-                    <li><a>80-18B</a></li>
+                    <li><a>80-18</a></li>
                     <li><a>80-19A</a></li>
+                    <li><a>80-X-diskuse-Praha</a></li>
                 </ul>
             </li>
             <li>
@@ -173,16 +136,11 @@
                     <li><a>81-06B</a></li>
                     <li><a>81-07A</a></li>
                     <li><a>81-07B</a></li>
-                    <li><a>81-08A</a></li>
-                    <li><a>81-08B</a></li>
-                    <li><a>81-09A</a></li>
-                    <li><a>81-09B</a></li>
-                    <li><a>81-10A</a></li>
-                    <li><a>81-10B</a></li>
-                    <li><a>81-11A</a></li>
-                    <li><a>81-11B</a></li>
-                    <li><a>81-12A</a></li>
-                    <li><a>81-12B</a></li>
+                    <li><a>81-08</a></li>
+                    <li><a>81-09</a></li>
+                    <li><a>81-10</a></li>
+                    <li><a>81-11</a></li>
+                    <li><a>81-12</a></li>
                     <li><a>81-13A</a></li>
                 </ul>
             </li>
@@ -190,6 +148,7 @@
                 <h4>1982</h4>
                 <ul>
                     <li><a>82-01A</a></li>
+                    <li><a>82-01B</a></li>
                     <li><a>82-02</a></li>
                     <li><a>82-03</a></li>
                     <li><a>82-04</a></li>
@@ -231,7 +190,6 @@
             <li>
                 <h4>1983</h4>
                 <ul>
-                    <li><a>83-01A</a></li>
                     <li><a>83-01B</a></li>
                     <li><a>83-02</a></li>
                     <li><a>83-03</a></li>
@@ -242,7 +200,8 @@
                     <li><a>83-08</a></li>
                     <li><a>83-09</a></li>
                     <li><a>83-10</a></li>
-                    <li><a>83-11</a></li>
+                    <li><a>83-11A</a></li>
+                    <li><a>83-11B</a></li>
                     <li><a>83-12</a></li>
                     <li><a>83-13</a></li>
                     <li><a>83-14</a></li>
@@ -272,6 +231,7 @@
                     <li><a>84-02A</a></li>
                     <li><a>84-02B</a></li>
                     <li><a>84-03A</a></li>
+                    <li><a>84-03B</a></li>
                     <li><a>84-04A</a></li>
                     <li><a>84-04B</a></li>
                     <li><a>84-05A</a></li>
@@ -507,6 +467,15 @@
                     <li><a>87-01B</a></li>
                     <li><a>87-02A-(s2)</a></li>
                     <li><a>87-02B-(s1)</a></li>
+                    <li><a>87-03</a></li>
+                    <li><a>87-04</a></li>
+                    <li><a>87-0506</a></li>
+                    <li><a>87-07</a></li>
+                    <li><a>87-08</a></li>
+                    <li><a>87-09</a></li>
+                    <li><a>87-10</a></li>
+                    <li><a>87-11</a></li>
+                    <li><a>87-12</a></li>
                     <li><a>87-13A</a></li>
                     <li><a>87-13B</a></li>
                     <li><a>87-14A</a></li>
@@ -690,6 +659,7 @@
                     <li><a>89-45B-modlitba-kontemplace-zjevení</a></li>
                     <li><a>89-47A</a></li>
                     <li><a>89-47B-256-90-01A</a></li>
+                    <li><a>89-XX-5.11.Plzen</a></li>
                 </ul>
             </li>
             <li>
@@ -723,7 +693,7 @@
                     <li><a>90-16B-414!</a></li>
                     <li><a>90-17A-22.4.90</a></li>
                     <li><a>90-17B</a></li>
-                    <li><a>90-18A-XX-zrychlene-22.4-210-23.4</a></li>
+                    <li><a>90-18A-XX-zrychlene</a></li>
                     <li><a>90-18B-XX-zrychlene</a></li>
                     <li><a>90-19A</a></li>
                     <li><a>90-19B</a></li>
@@ -749,6 +719,8 @@
                     <li><a>90-29B-B54-dulezite-graf-B375-udalosti</a></li>
                     <li><a>90-30A</a></li>
                     <li><a>90-30B</a></li>
+                    <li><a>90-41A</a></li>
+                    <li><a>90-41B</a></li>
                     <li><a>90-42A</a></li>
                     <li><a>90-42B</a></li>
                     <li><a>90-43A</a></li>
@@ -768,6 +740,7 @@
                     <li><a>91-02B</a></li>
                     <li><a>91-03A</a></li>
                     <li><a>91-03B</a></li>
+                    <li><a>91-04A</a></li>
                     <li><a>91-04B</a></li>
                     <li><a>91-05A</a></li>
                     <li><a>91-05B</a></li>
@@ -825,6 +798,7 @@
                     <li><a>91-31B</a></li>
                     <li><a>91-32A</a></li>
                     <li><a>91-32B</a></li>
+                    <li><a>91-CB-poslední_přednáška-91-06-17</a></li>
                 </ul>
             </li>
             <li>
@@ -845,6 +819,13 @@
                 <ul>
                     <li><a>X01A-Hábovi-božiště</a></li>
                     <li><a>X01B-Hábovi-božiště</a></li>
+                    <li><a>X-diskuseV</a></li>
+                    <li><a>X-originál-neoznačené</a></li>
+                    <li><a>X-večery_v_Kalech-Milada_C</a></li>
+                    <li><a>X02A-Aleně_hračku_neberte</a></li>
+                    <li><a>X02B-Vít-Hana</a></li>
+                    <li><a>prevzate/KM01-extempore</a></li>
+                    <li><a>prevzate/KM02-za_extase</a></li>
                     <li><a>prevzate/001a</a></li>
                     <li><a>prevzate/001b-2</a></li>
                     <li><a>prevzate/001b</a></li>
@@ -905,6 +886,10 @@
                     <li><a>kotouc-H01-b</a></li>
                     <li><a>kotouc-H01-c</a></li>
                     <li><a>kotouc-H01-d</a></li>
+                    <li><a>kotouc-I-a</a></li>
+                    <li><a>kotouc-I-b</a></li>
+                    <li><a>kotouc-I-c</a></li>
+                    <li><a>kotouc-I-d</a></li>
                     <li><a>kotouc-I01-81-82-Plzen-02-a</a></li>
                     <li><a>kotouc-I01-81-82-Plzen-02-b</a></li>
                     <li><a>kotouc-I01-81-82-Plzen-02-c</a></li>
@@ -1145,6 +1130,10 @@
                     <li><a>kotouc-3-b</a></li>
                     <li><a>kotouc-3-c</a></li>
                     <li><a>kotouc-3-d</a></li>
+                    <li><a>kotouc-4-a</a></li>
+                    <li><a>kotouc-4-b</a></li>
+                    <li><a>kotouc-4-c</a></li>
+                    <li><a>kotouc-4-d</a></li>
                     <li><a>prevzate/kotouc-001a</a></li>
                     <li><a>prevzate/kotouc-001b</a></li>
                     <li><a>prevzate/kotouc-001c</a></li>
