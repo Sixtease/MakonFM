@@ -835,7 +835,37 @@ $('.track-menu li').click(function(evt) {
 });
 $('.track-menu li>a').click(function(evt) {
     if (evt.button != 0) return;
-    var fn = $(this).text();
+    var fn = $(this)
+    .text()
+    .replace(/ě/,'e')
+    .replace(/š/,'s')
+    .replace(/č/,'c')
+    .replace(/ř/,'r')
+    .replace(/ž/,'z')
+    .replace(/ý/,'y')
+    .replace(/á/,'a')
+    .replace(/í/,'i')
+    .replace(/é/,'e')
+    .replace(/ú/,'u')
+    .replace(/ů/,'u')
+    .replace(/ď/,'d')
+    .replace(/ť/,'t')
+    .replace(/ň/,'n')
+    .replace(/Ě/,'E')
+    .replace(/Š/,'S')
+    .replace(/Č/,'C')
+    .replace(/Ř/,'R')
+    .replace(/Ž/,'Z')
+    .replace(/Ý/,'Y')
+    .replace(/Á/,'A')
+    .replace(/Í/,'I')
+    .replace(/É/,'E')
+    .replace(/Ú/,'U')
+    .replace(/Ů/,'U')
+    .replace(/Ď/,'D')
+    .replace(/Ť/,'T')
+    .replace(/Ň/,'N')
+    ;
     MakonFM.current_file(fn);
     $('.track-menu>li').removeClass('show');
 });
