@@ -54,6 +54,7 @@ h1 {
 .subedit textarea {
     width: 100%;
     margin: 5px -5px;
+    font-size: 150%;
 }
 
 .subedit .Window-edges {
