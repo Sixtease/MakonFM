@@ -883,7 +883,7 @@ $('.subtitles').on({
         MakonFM.edited_subtitles($sel);
     }
 });
-$('.js-subedit').on({
+$(document).on({
     keyup: function(evt) {
         switch (evt.keyCode) {
             case 27:
@@ -907,10 +907,6 @@ $('.play.Button').on('click', function(evt) {
 $('.pause.Button').on('click', function(evt) {
     if (evt.button != 0) return;
     MakonFM.requested_position(MakonFM.jp.status.currentTime);
-});
-$('.stop.Button').on('click', function(evt) {
-    if (evt.button != 0) return;
-    MakonFM.requested_position(0);
 });
 
 var Word = new function() {

@@ -133,7 +133,7 @@ div.jp-interface ul.jp-controls a {
 /* @group single player controls */
 
 div.jp-type-single  .jp-controls li a{
-	width: 99px;
+	width: 198px;
 }
 
 div.jp-type-single  .jp-play {
@@ -141,7 +141,7 @@ div.jp-type-single  .jp-play {
 }
 
 div.jp-type-single  .jp-play:hover {
-	background: url("jplayer.pink.flag.jpg") -100px -40px no-repeat;
+	background: url("jplayer.pink.flag.jpg") 0px -80px no-repeat;
 }
 
 div.jp-type-single  .jp-pause {
@@ -149,64 +149,12 @@ div.jp-type-single  .jp-pause {
 }
 
 div.jp-type-single  .jp-pause:hover {
-	background: url("jplayer.pink.flag.jpg") -100px -120px no-repeat;
-}
-
-div.jp-type-single  .jp-stop {
-	background: url("jplayer.pink.flag.jpg") 0px -80px no-repeat;
-}
-
-div.jp-type-single  .jp-stop:hover {
-	background: url("jplayer.pink.flag.jpg") -100px -80px no-repeat;
+	background: url("jplayer.pink.flag.jpg") 0px -160px no-repeat;
 }
 
 /* @end */
 
 /* @group playlist player controls */
-
-div.jp-type-playlist .jp-controls li a{
-	width: 49px;
-}
-
-div.jp-type-playlist .jp-play {
-	background: url("jplayer.pink.flag.jpg") -24px -40px no-repeat;
-}
-
-div.jp-type-playlist .jp-play:hover {
-	background: url("jplayer.pink.flag.jpg") -124px -40px no-repeat;
-}
-
-div.jp-type-playlist .jp-pause {
-	background: url("jplayer.pink.flag.jpg") -24px -120px no-repeat;
-}
-
-div.jp-type-playlist .jp-pause:hover {
-	background: url("jplayer.pink.flag.jpg") -124px -120px no-repeat;
-}
-
-div.jp-type-playlist .jp-stop {
-	background: url("jplayer.pink.flag.jpg") -24px -80px no-repeat;
-}
-
-div.jp-type-playlist .jp-stop:hover {
-	background: url("jplayer.pink.flag.jpg") -124px -80px no-repeat;
-}
-
-div.jp-type-playlist .jp-previous {
-	background: url("jplayer.pink.flag.jpg") -24px -200px no-repeat;
-}
-
-div.jp-type-playlist .jp-previous:hover {
-	background: url("jplayer.pink.flag.jpg") -124px -200px no-repeat;
-}
-
-div.jp-type-playlist .jp-next {
-	background: url("jplayer.pink.flag.jpg") -24px -160px no-repeat;
-}
-
-div.jp-type-playlist .jp-next:hover {
-	background: url("jplayer.pink.flag.jpg") -124px -160px no-repeat;
-}
 
 /* @end */
 
