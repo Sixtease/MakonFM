@@ -2,14 +2,14 @@
     <div class="Time-control">
         <div class="Window-edges">
             <div class="Start">
-                <button data-bind="click: dec_window_start">-</button>
-                <input type="time" data-bind="value: window_start.formatted" />
-                <button data-bind="click: inc_window_start">+</button>
+                <button data-bind="click: dec_window_start" title="začít dřív">-</button>
+                <input type="time" data-bind="value: window_start.formatted" title="začátek úseku" />
+                <button data-bind="click: inc_window_start" title="začít později">+</button>
             </div>
             <div class="End">
-                <button data-bind="click: dec_window_end">-</button>
-                <input type="time" data-bind="value: window_end.formatted" />
-                <button data-bind="click: inc_window_end">+</button>
+                <button data-bind="click: dec_window_end" title="skončit dřív">-</button>
+                <input type="time" data-bind="value: window_end.formatted" title="konec úseku" />
+                <button data-bind="click: inc_window_end" title="skončit později">+</button>
             </div>
         </div>
         <!--div class="waveform">
@@ -22,6 +22,6 @@
         <a class="icn Stop" title="stop (ctrl+space)"    data-bind="click: stop_window"   ></a>
         <a class="icn Save" title="uložit (ctrl+enter)"  data-bind="click: save_editation"></a>
     </div>
-    <a class="Close-button" data-bind="click: cancel_editation">&#9747;</a>
+    <a class="Close-button" data-bind="click: cancel_editation" title="Zrušit editaci">&#9747;</a>
 </div>
 
