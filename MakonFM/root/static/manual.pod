@@ -1,0 +1,74 @@
+=encoding utf8
+
+=head1 Makoň.FM -- Manuál k přepisovacímu systému
+
+=head2 Jak začít
+
+Přepisovací nástroj se nachází na adrese http://www.makon.fm/ .
+
+V levé části se nachází strukturovaný seznam nahrávek. Kliknutím na kategorii se
+zobrazí její položky. Kliknutím na jméno nahrávky se tato začne přehrávat. Než
+se rozeznějí Makoňova slova, může to chvíli trvat podle toho, jak rychlé je vaše
+připojení k internetu a jak dlouhá je pauza na začátku.
+
+Pokud se přehrávat nezačne, zkontrolujte, zda přehrávač v pravé části zobrazuje
+název nahrávky a zda běží počitadlo. Pokud ne, pak zkuste nahrávku znovu
+kliknutím vybrat (tutéž nebo jinou).
+
+Po započetí přehrávání se zobrazí přepis. Pokud k tomu nedojde, je možné, že se
+jedná o nahrávku, pro niž přepis zatím nebyl vygenerován. Vyberte prosím v
+takovém případě jinou.
+
+=head2 Zásady pro přepis
+
+Přepisujeme jen srozumitelné úseky a zásadně pouze úseky, kde hovoří Karel
+Makoň. Jiné mluvčí prosím nepřepisujte!
+
+Prosím, přepsaný úsek uložte až po pečlivé kontrole, kdy se
+ujistíte, že přepis opravdu přesně odpovídá vyslovenému projevu.
+
+V případě, že označený úsek začíná uprostřed slova, lze začátek posunout vpřed
+nebo vzad pomocí tlačítek plus a minus vlevo nahoře. Analogicky lze posouvat
+koncem označeného úseku tlačítky vpravo nahoře. Po posunutí doporučuji pro
+kontrolu opět přehrát označený úsek.
+
+Pokud K.M. vysloví část slova a nedořekne je (zadrhne se), pak prosím přepište
+toto nedovyslovené slovo, jak ho vyslovil, a připojte k němu pomlčku (bez
+mezery). Např.:
+
+  Tam je každou chvíli něco správ- něco jiného správné.
+  viz http://www.makon.fm/#85-05A#72.25
+
+Pokud K.M. přeruší tok mluvy po vyslovení celého slova (popř. nějaké slovo
+zopakuje), přidejte za toto slovo tři tečky. Např.:
+
+  Rozumíte, tak to v tom případě vypadá... v té přírodě vypadá.
+  viz http://www.makon.fm/#85-05A#67.94
+
+Doporučuji netrávit na jednom kousku mnoho času: Pokud je špatně rozumět, nebo
+úprava není systémem přijata, je lépe pasáž přeskočit. I odmítnuté úpravy jsou
+uloženy a mohou být zpětně obnoveny.
+
+=head2 Ovládání
+
+=over 4
+
+=item přepis
+
+Označením úseku chybného přepisu dojde k přepnutí do editačního módu. Z něho se
+lze bez uložení zásahů dostat zpět pomocí křížku vpravo nahoře nebo pomocí
+klávesy C<Esc>. Do textového pole vepište správný přepis. Pomocí klávesové
+zkratky C<ctrl+mezera> si můžete úsek znovu přehrát. Opravený přepis uložte
+pomocí klávesové zkratky C<ctrl+enter>.
+
+=item přehrávání
+
+Spustit i pozastavit klávesovou zkratkou C<ctrl+mezera>. Klik na slovo v
+přepisu způsobí též zastavení přehrávání.
+
+=item pohyb po nahrávce
+
+1) Klikem do vyhledávacího pruhu v přehrávači vpravo nahoře.
+2) Klikem na slovo v přepisu.
+
+=back
