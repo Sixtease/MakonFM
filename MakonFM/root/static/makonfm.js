@@ -137,6 +137,8 @@ function MakonFM_constructor(instance_name) {
             m.edited_subtitles.subs = new_edited_subs;
             
             m._limit_playback_to_editation_span();
+            
+            $('.js-subedit').focus();
         }
         else {
             m.edited_subtitles.subs = [];
