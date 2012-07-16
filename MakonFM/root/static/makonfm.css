@@ -8,7 +8,7 @@ a {
 
 h1 {
     margin: 0;
-    background: url('/static/images/header-bg.jpg') center top;
+    background: url('images/header-bg.jpg') center top;
     height: 174px;
     line-height: 174px;
     text-align: center;
@@ -86,7 +86,7 @@ h1 {
     display: inline-block;
     width: 99px;
     height: 34px;
-    background: url('/static/jplayer-skins/jplayer.pink.flag.jpg') no-repeat scroll transparent;
+    background: url('jplayer-skins/jplayer.pink.flag.jpg') no-repeat scroll transparent;
 }
 .icn.Play {
     background-position: -47px -40px;
@@ -110,7 +110,7 @@ h1 {
     display: inline-block;
     width: 34px;
     height: 34px;
-    background: url('/static/jplayer-skins/jplayer.pink.flag.jpg') no-repeat scroll -32px -40px transparent;
+    background: url('jplayer-skins/jplayer.pink.flag.jpg') no-repeat scroll -32px -40px transparent;
     border-radius: 17px;
 }
 
