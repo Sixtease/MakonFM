@@ -33,6 +33,8 @@
 
             [%- PROCESS 'subtitles.tt' | indent(12) %]
 
+            [%- PROCESS 'footer.tt'    | indent(12) %]
+
         </div>
     </div>
     <div data-bind="visible: editation_active">

@@ -911,6 +911,10 @@ $('.pause.Button').on('click', function(evt) {
     MakonFM.requested_position(MakonFM.jp.status.currentTime);
 });
 
+$('input.js-set-name').on('blur', function(evt) {
+    $.post(MAKONFM_CONFIG.SETNAME_URL, { name: $(evt.target).val() });
+});
+
 var Word = new function() {
     function get_lazy_observable(field_name, default_value) {
         if (!field_name) throw "field_name not given";

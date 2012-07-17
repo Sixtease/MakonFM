@@ -1,0 +1,5 @@
+<footer>
+    <a href="/manual/" target="_blank">manuál</a>
+    <input class="js-set-name" type="text" value="[% c.session.author %]" placeholder="Vaše jméno" />
+    <label>data &copy; 1960 &ndash; 1992 Karel Makoň</label>
+</footer>
