@@ -793,6 +793,8 @@ $(document).on({
         MakonFM.jp = $('#jquery_jplayer_1').data('jPlayer');
 
         ko.applyBindings(MakonFM);
+
+        $('input.js-set-name').val( $.cookie('author') );
     },
 
     'got_subtitles.MakonFM': function(evt, arg) {
@@ -912,7 +914,11 @@ $('.pause.Button').on('click', function(evt) {
 });
 
 $('input.js-set-name').on('blur', function(evt) {
-    $.post(MAKONFM_CONFIG.SETNAME_URL, { name: $(evt.target).val() });
+    var options = { path: '/', expires: 365 };
+    if (MAKONFM_CONFIG.SERVER_BASE) {
+        options.domain = MAKONFM_CONFIG.SERVER_BASE;
+    }
+    $.cookie('author', $(evt.target).val(), options);
 });
 
 var Word = new function() {

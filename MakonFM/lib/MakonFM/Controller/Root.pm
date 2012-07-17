@@ -18,19 +18,12 @@ sub manual :Local { }
 sub init :Local {
     my ($self, $c) = @_;
     my %sub_versions = map {; $_->key => $_->value } $c->model->resultset('Version')->all();
-    my $author = $c->session->{author};
     my $data = {
         subversions => \%sub_versions,
-        author      => $author,
     };
     $c->response->content_type('text/javascript');
     $c->response->body( 'jQuery(document).trigger("init_arrived", ' . JSON->new->encode($data) . ');' );
-}
-
-sub setname :Local {
-    my ($self, $c) = @_;
-    $c->session->{author} = $c->request->param('name');
-    $c->response->body('');
+    $c->response->header('Access-Control-Allow-Origin' => '*');
 }
 
 sub default :Path {

@@ -1,10 +1,11 @@
 
 var MAKONFM_CONFIG = {};
+[%- server = c.config.server_base; %]
 MAKONFM_CONFIG.STATIC_BASE        = '[% c.config.static_base %]';
-MAKONFM_CONFIG.SUBTITLE_BASE      = '[% c.config.server_base %]/static/subs/'
-MAKONFM_CONFIG.SEND_SUBTITLES_URL = '[% c.config.server_base %]/subsubmit/';
-MAKONFM_CONFIG.INIT_URL           = '[% c.config.server_base %]/init/';
-MAKONFM_CONFIG.SETNAME_URL        = '[% c.config.server_base %]/setname/';
+MAKONFM_CONFIG.SERVER_BASE        = '[% server %]';
+MAKONFM_CONFIG.SUBTITLE_BASE      = '[% server %]/static/subs/'
+MAKONFM_CONFIG.SEND_SUBTITLES_URL = '[% server %]/subsubmit/';
+MAKONFM_CONFIG.INIT_URL           = '[% server %]/init/';
 [%- IF c.config.local %]
 MAKONFM_CONFIG.MEDIA_BASE         = '/static/audio/';
 [%- ELSE %]

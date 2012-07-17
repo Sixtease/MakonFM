@@ -14,6 +14,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     [%~ END %]
     <script type="text/javascript" src="[% c.config.static_base %]/jquery.jplayer.min.js[% c.v('jplayer') %]"></script>
+    <script type="text/javascript" src="[% c.config.static_base %]/jquery.cookie.js[% c.v('jcookie') %]"></script>
     <script type="text/javascript" src="[% c.config.static_base %]/knockout.js[% c.v('knockout') %]"></script>
 </head>
 
