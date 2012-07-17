@@ -795,7 +795,7 @@ $(document).on({
 
         ko.applyBindings(MakonFM);
 
-        $('input.js-set-name').val( $.cookie('author') );
+        setTimeout(function() { $('input.js-set-name').val( $.cookie('author') ) }, 0);
     },
 
     'got_subtitles.MakonFM': function(evt, arg) {
