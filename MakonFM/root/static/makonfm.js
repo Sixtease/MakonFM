@@ -946,12 +946,13 @@ var Word = new function() {
 };
 
 var SUB_VERSION = {};
-$(document).one('subversions_arrived', function(evt, data) {
-    SUB_VERSION = data;
+$(document).one('init_arrived', function(evt, data) {
+    SUB_VERSION = data.subversions;
+    $('.js-set-name').val(data.author);
 });
 $('<script>')
 .attr({
-    src: MakonFM.SUBVERSIONS_URL + '?v=' + new Date().getTime(),
+    src: MakonFM.INIT_URL + '?v=' + new Date().getTime(),
     type: 'text/javascript'
 })
 .appendTo('body')
