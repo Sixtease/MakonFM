@@ -631,7 +631,8 @@ MakonFMp.send_subtitles = function($orig, submitted, subs) {
             filestem: m.current_file(),
             start: start_ts,
             end: end_ts,
-            trans: submitted
+            trans: submitted,
+            author: $.cookie('author')
         }
     }).success( function(new_subs) {
         //;;; console.log('new subs:', new_subs);
@@ -914,11 +915,7 @@ $('.pause.Button').on('click', function(evt) {
 });
 
 $('input.js-set-name').on('blur', function(evt) {
-    var options = { path: '/', expires: 365 };
-    if (MAKONFM_CONFIG.SERVER_BASE) {
-        options.domain = MAKONFM_CONFIG.SERVER_BASE;
-    }
-    $.cookie('author', $(evt.target).val(), options);
+    $.cookie('author', $(evt.target).val(), { path: '/', expires: 365 });
 });
 
 var Word = new function() {

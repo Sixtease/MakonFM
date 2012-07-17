@@ -27,9 +27,7 @@ sub index :Path :Args(0) {
     $subs->{end} = $end;
     $_->{humanic} = 1 for @{ $subs->{data} };
     
-    my $author = $c->request->cookie('author')
-    ? $c->request->cookie('author')->value
-    : '';
+    my $author = $c->request->parameters->{'author'} || '';
     
     $c->model->resultset('Submission')->create({
         filestem => $filestem,
