@@ -11,6 +11,8 @@ BEGIN { extends 'Catalyst::Controller' }
 sub index :Path :Args(0) {
     my ($self, $c) = @_;
     
+    $c->session->{foo} = 1;
+    
     my $trans = decode_utf8 $c->request->parameters->{trans};
     my $filestem = $c->request->parameters->{filestem};
     my $mfcc_fn = 
@@ -46,7 +48,7 @@ sub index :Path :Args(0) {
             },
             {
                 name => 'session',
-                value => $c->sessionid,
+                value => $c->sessionid || '',
             },
         ],
     });
