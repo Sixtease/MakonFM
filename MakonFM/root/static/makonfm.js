@@ -429,7 +429,8 @@ MakonFMp.upd_sub = function (ts, subs, i) {
                     vs.splice( 0, vs.indexOf(stopper)+1 )
                 }
                 else {
-                    scroll(m._lineno_of($ant) - m.SUB_MIDDLE_LINE);
+                    var aln = m._lineno_of($ant);
+                    scroll(aln - m.SUB_MIDDLE_LINE);
                 }
             }
         }
@@ -767,7 +768,7 @@ MakonFMp.set_hash = function(hash) {
 $(document).on({
 
     ready: function() {
-        var lh = MakonFMp.SUB_LINE_HEIGHT = $('.subtitles').css('lineHeight').replace(/\D+/g, '');
+        var lh = MakonFMp.SUB_LINE_HEIGHT = _get_line_height_of($('.subtitles'));
         var lc = MakonFMp.SUB_LINE_CNT = Math.round($('.subtitles').height() / lh);
         MakonFMp.SUB_MIDDLE_LINE = Math.floor((lc+1) / 2) - 1;
 
@@ -960,3 +961,20 @@ $('<script>')
 })
 .appendTo('body')
 .remove();
+
+
+function _get_line_height_of($el) {
+    var lh = $el.css('line-height');
+    var re = /\d+/;
+    var match = re.exec(lh);
+    if (match) {
+        return +match[0];
+    }
+    var fs = $el.css('font-size');
+    match = re.exec(fs);
+    if (match) {
+        return ((+match) * 1.5);
+    }
+    ;;; console.log('failed to find line height of', $el, 'with line-height', lh, 'and font-size', fs);
+    throw 'Failed to find line-height';
+}
