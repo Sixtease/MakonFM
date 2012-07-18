@@ -623,7 +623,7 @@ MakonFMp.send_subtitles = function($orig, submitted, subs) {
     var end_ts = m.window_end();
     if (!$.isNumeric(end_ts)) throw ('Failed to get end timestamp');
     
-    $.ajax({
+    _xreq({
         url: m.SEND_SUBTITLES_URL,
         type: 'post',
         cache: false,
@@ -633,9 +633,10 @@ MakonFMp.send_subtitles = function($orig, submitted, subs) {
             start: start_ts,
             end: end_ts,
             trans: submitted,
-            author: $.cookie('author')
+            author: $.cookie('author'),
+            session: $.cookie('session'),
         }
-    }).success( function(new_subs) {
+    }).done( function(new_subs) {
         //;;; console.log('new subs:', new_subs);
         if (new_subs && new_subs.success === 1) {
             m.merge_subtitles(new_subs);
@@ -977,4 +978,33 @@ function _get_line_height_of($el) {
     }
     ;;; console.log('failed to find line height of', $el, 'with line-height', lh, 'and font-size', fs);
     throw 'Failed to find line-height';
+}
+
+function _xreq(opt) {
+    if ($('.ua-ie8').length && window.XDomainRequest) {
+        jQuery.support.cors = true;
+        // Use Microsoft XDR
+        var xdr = new XDomainRequest();
+        xdr.open(opt.type, opt.url);
+        var promise = new $.Deferred();
+        promise.xdr = xdr;
+        xdr.onload = function() {
+            promise.resolve(xdr.responseText);
+        };
+        xdr.onerror = function() {
+            promise.reject();
+        };
+        xdr.ontimeout = function() {
+            promise.reject();
+        };
+        xdr.send($.param(opt.data));
+        return promise;
+    } else {
+        return $.ajax(opt);
+    }
+}
+
+if ($.cookie('session')) { } else {
+    var sess = new Date().getTime() + '_' + (Math.random()+'').substr(2);
+    $.cookie('session', sess, { path: '/', expires: 365 });
 }

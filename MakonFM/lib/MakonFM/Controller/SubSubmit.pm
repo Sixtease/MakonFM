@@ -5,23 +5,32 @@ use Encode;
 use MakonFM::Util::MatchChunk;
 use MakonFM::Util::Subs;
 use JSON ();
+use URL::Encode ();
 
 BEGIN { extends 'Catalyst::Controller' }
 
 sub index :Path :Args(0) {
     my ($self, $c) = @_;
     
-    $c->session->{foo} = 1;
+    my $param = $c->request->parameters;
+    if ($c->request->user_agent =~ /MSIE/
+        and keys($c->request->parameters) == 0
+        and ref($c->request->body) =~ /File/
+    ) {
+        my $handle = $c->request->body();
+        my $body = join '', <$handle>;
+        $param = URL::Encode::url_params_mixed($body);
+    }
     
-    my $trans = decode_utf8 $c->request->parameters->{trans};
-    my $filestem = $c->request->parameters->{filestem};
+    my $trans = decode_utf8 $param->{trans};
+    my $filestem = $param->{filestem};
     my $mfcc_fn = 
         $c->econf(qw{paths audio mfcc})
         . $filestem
         . '.mfcc'
     ;
-    my $start = $c->request->parameters->{start};
-    my $end   = $c->request->parameters->{ end };
+    my $start = $param->{start};
+    my $end   = $param->{ end };
     
     my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans, $mfcc_fn, $start, $end);
     $subs->{filestem} = $filestem;
@@ -29,7 +38,8 @@ sub index :Path :Args(0) {
     $subs->{end} = $end;
     $_->{humanic} = 1 for @{ $subs->{data} };
     
-    my $author = $c->request->parameters->{'author'} || '';
+    my $author = $param->{'author'} || '';
+    my $session = $param->{session} || $c->sessionid || '';
     
     $c->model->resultset('Submission')->create({
         filestem => $filestem,
@@ -48,7 +58,7 @@ sub index :Path :Args(0) {
             },
             {
                 name => 'session',
-                value => $c->sessionid || '',
+                value => $session,
             },
         ],
     });
