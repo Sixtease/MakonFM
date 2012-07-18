@@ -19,7 +19,9 @@
 </head>
 
 <body>
+<!--[if IE 7 ]><div class="ua-ie ua-ie7"><![endif]-->
 <!--[if IE 8 ]><div class="ua-ie ua-ie8"><![endif]-->
+<!--[if IE 9 ]><div class="ua-ie ua-ie9"><![endif]-->
 
     [%# <h1>Makoň.FM</h1> %]
     [%# <p class="hint" data-bind="text: hint_message">Vyberte nahrávku</p> %]
@@ -50,7 +52,7 @@
     </script>
     <script type="text/javascript" src="[% c.config.static_base %]/makonfm.js[% c.v('js') %]"></script>
 
-<!--[if IE 8 ]></div><![endif]-->
+<!--[if IE ]></div><![endif]-->
 </body>
 
 </html>
