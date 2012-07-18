@@ -549,7 +549,7 @@ MakonFMp.show_word_info = function(word) {
     if ($.isNumeric(word)) {
         ts = word;
     }
-    else if ((word instanceof HTMLElement) || (word instanceof jQuery)) {
+    else if ((word instanceof Element) || (word instanceof jQuery)) {
         ts = $(word).data('timestamp');
     }
     if (ts !== undefined) {
