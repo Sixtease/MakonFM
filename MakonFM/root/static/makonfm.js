@@ -989,7 +989,7 @@ function _xreq(opt) {
         var promise = new $.Deferred();
         promise.xdr = xdr;
         xdr.onload = function() {
-            promise.resolve(xdr.responseText);
+            promise.resolve($.parseJSON(xdr.responseText));
         };
         xdr.onerror = function() {
             promise.reject();
