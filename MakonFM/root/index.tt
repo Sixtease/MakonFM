@@ -52,7 +52,9 @@
     </script>
     <script type="text/javascript" src="[% c.config.static_base %]/makonfm.js[% c.v('js') %]"></script>
 
-<!--[if IE ]></div><![endif]-->
+<!--[if IE 7 ]></div><![endif]-->
+<!--[if IE 8 ]></div><![endif]-->
+<!--[if IE 9 ]></div><![endif]-->
 </body>
 
 </html>
