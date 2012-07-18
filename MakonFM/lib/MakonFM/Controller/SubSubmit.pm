@@ -14,7 +14,7 @@ sub index :Path :Args(0) {
     
     my $param = $c->request->parameters;
     if ($c->request->user_agent =~ /MSIE/
-        and keys($c->request->parameters) == 0
+        and keys(%{ $c->request->parameters }) == 0
         and ref($c->request->body) =~ /File/
     ) {
         my $handle = $c->request->body();
