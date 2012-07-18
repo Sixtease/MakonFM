@@ -3,12 +3,12 @@
         <div class="Window-edges">
             <div class="Start">
                 <button data-bind="click: dec_window_start" title="začít dřív">-</button>
-                <input type="time" data-bind="value: window_start.formatted" title="začátek úseku" />
+                <input type="text" data-bind="value: window_start.formatted" title="začátek úseku" />
                 <button data-bind="click: inc_window_start" title="začít později">+</button>
             </div>
             <div class="End">
                 <button data-bind="click: dec_window_end" title="skončit dřív">-</button>
-                <input type="time" data-bind="value: window_end.formatted" title="konec úseku" />
+                <input type="text" data-bind="value: window_end.formatted" title="konec úseku" />
                 <button data-bind="click: inc_window_end" title="skončit později">+</button>
             </div>
         </div>
