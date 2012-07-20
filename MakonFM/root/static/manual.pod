@@ -32,6 +32,12 @@ nebo vzad pomocí tlačítek plus a minus vlevo nahoře. Analogicky lze posouvat
 koncem označeného úseku tlačítky vpravo nahoře. Po posunutí doporučuji pro
 kontrolu opět přehrát označený úsek.
 
+Doporučuji netrávit na jednom kousku mnoho času: Pokud je špatně rozumět, nebo
+úprava není systémem přijata, je lépe pasáž přeskočit. I odmítnuté úpravy jsou
+uloženy a mohou být zpětně obnoveny.
+
+=head3 Zadrhnutí
+
 Pokud K.M. vysloví část slova a nedořekne je (zadrhne se), pak prosím přepište
 toto nedovyslovené slovo, jak ho vyslovil, a připojte k němu pomlčku (bez
 mezery). Např.:
@@ -45,9 +51,10 @@ zopakuje), přidejte za toto slovo tři tečky. Např.:
   Rozumíte, tak to v tom případě vypadá... v té přírodě vypadá.
   viz http://www.makon.fm/#85-05A#67.94
 
-Doporučuji netrávit na jednom kousku mnoho času: Pokud je špatně rozumět, nebo
-úprava není systémem přijata, je lépe pasáž přeskočit. I odmítnuté úpravy jsou
-uloženy a mohou být zpětně obnoveny.
+=head3 Cizí slova
+
+Slova s nečeskou výslovností přepisujeme foneticky. Tedy ne I<Schwarz>,
+ale I<Švarc>.
 
 =head2 Ovládání
 
