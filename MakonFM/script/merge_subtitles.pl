@@ -116,15 +116,16 @@ sub are_identical_words {
     ;
     use warnings;
     my $l = word_length($sub1, $subs1);
+    my $tolerance = $l/4;
+    my ($pre1, $pre2);
     if ($sub1->{wordform} eq $sub2->{wordform}) {
-        if (($sub2->{timestamp} - $sub1->{timestamp}) < $l/2) {
-            return 1
-        }
-        else {
-            return 0
-        }
+        $tolerance = $l/2;
     }
-    elsif (($sub2->{timestamp} - $sub1->{timestamp}) < $l/4) {
+    elsif ($pre1 = prev_word($sub1, $subs1) and $pre2 = prev_word($sub2, $subs2) and $pre1->{wordform} eq $pre2->{wordform}) {
+        $tolerance = $l;
+    }
+    
+    if (($sub2->{timestamp} - $sub1->{timestamp}) < $tolerance) {
         return 1
     }
     else {
@@ -144,6 +145,11 @@ sub clean_temp_info {
     for (@$subs) {
         delete $_->{_i};
     }
+}
+
+sub prev_word {
+    my ($word, $subs) = @_;
+    return $subs->[ $word->{_i} - 1 ]
 }
 
 sub next_word {
@@ -181,8 +187,12 @@ sub main {
     my ($sub1, $head, $foot) = load_sub($sub1_jsonp);
     my ($sub2              ) = load_sub($sub2_jsonp);
     my $merged = merge2($sub1->{data}, $sub2->{data});
-    $sub1->{data} = $merged;
-    print $head, JSON->new->pretty->encode($sub1), $foot;
+    delete $sub1->{data};
+    my $filestem = delete $sub1->{filestem};
+    if (keys %$sub1) {
+        die "sub has more JSON fields than data and filestem";
+    }
+    print $head, qq({ "filestem": "$filestem", "data": ), JSON->new->pretty->space_before(0)->encode($merged), "});\n";
 }
 
 main();
