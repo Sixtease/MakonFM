@@ -146,6 +146,10 @@ function MakonFM_constructor(instance_name) {
         }
     });
 
+    m.editation_active.subscribe(function() {
+        _clear_selection();
+    });
+
     m.cancel_editation = function() { m.editation_active(false); };
 
     m.window_start = ko.observable(null);
@@ -1001,6 +1005,18 @@ function _xreq(opt) {
         return promise;
     } else {
         return $.ajax(opt);
+    }
+}
+
+function _clear_selection() {
+    if (window.getSelection) {
+        getSelection().collapseToStart();
+    }
+    else if (document.selection) {
+//        document.selection.clear();   // crashes IE8/WXP
+    }
+    else {
+        ;;; console.log('cannot clear selection: neither getSelection nor document.selection present');
     }
 }
 
