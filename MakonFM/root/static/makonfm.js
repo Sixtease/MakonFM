@@ -1010,7 +1010,11 @@ function _xreq(opt) {
 
 function _clear_selection() {
     if (window.getSelection) {
-        getSelection().collapseToStart();
+        try {
+            getSelection().collapseToStart();
+        } catch(e) {
+            ;;; console.log('getSelection().collapseToStart() failed:', e);
+        }
     }
     else if (document.selection) {
 //        document.selection.clear();   // crashes IE8/WXP
