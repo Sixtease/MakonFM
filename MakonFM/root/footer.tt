@@ -1,5 +1,8 @@
 <footer>
     <a href="/manual/" target="_blank">manuál</a>
     <input class="js-set-name" type="text" placeholder="Vaše jméno" />
-    <label>data &copy; 1960 &ndash; 1992 Karel Makoň</label>
+    <label>
+        data &copy; 1960 &ndash; 1992 Karel Makoň; k dispozici pod licení
+        <a href="http://creativecommons.org/licenses/by-sa/3.0/cz/">CC BY-SA 3.0</a>
+    </label>
 </footer>

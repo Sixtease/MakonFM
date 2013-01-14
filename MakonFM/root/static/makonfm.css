@@ -157,6 +157,9 @@ footer {
 footer > * {
     margin: 0 10px;
 }
+footer label {
+    display: inline-block;
+}
 
 .ua-ie .word:after {
     content: ' ';
