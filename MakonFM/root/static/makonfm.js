@@ -119,7 +119,12 @@ function MakonFM_constructor(instance_name) {
         if (!sub) return $();
         return m._get_word_el_by_ts(sub.timestamp);
     };
-
+    
+    m.medium_loaded = ko.observable(false);
+    
+    _current_filestem.subscribe(function() {
+        m.medium_loaded(false);
+    });
     m.edited_subtitles.subscribe(function($sel) {
         $.each(m.edited_subtitles.subs, function(i,s) {
             s.is_selected(false);
@@ -292,6 +297,12 @@ function MakonFM_constructor(instance_name) {
     });
     m.current_word.subscribe(function(w) {
         m._current_visible_word_index(m._i_by_ts(w.timestamp, m.visible_subs(), m.current_visible_word_index()));
+    });
+    
+    m.medium_loaded.subscribe(function(state) {
+        if (state === true) {
+            place_humanic_markers(m.subs);
+        }
     });
 
     m._ignore_hashchange = 0;
@@ -543,6 +554,7 @@ MakonFMp.clear_subs = function() {
     
     m.subs = [];
     m.visible_subs.removeAll();
+    clear_humanic_markers();
 };
 
 MakonFMp.show_word_info = function(word) {
@@ -795,6 +807,18 @@ $(document).on({
                     var fn = location.hash.substr(1);
                     MakonFM.current_file(fn);
                 }
+            },
+            progress: function(data) {
+                if (data.jPlayer.status.seekPercent == 100) {
+                    if (!MakonFM.medium_loaded()) {
+                        MakonFM.medium_loaded(true);
+                    }
+                }
+            },
+            loadeddata: function() {
+                if (!MakonFM.medium_loaded()) {
+                    MakonFM.medium_loaded(true);
+                }
             }
         });
         MakonFM.jp = $('#jquery_jplayer_1').data('jPlayer');
@@ -805,8 +829,9 @@ $(document).on({
     },
 
     'got_subtitles.MakonFM': function(evt, arg) {
-        if (ko.utils.stringStartsWith(MakonFM.current_file(), arg.filestem)) {
+        if (_string_starts_with(MakonFM.current_file(), arg.filestem)) {
             MakonFM.subs = arg.data;
+            //place_humanic_markers(arg.data);
         }
         MakonFM.subtitles[arg.filestem] = arg.data;
     },
@@ -1022,6 +1047,52 @@ function _clear_selection() {
     else {
         ;;; console.log('cannot clear selection: neither getSelection nor document.selection present');
     }
+}
+
+function _string_starts_with(string, startsWith) {
+    string = string || "";
+    if (startsWith.length > string.length)
+        return false;
+    return string.substring(0, startsWith.length) === startsWith;
+}
+
+function place_humanic_markers(subs) {
+    var chunks = [];
+    var in_humanic = false;
+    var cur_chunk = {};
+    var dur = MakonFM.jp.status.duration;
+    for (var i = 0; i < subs.length; i++) {
+        var sub = subs[i];
+        if      ( in_humanic && (( sub.humanic === 1) || (('is_humanic' in sub) && sub.is_humanic()))) {
+            cur_chunk.end = subs[i].timestamp;
+        }
+        else if ( in_humanic && ( !sub.humanic        || (('is_humanic' in sub) && sub.is_humanic()))) {
+            in_humanic = false;
+            chunks.push(cur_chunk);
+            cur_chunk = {};
+        }
+        else if (!in_humanic && (( sub.humanic === 1) || (('is_humanic' in sub) && sub.is_humanic()))) {
+            in_humanic = true;
+            cur_chunk.start = sub.timestamp;
+            cur_chunk.end = sub.timestamp;
+        }
+    }
+    var $seek_bar = $('.jp-seek-bar');
+    clear_humanic_markers();
+    $.map(chunks, function(chunk) {
+        var left  = 100 * chunk.start / dur + '%';
+        var width = 100 * (chunk.end - chunk.start) / dur + '%';
+        $('<div>')
+        .addClass('jpx-marker')
+        .css({
+            left:  left,
+            width: width
+        })
+        .appendTo('.jp-seek-bar');
+    });
+}
+function clear_humanic_markers() {
+    $('.jpx-marker').remove();
 }
 
 if ($.cookie('session')) { } else {

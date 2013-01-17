@@ -164,3 +164,21 @@ footer label {
 .ua-ie .word:after {
     content: ' ';
 }
+
+/* jPlayer override */
+.jp-seek-bar {
+    position: relative;
+}
+.jp-play-bar {
+    position: relative;
+    opacity: 0.9;
+    z-index: 2;
+}
+.jpx-marker {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    min-width: 1px;
+    background-color: gold;
+    background-image: linear-gradient(to bottom, #FFEB80 43%, #FFD700);
+}
