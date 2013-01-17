@@ -10,12 +10,14 @@
     <link rel="stylesheet" type="text/css" href="[% c.config.static_base %]/makonfm.css[% c.v('css') %]" />
     [%~ IF c.config.local %]
     <script type="text/javascript" src="[% c.config.static_base %]/jquery.js"></script>
+    <script type="text/javascript" src="[% c.config.static_base %]/knockout.js[% c.v('knockout') %]"></script>
+    <script type="text/javascript" src="[% c.config.static_base %]/jquery.cookie.js[% c.v('jcookie') %]"></script>
     [%~ ELSE %]
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.2/jquery.cookie.min.js"></script>
     [%~ END %]
     <script type="text/javascript" src="[% c.config.static_base %]/jquery.jplayer.min.js[% c.v('jplayer') %]"></script>
-    <script type="text/javascript" src="[% c.config.static_base %]/jquery.cookie.js[% c.v('jcookie') %]"></script>
-    <script type="text/javascript" src="[% c.config.static_base %]/knockout.js[% c.v('knockout') %]"></script>
 </head>
 
 <body>
