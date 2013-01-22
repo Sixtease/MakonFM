@@ -950,6 +950,26 @@ $('input.js-set-name').on('blur', function(evt) {
     $.cookie('author', $(evt.target).val(), { path: '/', expires: 365 });
 });
 
+$('.curword').on('change focusout', 'input', function(evt) {
+    var timestamp = $(this).data('timestamp');
+    var subs = MakonFM.subs;
+    var i = MakonFM._i_by_ts(timestamp, subs);
+    var word = subs[i];
+    var prev_timeout = word.save_timeout;
+    if (prev_timeout) { clearTimeout(prev_timeout); }
+    var save_timeout = setTimeout(save_word_fn(word), 300);
+    word.save_timeout = save_timeout;
+});
+$('.curword').on('focusin', 'input', function(evt) {
+    var timestamp = $(this).data('timestamp');
+    var subs = MakonFM.subs;
+    var i = MakonFM._i_by_ts(timestamp, subs);
+    var word = subs[i];
+    var prev_timeout = word.save_timeout;
+    if (prev_timeout) { clearTimeout(prev_timeout); }
+    delete word.save_timeout;
+});
+
 var Word = new function() {
     function get_lazy_observable(field_name, default_value) {
         if (!field_name) throw "field_name not given";
@@ -1094,6 +1114,35 @@ function place_humanic_markers(subs) {
 }
 function clear_humanic_markers() {
     $('.jpx-marker').remove();
+}
+
+function save_word(word) {
+    delete word.save_timeout;
+    word.corrected(true);
+    _xreq({
+        url: MakonFM.SAVE_WORD_URL,
+        type: 'post',
+        cache: false,
+        dataType: 'json',
+        data: {
+            stem: MakonFM.current_file(),
+            wordform: word.wordform,
+            occurrence: word.occurrence,
+            phonet: word.phonet,
+            timestamp: word.timestamp
+        }
+    }).done( function(result) {
+        if (result && result.success === 1) {
+            word.corrected(false);
+        }
+        else {
+            throw 'saving word failed';
+        }
+    });
+}
+
+function save_word_fn(word) {
+    return function() { save_word(word); };
 }
 
 if ($.cookie('session')) { } else {

@@ -147,4 +147,51 @@ sub subs_from_jsonp {
     return $subs
 }
 
+sub get_word_by_timestamp {
+    my ($subs, $timestamp) = @_;
+    return if not $subs;
+    my $data = $subs->{data};
+    return if ref $data ne 'ARRAY';
+    return _get_word_from_chunk($timestamp, $data, 0, $#$data);
+}
+
+sub _get_word_from_chunk {
+    my ($ts, $data, $start, $end) = @_;
+    if ($start > $end) { die '_get_word_from_chunk needs start not greater than end' }
+    while ($start < $end) {
+        my $start_ts = $data->[$start]{timestamp};
+        if ($start_ts == $ts) {
+            return {
+                word => $data->[$start],
+                i => $start,
+            }
+        }
+        my $end_ts = $data->[$end]{timestamp};
+        if ($end_ts == $ts) {
+            return {
+                word => $data->[$end],
+                i => $end,
+            }
+        }
+        if ($end - $start == 1) {
+            warn "No such timestamp ($ts) in $data->{filestem}";
+            return undef;
+        }
+        my $pivot = int($start + ($ts - $start_ts) / ($end_ts - $start_ts) * ($end - $start));
+        my $pivot_ts = $data->[$pivot]{timestamp};
+        if ($ts == $pivot_ts) {
+            return {
+                word => $data->[$pivot],
+                i => $pivot,
+            }
+        }
+        elsif ($ts < $pivot_ts) {
+            $end = $pivot - 1;
+        }
+        else {
+            $start = $pivot + 1;
+        }
+    }
+}
+
 1
