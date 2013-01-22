@@ -910,6 +910,7 @@ $(document).on('click', '.subtitles .word', function(evt) {
     if (evt.button != 0) return;
     var word = MakonFM.show_word_info(evt.target);
     MakonFM.jPlayer('pause', word.timestamp);
+    MakonFM.requested_position(MakonFM.jp.status.currentTime);
 });
 
 $('.subtitles').on({
