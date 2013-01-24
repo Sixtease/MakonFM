@@ -951,11 +951,23 @@ $('input.js-set-name').on('blur', function(evt) {
     $.cookie('author', $(evt.target).val(), { path: '/', expires: 365 });
 });
 
-$('.curword').on('change focusout', 'input', function(evt) {
+$('.curword').on('change', 'input', function(evt) {
     var timestamp = $(this).data('timestamp');
     var subs = MakonFM.subs;
     var i = MakonFM._i_by_ts(timestamp, subs);
     var word = subs[i];
+    word.dirty = true;
+    var prev_timeout = word.save_timeout;
+    if (prev_timeout) { clearTimeout(prev_timeout); }
+    var save_timeout = setTimeout(save_word_fn(word), 300);
+    word.save_timeout = save_timeout;
+});
+$('.curword').on('focusout', 'input', function(evt) {
+    var timestamp = $(this).data('timestamp');
+    var subs = MakonFM.subs;
+    var i = MakonFM._i_by_ts(timestamp, subs);
+    var word = subs[i];
+    if (!word.dirty) { return; }
     var prev_timeout = word.save_timeout;
     if (prev_timeout) { clearTimeout(prev_timeout); }
     var save_timeout = setTimeout(save_word_fn(word), 300);
@@ -983,6 +995,8 @@ function Word(w) {
 function init_for_inspection(w) {
     if (w.iinitd) { return w; }
     w.iinitd = true;
+    _to_observable(w, 'occurrence');
+    _to_observable(w, 'wordform');
     _to_observable(w, 'fonet');
     w.fonet_human  = ko.computed({
         read: function() {
@@ -998,10 +1012,22 @@ function init_for_inspection(w) {
             }
         }
     }, w);
+    w.occurrence.subscribe(_update_wordform, w);
     return w;
 }
 function _to_observable(obj, field_name) {
     obj[field_name] = ko.observable(obj[field_name]);
+}
+function _update_wordform(occurrence) {
+    if (typeof occurrence !== 'string') { return; }
+    var wordform = occurrence
+    .toLowerCase()
+    .replace(/\W+$/, '');
+    var old_wf = this.wordform();
+    if (old_wf !== wordform) {
+        this.wordform(wordform);
+        yft($('dd.wordform'));
+    }
 }
 
 var SUB_VERSION = {};
@@ -1120,8 +1146,21 @@ function clear_humanic_markers() {
     $('.jpx-marker').remove();
 }
 
+function yft(el) {
+    var me = this;
+    var args = arguments;
+    if (!$.ui) {
+        return $.getScript(MAKONFM_CONFIG.JQ_UI_URL)
+        .done(function() { yft.apply(me, args); });
+    }
+    $(el)
+    .css('background-color', 'yellow')
+    .animate({'background-color': 'transparent'}, {duration: 2000});
+}
+
 function save_word(word) {
     delete word.save_timeout;
+    delete word.dirty;
     word.corrected(true);
     _xreq({
         url: MakonFM.SAVE_WORD_URL,
@@ -1130,9 +1169,9 @@ function save_word(word) {
         dataType: 'json',
         data: {
             stem: MakonFM.current_file(),
-            wordform: word.wordform,
-            occurrence: word.occurrence,
-            fonet: word.fonet,
+            wordform: word.wordform(),
+            occurrence: word.occurrence(),
+            fonet: word.fonet(),
             timestamp: word.timestamp
         }
     }).done( function(result) {
