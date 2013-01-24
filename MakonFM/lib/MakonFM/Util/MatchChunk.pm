@@ -100,7 +100,7 @@ sub txt2dict {
     $dict .= "!ENTER       sil\n";
     $dict .= "!EXIT       sil\n";
     for (@_) {
-        next if $words{$_->{occurrence}}++;
+        next if $words{$_->{ucform}}++;
         $dict .= $_->{ucform} . '       ' . $_->{fonet} . "\n";
     }
     return $dict
