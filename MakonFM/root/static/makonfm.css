@@ -187,4 +187,6 @@ footer label {
     border: 0 none;
     font: inherit;
     width: 500px;
+    color: black;
+    background: transparent;
 }
