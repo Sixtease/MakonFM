@@ -18,11 +18,11 @@
     <dt class="occurrence">Výskyt</dt>
     <dd class="occurrence"><input type="text" data-bind="value: occurrence, enable: humanic" /></dd>
     
-    <dt class="fonet">Výslovnost</dt>
-    <dd class="fonet"><input type="text" data-bind="value: fonet_human, enable: humanic" /></dd>
-    
     <dt class="wordform">Slovní tvar</dt>
     <dd class="wordform"><input type="text" data-bind="value: wordform, enable: humanic" /></dd>
+    
+    <dt class="fonet">Výslovnost</dt>
+    <dd class="fonet"><input type="text" data-bind="value: fonet_human, enable: humanic" /></dd>
     
     <dt class="timestamp">Pozice</dt>
     <dd class="timestamp" data-bind="text: $root.format_time(timestamp)"></dd>
