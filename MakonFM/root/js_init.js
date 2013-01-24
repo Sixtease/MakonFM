@@ -9,7 +9,9 @@ MAKONFM_CONFIG.SAVE_WORD_URL      = '[% server %]/saveword/';
 MAKONFM_CONFIG.INIT_URL           = '[% server %]/init/';
 [%- IF c.config.local %]
 MAKONFM_CONFIG.MEDIA_BASE         = '/static/audio/';
+MAKONFM_CONFIG.JQ_UI_URL          = '/static/jquery-ui.js';
 [%- ELSE %]
 MAKONFM_CONFIG.MEDIA_BASE         = 'http://commondatastorage.googleapis.com/karel-makon-mp3/';
+MAKONFM_CONFIG.JQ_UI_URL          = '//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js';
 //MAKONFM_CONFIG.SUBTITLE_BASE      = 'http://commondatastorage.googleapis.com/karel-makon-sub/';
 [%- END -%]
