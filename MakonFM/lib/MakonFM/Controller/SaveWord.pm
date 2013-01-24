@@ -24,7 +24,7 @@ sub index :Path :Args(0) {
     
     my $wordform   = decode_utf8 $param->{wordform};
     my $occurrence = decode_utf8 $param->{occurrence};
-    my $phonet     =             $param->{phonet};
+    my $fonet      =             $param->{fonet};
     my $timestamp  =             $param->{timestamp};
     my $stem       =             $param->{stem};
     
@@ -39,7 +39,7 @@ sub index :Path :Args(0) {
     my $word = $word_data->{word};
     $word->{wordform}   = $wordform;
     $word->{occurrence} = $occurrence;
-    $word->{phonet}     = $phonet;
+    $word->{fonet}      = $fonet;
     
     $subs->{data}[$word_data->{i}] = $word;
     

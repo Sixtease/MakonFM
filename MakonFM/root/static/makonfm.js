@@ -105,8 +105,8 @@ function MakonFM_constructor(instance_name) {
     m.current_word = ko.computed({
         read: function() { return m._current_word() },
         write: function(w) {
-            if (m._current_word()) m._current_word().is_current(false);
-            w.is_current(true);
+            if (m._current_word()) m._current_word().current(false);
+            w.current(true);
             m._current_word(w);
         },
         owner: m
@@ -127,7 +127,7 @@ function MakonFM_constructor(instance_name) {
     });
     m.edited_subtitles.subscribe(function($sel) {
         $.each(m.edited_subtitles.subs, function(i,s) {
-            s.is_selected(false);
+            s.selected(false);
         });
         
         if ($sel) {
@@ -136,7 +136,7 @@ function MakonFM_constructor(instance_name) {
             var sel_last_idx  = m._i_by_ts($sel.last ().data('timestamp'), _vs, sel_first_idx);
             var new_edited_subs = _vs.slice(sel_first_idx, sel_last_idx+1);
             $.each(new_edited_subs, function(i,s) {
-                s.is_selected(true);
+                s.selected(true);
             });
             
             m.edited_subtitles.subs = new_edited_subs;
@@ -572,6 +572,7 @@ MakonFMp.show_word_info = function(word) {
         var i = m._i_by_ts(ts, subs);
         word = subs[i];
     }
+    init_for_inspection(word);
     m.inspected_word(word);
     return word;
 };
@@ -753,7 +754,7 @@ MakonFMp.save_editation = function() {
     if (words.length != $words.length) {
         ;;; console.log('words and $words differ in length', words, $words);
     }
-    $.each(words, function(i,w) { w.is_corrected(true) });
+    $.each(words, function(i,w) { w.corrected(true) });
     m.send_subtitles($words, str);
     m.editation_active(false);
 };
@@ -970,35 +971,38 @@ $('.curword').on('focusin', 'input', function(evt) {
     delete word.save_timeout;
 });
 
-var Word = new function() {
-    function get_lazy_observable(field_name, default_value) {
-        if (!field_name) throw "field_name not given";
-        if (arguments.length < 2) default_value = false;
-        return function() {
-            if (field_name in this) {
-                if (typeof this[field_name] !== 'function') {
-                    this[field_name] = ko.observable(this[field_name]);
-                }
-                return this[field_name].apply(this, arguments);
+function Word(w) {
+    if (w.winitd) { return w; }
+    w.winitd = true;
+    _to_observable(w, 'current');
+    _to_observable(w, 'corrected');
+    _to_observable(w, 'humanic');
+    _to_observable(w, 'selected');
+    return w;
+}
+function init_for_inspection(w) {
+    if (w.iinitd) { return w; }
+    w.iinitd = true;
+    _to_observable(w, 'fonet');
+    w.fonet_human  = ko.computed({
+        read: function() {
+            return Phonet.to_human(this.fonet()).str;
+        },
+        write: function(human) {
+            var fonet = Phonet.from_human(human);
+            if (fonet) {
+                this.fonet(fonet);
             }
-            if (arguments.length == 0) {
-                this[field_name] = ko.observable(default_value);
-                return this[field_name].apply(this, arguments);
+            else {
+                console.log('human-readable to phonetic failed for:', human);
             }
-            return this[field_name] = ko.observable.apply(ko, arguments);
-        };
-    }
-    
-    var word = {};
-    word.is_current   = get_lazy_observable('current');
-    word.is_corrected = get_lazy_observable('corrected');
-    word.is_humanic   = get_lazy_observable('humanic');
-    word.is_selected  = get_lazy_observable('selected');
-    
-    return function(w) {
-        return $.extend(w, word);
-    };
-};
+        }
+    }, w);
+    return w;
+}
+function _to_observable(obj, field_name) {
+    obj[field_name] = ko.observable(obj[field_name]);
+}
 
 var SUB_VERSION = {};
 $(document).one('init_arrived', function(evt, data) {
@@ -1084,15 +1088,15 @@ function place_humanic_markers(subs) {
     var dur = MakonFM.jp.status.duration;
     for (var i = 0; i < subs.length; i++) {
         var sub = subs[i];
-        if      ( in_humanic && (( sub.humanic === 1) || (('is_humanic' in sub) && sub.is_humanic()))) {
+        if      ( in_humanic && (( sub.humanic === 1) || ($.isFunction(sub.humanic) && sub.humanic()))) {
             cur_chunk.end = subs[i].timestamp;
         }
-        else if ( in_humanic && ( !sub.humanic        || (('is_humanic' in sub) && sub.is_humanic()))) {
+        else if ( in_humanic && ( !sub.humanic        || ($.isFunction(sub.humanic) && sub.humanic()))) {
             in_humanic = false;
             chunks.push(cur_chunk);
             cur_chunk = {};
         }
-        else if (!in_humanic && (( sub.humanic === 1) || (('is_humanic' in sub) && sub.is_humanic()))) {
+        else if (!in_humanic && (( sub.humanic === 1) || ($.isFunction(sub.humanic) && sub.humanic()))) {
             in_humanic = true;
             cur_chunk.start = sub.timestamp;
             cur_chunk.end = sub.timestamp;
@@ -1128,7 +1132,7 @@ function save_word(word) {
             stem: MakonFM.current_file(),
             wordform: word.wordform,
             occurrence: word.occurrence,
-            phonet: word.phonet,
+            fonet: word.fonet,
             timestamp: word.timestamp
         }
     }).done( function(result) {

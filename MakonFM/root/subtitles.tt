@@ -2,10 +2,10 @@
     <span class="word" data-bind="
         text: occurrence,
         css: {
-            cur       : is_current(),
-            corrected : is_corrected(),
-            humanic   : is_humanic(),
-            selected  : is_selected()
+            cur       : current,
+            corrected : corrected,
+            humanic   : humanic,
+            selected  : selected
         },
         attr: {
             id: $root.name + '-word-ts-' + timestamp,
@@ -19,7 +19,7 @@
     <dd class="occurrence"><input type="text" data-bind="value: occurrence, enable: humanic" /></dd>
     
     <dt class="fonet">Výslovnost</dt>
-    <dd class="fonet"><input type="text" data-bind="value: fonet, enable: humanic" /></dd>
+    <dd class="fonet"><input type="text" data-bind="value: fonet_human, enable: humanic" /></dd>
     
     <dt class="wordform">Slovní tvar</dt>
     <dd class="wordform"><input type="text" data-bind="value: wordform, enable: humanic" /></dd>

@@ -52,6 +52,7 @@
     <script type="text/javascript">
         [%~ PROCESS 'js_init.js' | indent(8) %]
     </script>
+    <script type="text/javascript" src="[% c.config.static_base %]/phonet.js[% c.v('phonet') %]"></script>
     <script type="text/javascript" src="[% c.config.static_base %]/makonfm.js[% c.v('js') %]"></script>
 
 <!--[if IE 7 ]></div><![endif]-->
