@@ -29,7 +29,7 @@ $MakonFM::Util::HTKout2subs::quiet = 1;
 
 sub get_subs {
 
-    my ($trans_fn, $mfcc_fn, $start_pos, $end_pos) = @_;
+    my ($trans_fn, $mfcc_fn, $start_pos, $end_pos, $audio_fn) = @_;
 
     local $CWD = $workpath if $workpath;
 
@@ -48,6 +48,12 @@ sub get_subs {
     open my $dict_fh, '>:encoding(iso-8859-2)', $dict_fn or die "Couldn't open '$dict_fn': $!";
     print {$dict_fh} $dict;
     close $dict_fh;
+
+    if ($audio_fn) {
+        my $wav_chunk_fn = 'chunk0.wav';
+        unlink $wav_chunk_fn;
+        system(qq(sox "$audio_fn" "$wav_chunk_fn" trim "$start_pos" "=$end_pos" norm));
+    }
 
     my $mfc_chunk_fn = 'chunk0.mfc';
     unlink $mfc_chunk_fn;

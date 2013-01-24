@@ -32,7 +32,16 @@ sub index :Path :Args(0) {
     my $start = $param->{start};
     my $end   = $param->{ end };
     
-    my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans, $mfcc_fn, $start, $end);
+    my $mp3_fn;
+    if ($c->config->{mkwav}) {
+        $mp3_fn =
+            $c->econf(qw{paths audio mp3})
+            . $filestem
+            . '.mp3'
+        ;
+    }
+    
+    my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans, $mfcc_fn, $start, $end, $mp3_fn);
     $subs->{filestem} = $filestem;
     $subs->{start} = $start;
     $subs->{end} = $end;
