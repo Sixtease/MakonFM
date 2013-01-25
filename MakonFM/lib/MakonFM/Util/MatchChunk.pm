@@ -29,7 +29,8 @@ $MakonFM::Util::HTKout2subs::quiet = 1;
 
 sub get_subs {
 
-    my ($trans_fn, $mfcc_fn, $start_pos, $end_pos, $audio_fn) = @_;
+    my ($trans_fn, $mfcc_fn, $start_pos, $end_pos, $audio_fn, $opt) = @_;
+    $opt ||= {};
 
     local $CWD = $workpath if $workpath;
 
@@ -37,35 +38,40 @@ sub get_subs {
 
     my @words = parse_words($trans_fh);
 
-    my $trans_mlf = txt2mlf(@words);
-    my $trans_mlf_fn = 'trans.mlf';
+    my $rand = int(rand(100));
+
+    my $chunk_name = expand_wc('chunkX.lab', $rand);
+    my $trans_mlf = txt2mlf($chunk_name, @words);
+    my $trans_mlf_fn = expand_wc('transX.mlf', $rand);
     open my $trans_mlf_fh, '>:encoding(iso-8859-2)', $trans_mlf_fn or die "Couldn't open $trans_mlf_fn for writing: $!";
     print {$trans_mlf_fh} $trans_mlf;
     close $trans_mlf_fh;
 
     my $dict = txt2dict(@words);
-    my $dict_fn = 'dict';
+    my $dict_fn = expand_wc('dictX', $rand);
     open my $dict_fh, '>:encoding(iso-8859-2)', $dict_fn or die "Couldn't open '$dict_fn': $!";
     print {$dict_fh} $dict;
     close $dict_fh;
 
     if ($audio_fn) {
-        my $wav_chunk_fn = 'chunk0.wav';
+        my $wav_chunk_fn = expand_wc('chunkX.wav', $rand);
         unlink $wav_chunk_fn;
         system(qq(sox "$audio_fn" "$wav_chunk_fn" trim "$start_pos" "=$end_pos" norm));
+        unlink $wav_chunk_fn unless $opt->{keep_temp};
     }
 
-    my $mfc_chunk_fn = 'chunk0.mfc';
+    my $mfc_chunk_fn = expand_wc('chunkX.mfc', $rand);
     unlink $mfc_chunk_fn;
     system(qq(${HTKpath}HCopy -C config-mfcc2mfcc -s ${start_pos}e7 -e ${end_pos}e7 "$mfcc_fn" "$mfc_chunk_fn"));
 
-    my $aligned_fn = 'aligned.mlf';
+    my $aligned_fn = expand_wc('alignedX.mlf', $rand);
     unlink $aligned_fn;
     system(qq(LANG=C ${HTKpath}HVite -l '*' -b silence -C config1 -a -H hmmmacros -H hmmdefs -i $aligned_fn -m -t 500.0 -I "$trans_mlf_fn" -y lab "$dict_fn" monophones1 "$mfc_chunk_fn"));
 
     my @subs = do {
         open my $aligned_fh, '<', $aligned_fn or die "Couldn't open '$aligned_fn': $!";
         my $splits = [0+$start_pos];
+        $splits->[$rand] = 0+$start_pos;  # since we're assigning chunks random numbers, we need to set the offset to the given chunk number
         grep {;
             $_->{wordform} ne 'silence'
         } @{ MakonFM::Util::HTKout2subs::get_subs($splits, $aligned_fh) }
@@ -85,6 +91,8 @@ sub get_subs {
     if (scalar(@words) xor scalar(@subs)) {
         $success = 0;
     }
+
+    unlink $mfc_chunk_fn, $aligned_fn, $dict_fn, $trans_mlf_fn unless $opt->{keep_temp};
 
     return {
         data => \@subs,
@@ -107,9 +115,10 @@ sub txt2dict {
 }
 
 sub txt2mlf {
+    my $chunk = shift;
     my $rv = '';
     $rv .= "#!MLF!#\n";
-    $rv .= qq{"chunk0.lab"\n};
+    $rv .= qq{"$chunk"\n};
     $rv .= "!ENTER\n";
     for (@_) {
         $rv .=  $_->{ucform} . "\n";
@@ -198,6 +207,12 @@ sub occ2form {
         }
         return lc
     }
+}
+
+sub expand_wc {
+    my ($wc, $pat) = @_;
+    $wc =~ s/X/$pat/;
+    return $wc;
 }
 
 1
