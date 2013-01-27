@@ -6,26 +6,40 @@ use Exporter qw(import);
 
 our @EXPORT_OK = qw(vyslov);
 
+my $dict_tbl;
+sub set_dict {
+    ($dict_tbl) = @_;
+}
+
 sub vyslov {
+    if (not defined $dict_tbl) {
+        warn 'using vyslov without having set dictionary';
+    }
     my $rv = '';
     for (my ($tmp) = @_) {
         if (/[^\w\s]/) {
             chomp;
-            return "sp";
-            next
+            return ["sil"]
         }
         chomp;
+        if (my @spec = specialcase()) {
+            return \@spec
+        }
         init();
         prepis();
         tr/[A-Z]/[a-z]/;
         infreq();
-        add_sp();
-        return $_
+        return ["$_ sp"]
     }
 }
 
+sub specialcase {
+    if (not defined $dict_tbl) { return }
+    return $dict_tbl->search({ form => $_ })->get_column('pron')->all
+}
+
 sub init {
-    s/NISM/NYSM/g;
+    s/NISM/NYZM/g;
     s/ANTI/ANTY/g;
     s/AKTI/AKTY/g;
     s/ATIK/ATYK/g;
@@ -36,7 +50,6 @@ sub init {
     s/ARKTI/ARKTY/g;
     s/ATRAKTI/ATRAKTY/g;
     s/AUDI/AUDY/g;
-    s/AUTOMATI/AUTOMATY/g;
     s/CAUSA/KAUZA/g;
     s/CELSIA/CELZIA/g;
     s/CHIL/ČIL/g;
@@ -57,12 +70,12 @@ sub init {
     s/DISP/DYSP/g;
     s/DIST/DYST/g;
     s/DIVIDE/DYVIDE/g;
+    s/^DOUČ/DO!UČ/g;
     s/DUKTI/DUKTY/g;
     s/EDIC/EDYC/g;
-    s/ERROR/EROR/g;
-    s/^EX([AEIOUÁÉÍÓÚŮ])/EGZ$1/g;
+    s/^EX(?=[AEIOUÁÉÍÓÚŮ])/EGZ/g;
     s/ELEKTRONI/ELEKTRONY/g;
-    s/ENERGETIK/ENERGETYK/g;
+    s/ENERGETI/ENERGETY/g;
     s/ETIK/ETYK/g;
     s/FEMINI/FEMINY/g;
     s/FINIŠ/FINYŠ/g;
@@ -70,12 +83,13 @@ sub init {
     s/GENETI/GENETY/g;
     s/GIENI/GIENY/g;
     s/IMUNI/IMUNY/g;
+    s/^INDI(?=.)/INDY/g;
     s/INDIV/INDYV/g;
     s/INICI/INYCI/g;
     s/INVESTI/INVESTY/g;
     s/KARATI/KARATY/g;
     s/KARDI/KARDY/g;
-    s/KLAUS/KLAUZ/g;
+    s/KLAUS(?=.)/KLAUZ/g;
     s/KOMUNI/KOMUNY/g;
     s/KONDI/KONDY/g;
     s/KREDIT/KREDYT/g;
@@ -88,14 +102,16 @@ sub init {
     s/MOTIV/MOTYV/g;
     s/MANAG/MENEDŽ/g;
     s/NSTI/NSTY/g;
-    s/TEMATI/TEMATY/g;
     s/MINI/MINY/g;
     s/MINUS/MÝNUS/g;
     s/ING/YNG/g;
     s/GATIV/GATYV/g;
-    s/MATI/MATY/g;
+    s/(?<=.)MATI/MATY/g;
+    s/^MATI(?=[^CČN])/MATY/g;
+    s/^MATINÉ/MATYNÉ/g;
     s/MANIP/MANYP/g;
     s/MODERNI/MODERNY/g;
+    s/^NAU/NA!U/g;
     s/^NE/NE!/g;
     s/^ODD/OD!D/g;
     s/^ODT/OT!T/g;
@@ -109,6 +125,7 @@ sub init {
     s/^PODT/POT!T/g;
     s/POLITI/POLITY/g;
     s/POZIT/POZYT/g;
+    s/^POUČ/PO!UČ/g;
     s/^POULI/PO!ULI/g;
     s/PRIVATI/PRIVATY/g;
     s/PROSTITU/PROSTYTU/g;
@@ -120,7 +137,7 @@ sub init {
     s/ROCK/ROK/g;
     s/^ROZ/ROZ!/g;
     s/RUTIN/RUTYN/g;
-    s/^RÁDI(.)/RÁDY$1/g;
+    s/^RÁDI(?=.)/RÁDY/g;
     s/SHOP/sh O P/g;
     s/^SEBE/SEBE!/g;
     s/^SHO/SCHO/g;
@@ -146,6 +163,7 @@ sub init {
     s/UNIVER/UNYVER/g;
     s/VENTI/VENTY/g;
     s/VERTIK/VERTYK/g;
+    s/^ZAU/ZA!U/g;
 }
 
 sub prepis {
@@ -164,7 +182,7 @@ sub prepis {
     s/X/KS/g;
 
     # ošetření Ě 
-    s/([BPFV])Ě/$1JE/g;
+    s/(?<=[BFPV])Ě/JE/g;
     s/DĚ/ĎE/g;
     s/TĚ/ŤE/g;
     s/NĚ/ŇE/g;
@@ -181,49 +199,49 @@ sub prepis {
 
     # asimilace znělosti
     s/B$/P/g;
-    s/B([PTŤKSŠCČ#F])/P$1/g;
-    s/B([BDĎGZŽ@&H])$/P$1/g;
-    s/P([BDĎGZŽ@&H])/B$1/g;
+    s/B(?=[PTŤKSŠCČ#F])/P/g;
+    s/B(?=[BDĎGZŽ@&H]$)/P/g;
+    s/P(?=[BDĎGZŽ@&H])/B/g;
     s/D$/T/g;
-    s/D([PTŤKSŠCČ#F])/T$1/g;
-    s/D([BDĎGZŽ@&H])$/T$1/g;
-    s/T([BDĎGZŽ@&H])/D$1/g;
+    s/D(?=[PTŤKSŠCČ#F])/T/g;
+    s/D(?=[BDĎGZŽ@&H]$)/T/g;
+    s/T(?=[BDĎGZŽ@&H])/D/g;
     s/Ď$/Ť/g;
-    s/Ď([PTŤKSŠCČ#F])/Ť$1/g;
-    s/Ď([BDĎGZŽ@&H])$/Ť$1/g;
-    s/Ť([BDĎGZŽ@&H])/Ď$1/g;
+    s/Ď(?=[PTŤKSŠCČ#F])/Ť/g;
+    s/Ď(?=[BDĎGZŽ@&H]$)/Ť/g;
+    s/Ť(?=[BDĎGZŽ@&H])/Ď/g;
     s/V$/F/g;
-    s/V([PTŤKSŠCČ#F])/F$1/g;
-    s/V([BDĎGZŽ@&H])$/F$1/g;
-    s/F([BDĎGZŽ@&H])/V$1/g;
+    s/V(?=[PTŤKSŠCČ#F])/F/g;
+    s/V(?=[BDĎGZŽ@&H]$)/F/g;
+    s/F(?=[BDĎGZŽ@&H])/V/g;
     s/G$/K/g;
-    s/G([PTŤKSŠCČ#F])/K$1/g;
-    s/G([BDĎGZŽ@&H])$/K$1/g;
-    s/K([BDĎGZŽ@&H])/G$1/g;
+    s/G(?=[PTŤKSŠCČ#F])/K/g;
+    s/G(?=[BDĎGZŽ@&H]$)/K/g;
+    s/K(?=[BDĎGZŽ@&H])/G/g;
     s/Z$/S/g;
-    s/Z([PTŤKSŠCČ#F])/S$1/g;
-    s/Z([BDĎGZŽ@&H])$/S$1/g;
-    s/S([BDĎGZŽ@&H])/Z$1/g;
+    s/Z(?=[PTŤKSŠCČ#F])/S/g;
+    s/Z(?=[BDĎGZŽ@&H]$)/S/g;
+    s/S(?=[BDĎGZŽ@&H])/Z/g;
     s/Ž$/Š/g;
-    s/Ž([PTŤKSŠCČ#F])/Š$1/g;
-    s/Ž([BDĎGZŽ@&H])$/Š$1/g;
-    s/Š([BDĎGZŽ@&H])/Ž$1/g;
+    s/Ž(?=[PTŤKSŠCČ#F])/Š/g;
+    s/Ž(?=[BDĎGZŽ@&H]$)/Š/g;
+    s/Š(?=[BDĎGZŽ@&H])/Ž/g;
     s/H$/#/g;
-    s/H([PTŤKSŠCČ#F])/#$1/g;
-    s/H([BDĎGZŽ@&H])$/#$1/g;
-    s/#([BDĎGZŽ@&H])/H$1/g;
+    s/H(?=[PTŤKSŠCČ#F])/#/g;
+    s/H(?=[BDĎGZŽ@&H]$)/#/g;
+    s/#(?=[BDĎGZŽ@&H])/H/g;
     s/\@$/C/g;
-    s/\@([PTŤKSŠCČ#F])/C$1/g;
-    s/\@([BDĎGZŽ@&H])$/C$1/g;
-    s/C([BDĎGZŽ@&H])/\@$1/g;
+    s/\@(?=[PTŤKSŠCČ#F])/C/g;
+    s/\@(?=[BDĎGZŽ@&H]$)/C/g;
+    s/C(?=[BDĎGZŽ@&H])/\@/g;
     s/&$/Č/g;
-    s/&([PTŤKSŠCČ#F])/Č$1/g;
-    s/&([BDĎGZŽ@&H])$/Č$1/g;
-    s/Č([BDĎGZŽ@&H])/&$1/g;
+    s/&(?=[PTŤKSŠCČ#F])/Č/g;
+    s/&(?=[BDĎGZŽ@&H]$)/Č/g;
+    s/Č(?=[BDĎGZŽ@&H])/&/g;
     s/Ř$/>/g;
-    s/Ř([PTŤKSŠCČ#F])/>$1/g;
-    s/Ř([BDĎGZŽ@&H])$/>$1/g;
-    s/([PTŤKSŠCČ#F])Ř/$1>/g;
+    s/Ř(?=[PTŤKSŠCČ#F])/>/g;
+    s/Ř(?=[BDĎGZŽ@&H]$)/>/g;
+    s/(?<=[PTŤKSŠCČ#F])Ř/>/g;
 
 
     #zbytek
@@ -286,18 +304,17 @@ sub pilsen2prague {
     else { _pilsen2prague() }
 }
 sub _pilsen2prague {
-    s/au/aw/g;
-    s/cz/ch/g;
-    s/ch/x/g;
-    s/dzs/dzh/g;
-    s/es/e s/g;
-    s/eu/ew/g;
-    s/ou/ow/g;
-    s/rsz/rsh/g;
-    s/rzs/rzh/g;
-    s/sz/sh/g;
-    s/ts/dz/g;
-    s/zs/zh/g;
+    s/aw/au/g;
+    s/ch/cz/g;
+    s/x/ch/g;
+    s/dzh/dzs/g;
+    s/ew/eu/g;
+    s/ow/ou/g;
+    s/rsh/rsz/g;
+    s/rzh/rzs/g;
+    s/sh/sz/g;
+    s/dz/ts/g;
+    s/zh/zs/g;
 }
 
 sub infreq {
@@ -308,11 +325,7 @@ sub infreq {
     s/oo/o/g;
 }
 
-sub add_sp {
-    # skip prepositions
-    return if /^(?:p (?:r(?:z (?:e t|i)| o)|o(?: t)?)|n a(?: t)?|[kosuf]|o t|d o|b e s|z a) $/;
-    s/ ?$/ sp/;
-}
+1
 
 __END__
 

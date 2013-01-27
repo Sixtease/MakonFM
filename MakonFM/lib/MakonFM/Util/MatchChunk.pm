@@ -107,9 +107,12 @@ sub txt2dict {
     $dict .= "silence       sil\n";
     $dict .= "!ENTER       sil\n";
     $dict .= "!EXIT       sil\n";
-    for (@_) {
-        next if $words{$_->{ucform}}++;
-        $dict .= $_->{ucform} . '       ' . $_->{fonet} . "\n";
+    for my $w (@_) {
+        my $form = $w->{ucform};
+        for my $fonet (@{ $w->{fonet_list} }) {
+            next if $words{"$form;$fonet"}++;
+            $dict .= "$form       $fonet\n";
+        }
     }
     return $dict
 }
@@ -191,7 +194,7 @@ sub parse_words {
         my $ucform = uc occ2form($w);
         push @words, {
             occurrence => $w,
-            fonet => vyslov($ucform),
+            fonet_list => vyslov($ucform),
             ucform => $ucform,
         };
     }

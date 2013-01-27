@@ -3,6 +3,7 @@ use Moose;
 use namespace::autoclean;
 use Encode;
 use MakonFM::Util::MatchChunk;
+use MakonFM::Util::Vyslov;
 use MakonFM::Util::Subs;
 use JSON ();
 use URL::Encode ();
@@ -41,6 +42,7 @@ sub index :Path :Args(0) {
         ;
     }
     
+    MakonFM::Util::Vyslov::set_dict($c->model->resultset('Dict'));
     my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans, $mfcc_fn, $start, $end, $mp3_fn);
     $subs->{filestem} = $filestem;
     $subs->{start} = $start;
