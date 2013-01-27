@@ -8,7 +8,7 @@ extends qw(DBIx::Class::ResultSet);
 
 sub add_word {
     my ($self, $word) = @_;
-    $self->create({
+    $self->find_or_create({
         form => $word->{wordform},
         pron => $word->{fonet},
     });
