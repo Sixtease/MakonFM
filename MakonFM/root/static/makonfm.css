@@ -131,7 +131,7 @@ h1 {
     color: black;
 }
 body div.jp-audio {
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
 }
