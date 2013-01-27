@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS prondict;
 DROP TABLE IF EXISTS versions;
 DROP TABLE IF EXISTS sub_info;
 DROP TABLE IF EXISTS submissions;
@@ -26,4 +27,11 @@ CREATE TABLE sub_info (
 CREATE TABLE versions (
     key varchar(255) PRIMARY KEY,
     value integer NOT NULL
+);
+
+CREATE TABLE dict (
+    id serial PRIMARY KEY,
+    form varchar(63) NOT NULL,
+    pron text NOT NULL,
+    UNIQUE(form, pron)
 );
