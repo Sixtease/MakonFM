@@ -22,7 +22,7 @@
     <dd class="wordform"><input type="text" data-bind="value: wordform, enable: humanic" /></dd>
     
     <dt class="fonet">Výslovnost</dt>
-    <dd class="fonet"><input type="text" data-bind="value: fonet_human, enable: humanic" /></dd>
+    <dd class="fonet" data-bind="text: fonet_human"></dd>
     
     <dt class="timestamp">Pozice</dt>
     <dd class="timestamp" data-bind="text: $root.format_time(timestamp)"></dd>

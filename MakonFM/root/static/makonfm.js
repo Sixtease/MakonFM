@@ -13,6 +13,9 @@ function MakonFM_constructor(instance_name) {
     m.requested_position = ko.computed({
         read: function() { return m._requested_position(); },
         write: function(pos) {
+            if (!_current_filestem()) {
+                return;
+            }
             m._requested_position(+pos);
             var new_hash = [m.current_file(), pos].join('#');
             m.set_hash(new_hash);
@@ -997,21 +1000,7 @@ function init_for_inspection(w) {
     w.iinitd = true;
     _to_observable(w, 'occurrence');
     _to_observable(w, 'wordform');
-    _to_observable(w, 'fonet');
-    w.fonet_human  = ko.computed({
-        read: function() {
-            return Phonet.to_human(this.fonet()).str;
-        },
-        write: function(human) {
-            var fonet = Phonet.from_human(human);
-            if (fonet) {
-                this.fonet(fonet);
-            }
-            else {
-                console.log('human-readable to phonetic failed for:', human);
-            }
-        }
-    }, w);
+    w.fonet_human = Phonet.to_human(w.fonet).str;
     w.occurrence.subscribe(_update_wordform, w);
     return w;
 }
@@ -1020,9 +1009,25 @@ function _to_observable(obj, field_name) {
 }
 function _update_wordform(occurrence) {
     if (typeof occurrence !== 'string') { return; }
-    var wordform = occurrence
-    .toLowerCase()
-    .replace(/\W+$/, '');
+    var lc = occurrence.toLowerCase();
+    var wordform;
+    
+    // \W matches multibyte letters :-(
+    var match = /\W+$/.exec(lc);
+    if (match) {
+        var bW = match[0];
+        var i = bW.length;
+        var l = 0;
+        while (bW.charCodeAt(i-1) < 128) {
+            i--;
+            l++;
+        }
+        wordform = lc.substr(0, lc.length - l);
+    }
+    else {
+        wordform = lc;
+    }
+    
     var old_wf = this.wordform();
     if (old_wf !== wordform) {
         this.wordform(wordform);
@@ -1171,7 +1176,7 @@ function save_word(word) {
             stem: MakonFM.current_file(),
             wordform: word.wordform(),
             occurrence: word.occurrence(),
-            fonet: word.fonet(),
+            fonet: word.fonet,
             timestamp: word.timestamp
         }
     }).done( function(result) {
