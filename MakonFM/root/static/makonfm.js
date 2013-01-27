@@ -279,6 +279,10 @@ function MakonFM_constructor(instance_name) {
             t += order * v;
             order *= 60;
         });
+        if (isNaN(t)) {
+            this.valueHasMutated(); // to restore the previous digits in the field
+            return;
+        }
         this(t);
     }
 
