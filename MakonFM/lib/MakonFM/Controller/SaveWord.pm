@@ -2,7 +2,6 @@ package MakonFM::Controller::SaveWord;
 use Moose;
 use namespace::autoclean;
 use Encode;
-use MakonFM::Util::MatchChunk;
 use MakonFM::Util::Subs;
 use JSON ();
 use URL::Encode ();
