@@ -3,6 +3,7 @@ use Moose;
 use namespace::autoclean;
 use Encode;
 use MakonFM::Util::Subs;
+use MakonFM::Util::Vyslov qw(vyslov);
 use JSON ();
 use URL::Encode ();
 
@@ -36,6 +37,19 @@ sub index :Path :Args(0) {
         die "word not found (timestamp $timestamp)"
     }
     my $word = $word_data->{word};
+    
+    if ($word->{wordform} ne $wordform) {
+        my $dict_rs = $c->model->resultset('Dict');
+        my $ucform = uc $wordform;
+        MakonFM::Util::Vyslov::set_dict( $dict_rs );
+        my $prons = vyslov($ucform);
+        if ( $prons ) {
+            if (grep { $fonet eq $_} @$prons ) { } else {
+                $dict_rs->add_word({wordform => $ucform, fonet => $fonet});
+            }
+        }
+    }
+    
     $word->{wordform}   = $wordform;
     $word->{occurrence} = $occurrence;
     $word->{fonet}      = $fonet;

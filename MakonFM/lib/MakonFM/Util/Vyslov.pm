@@ -15,21 +15,23 @@ sub vyslov {
     if (not defined $dict_tbl) {
         warn 'using vyslov without having set dictionary';
     }
-    my $rv = '';
     for (my ($tmp) = @_) {
+        my @rv;
         if (/[^\w\s]/) {
             chomp;
             return ["sil"]
         }
         chomp;
         if (my @spec = specialcase()) {
-            return \@spec
+            @rv = @spec;
         }
         init();
         prepis();
         tr/[A-Z]/[a-z]/;
         infreq();
-        return ["$_ sp"]
+        add_sp();
+        push @rv, $_;
+        return \@rv;
     }
 }
 
@@ -323,6 +325,10 @@ sub infreq {
     s/ew/e u/g;
     s/mg/m/g;
     s/oo/o/g;
+}
+
+sub add_sp {
+    s/ *$/ sp/;
 }
 
 1
