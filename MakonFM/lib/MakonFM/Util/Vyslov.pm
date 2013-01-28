@@ -31,6 +31,7 @@ sub vyslov {
         infreq();
         add_sp();
         push @rv, $_;
+        add_variants(\@rv);
         return \@rv;
     }
 }
@@ -329,6 +330,13 @@ sub infreq {
 
 sub add_sp {
     s/ *$/ sp/;
+}
+
+sub add_variants {
+    my ($rv) = @_;
+    if (/^o /) {    # opice => vopice
+        push @$rv, "v $_";
+    }
 }
 
 1
