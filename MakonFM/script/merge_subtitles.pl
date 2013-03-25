@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# merge_subtitles.pl new.sub.js old.sub.js > merged.sub.js
+
 use strict;
 use warnings;
 use utf8;
