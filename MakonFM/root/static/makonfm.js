@@ -801,6 +801,7 @@ $(document).on({
         MakonFM.jPlayer({
             swfPath: MakonFM.STATIC_BASE,
             supplied: "mp3",
+            solution: 'flash,html',
             timeupdate: function(evt) {
                 if (MakonFM.editation_active()) return;
                 try {
