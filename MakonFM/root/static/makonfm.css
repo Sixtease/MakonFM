@@ -37,7 +37,7 @@ h1 {
     height: 66px;
     overflow: hidden;
     position: relative;
-    margin-top: 58px;
+    margin: 58px 10px 0;
 }
 .subtitles.edited {
     height: auto;
