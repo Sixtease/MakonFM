@@ -122,6 +122,12 @@ function MakonFM_constructor(instance_name) {
         if (!sub) return $();
         return m._get_word_el_by_ts(sub.timestamp);
     };
+    m._get_word_els_span = function(start_sub,end_sub) {
+        if (!start_sub) return $();
+        var $start = m._get_word_el(start_sub);
+        var $end   = m._get_word_el(  end_sub);
+        return $start.add($start.nextUntil($end)).add($end);
+    };
     
     m.medium_loaded = ko.observable(false);
     
@@ -313,6 +319,11 @@ function MakonFM_constructor(instance_name) {
     });
 
     m._ignore_hashchange = 0;
+    
+    m.min_autostop_pause = 5;   // seconds
+    m.min_autostop_window_length = 3;
+    m.max_window_length = 15;   // TODO enforce globally
+    m.min_autostop_phones = 10;
 
     return m;
 }
@@ -789,6 +800,86 @@ MakonFMp.set_hash = function(hash) {
     m._ignore_hashchange++;
     location.hash = hash;
 };
+
+MakonFMp.get_next_uncertainty_window = function(start_ts) {
+    var m = this;
+    var subs = m.subs;
+    var i = m._i_by_ts(start_ts, subs);
+    var min_pause = m.min_autostop_pause;
+    var mcm = m.get_cm_treshold();
+    var min_len = m.min_autostop_window_length;
+    var max_len = m.max_window_length;
+    var min_phones = m.min_autostop_phones;
+    var len;
+    
+    var last_pause_i = i;
+    var max_last_autostop_ts = start_ts - min_pause;
+    while (last_pause_i > 0 && !subs[last_pause_i].autopause_start && subs[last_pause_i].timestamp > max_last_autostop_ts) {
+        last_pause_i--;
+    }
+    if (subs[last_pause_i].autopause_start) {
+        start_ts = subs[last_pause_i].timestamp + min_pause;
+        i = m._i_by_ts(start_ts, subs);
+    }
+    
+    var sub, cnt_phones, buf, win;
+    START_SEARCH:
+    while (++i < subs.length && !win) {
+        sub = subs[i];
+        if (sub.cmscore < mcm) {
+            buf = [sub];
+            cnt_phones = sub.fonet.split(' ').length;
+            END_SEARCH:
+            while (
+                   ( ++i < subs.length )
+                && ( (sub=subs[i]).cmscore < mcm )
+                && ( (len=sub.timestamp-buf[0].timestamp) < max_len )
+            ) {
+                cnt_phones += sub.fonet.split(' ').length;
+                buf.push(sub);
+            }
+            if (len > min_len && cnt_phones > min_phones) {
+                win = buf.concat();
+            }
+        }
+    }
+    win[0].autopause_start = true;
+    return win;
+};
+
+MakonFMp.edit_uncertainty_window = function(win) {
+    var m = this;
+    var _vs = m.visible_subs();
+    if (!win || !win.length) { return 'no window'; }
+    if (!_vs || !_vs.length) { return 'no visible subs'; }
+    if (win[0].timestamp < _vs[0].timestamp) { return 'visible subs beyond window'; }
+    if (win[win.length-1].timestamp > _vs[_vs.length-1].timestamp) { return 'window not yet reached'; }
+    var $win = m._get_word_els_span(win[0],win[win.length-1]);
+    m.edited_subtitles($win);
+};
+
+MakonFMp.get_cm_treshold = function() {
+    var m = this;
+    var stem = m.current_file();
+    if (!('cm_thres' in m)) { m.cm_thres = {}; }
+    var cm_thres = m.cm_thres[stem];
+    if (!cm_thres) {
+        cm_thres = m.cm_thres[stem] = (function() {
+            var s = m.subs;
+            var cms = new Array(s.length);
+            var cnt = 0;
+            for (var i = 0; i < s.length; i++) {
+                if (s[i].cmscore > 0) {
+                    cms[cnt++] = +s[i].cmscore;
+                }
+            }
+            cms.sort(function(a,b){return a-b});
+            return cms[Math.floor(0.51*cnt)];
+        })();
+    }
+    return cm_thres;
+};
+
 
 $(document).on({
 
