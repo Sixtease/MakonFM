@@ -323,6 +323,9 @@ function MakonFM_constructor(instance_name) {
     m.uncertainty_lookahead = 10;
     m.max_autostop_window_length = 15;  // seconds
     m.min_autostop_window_length = 3;
+    
+    m.next_autostop = [];
+    setTimeout(function(){m.autostop()},1000);
 
     return m;
 }
@@ -819,7 +822,7 @@ MakonFMp.get_next_uncertain_sentence = function(ts) {
         if (sentence_boundary(subs,i++)) {
             var discard_sentence = false;
             if (si >= 0) {
-                if (sents[si].length == 0) { discard_sentence = true }
+                if (sents[si].do_discard) { discard_sentence = true }
                 var time_len = sents[si][sents[si].length-1].timestamp - sents[si][0].timestamp;
                 if (time_len < min_len) { discard_sentence = true }
                 if (time_len > max_len) { discard_sentence = true }
@@ -836,13 +839,19 @@ MakonFMp.get_next_uncertain_sentence = function(ts) {
         if (si < 0) {
             continue;
         }
-        if (w.cmscore) {
-            sents[si].push(w);
+        
+        if (!w.cmscore) {
+            sents[si].do_discard = true;
         }
+        if (w.autostopped) {
+            sents[si].do_discard = true;
+        }
+        
+        sents[si].push(w);
     }
     
-    if (si < lookahead/2) {
-        return null;
+    if (si === 0) {
+        return [];
     }
     
     var cmss = new Array(si); // confidence measure scores (of the looked-ahead sentences)
@@ -880,12 +889,38 @@ MakonFMp.get_next_uncertain_sentence = function(ts) {
 MakonFMp.edit_uncertainty_window = function(win) {
     var m = this;
     var _vs = m.visible_subs();
-    if (!win || !win.length) { return 'no window'; }
-    if (!_vs || !_vs.length) { return 'no visible subs'; }
-    if (win[0].timestamp < _vs[0].timestamp) { return 'visible subs beyond window'; }
-    if (win[win.length-1].timestamp > _vs[_vs.length-1].timestamp) { return 'window not yet reached'; }
+    if (!win || !win.length) { console.log('no window'); return null; }
+    if (!_vs || !_vs.length) { console.log('no visible subs'); return null; }
+    if (win[0].timestamp < _vs[0].timestamp) { return +1; /* visible subs beyond window */ }
+    if (win[win.length-1].timestamp > _vs[_vs.length-1].timestamp) { return -1; /* window not yet reached */ }
     var $win = m._get_word_els_span(win[0],win[win.length-1]);
+    $.each(win, function(i,w) {
+        w.autostopped = true;
+    });
     m.edited_subtitles($win);
+    return true;
+};
+
+MakonFMp.autostop = function() {
+    var m = this;
+    var ast = m.next_autostop;
+    
+    if (m.jp.status.paused) {
+        ast.length = 0;
+    }
+    else if (ast.length) {
+        var editing = m.edit_uncertainty_window(ast);
+        if (editing === true) {
+            ast.length = 0;
+        }
+        else if (editing > 0) {
+            m.next_autostop = m.get_next_uncertain_sentence();
+        }
+    }
+    else {
+        m.next_autostop = m.get_next_uncertain_sentence();
+    }
+    setTimeout(function() { m.autostop() }, 1000);
 };
 
 $(document).on({
