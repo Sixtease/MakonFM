@@ -122,6 +122,12 @@ function MakonFM_constructor(instance_name) {
         if (!sub) return $();
         return m._get_word_el_by_ts(sub.timestamp);
     };
+    m._get_word_els_span = function(start_sub,end_sub) {
+        if (!start_sub) return $();
+        var $start = m._get_word_el(start_sub);
+        var $end   = m._get_word_el(  end_sub);
+        return $start.add($start.nextUntil($end)).add($end);
+    };
     
     m.medium_loaded = ko.observable(false);
     
@@ -869,6 +875,17 @@ MakonFMp.get_next_uncertain_sentence = function(ts) {
         if (wo.charAt(0).toUpperCase() !== wo.charAt(0)) { return false; }
         return true;
     }
+};
+
+MakonFMp.edit_uncertainty_window = function(win) {
+    var m = this;
+    var _vs = m.visible_subs();
+    if (!win || !win.length) { return 'no window'; }
+    if (!_vs || !_vs.length) { return 'no visible subs'; }
+    if (win[0].timestamp < _vs[0].timestamp) { return 'visible subs beyond window'; }
+    if (win[win.length-1].timestamp > _vs[_vs.length-1].timestamp) { return 'window not yet reached'; }
+    var $win = m._get_word_els_span(win[0],win[win.length-1]);
+    m.edited_subtitles($win);
 };
 
 $(document).on({
