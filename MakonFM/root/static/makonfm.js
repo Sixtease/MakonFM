@@ -314,6 +314,10 @@ function MakonFM_constructor(instance_name) {
 
     m._ignore_hashchange = 0;
 
+    m.uncertainty_lookahead = 10;
+    m.max_autostop_window_length = 15;  // seconds
+    m.min_autostop_window_length = 3;
+
     return m;
 }
 var MakonFMp = MakonFM_constructor.prototype;
@@ -788,6 +792,83 @@ MakonFMp.set_hash = function(hash) {
     var m = this;
     m._ignore_hashchange++;
     location.hash = hash;
+};
+
+MakonFMp.get_next_uncertain_sentence = function(ts) {
+    var m = this;
+    var lookahead = m.uncertainty_lookahead;
+    var max_len = m.max_autostop_window_length;
+    var min_len = m.min_autostop_window_length;
+    if (!$.isNumeric(ts)) {
+        ts = m.jp.status.currentTime;
+    }
+    var sents = new Array(lookahead);
+    sents[0] = [];
+    var subs = m.subs;
+    var i = m._i_by_ts(ts, subs);   // word index
+    var si = -1;    // sentence index
+    var w;
+    while (i < subs.length) {
+        w = subs[i];
+        if (sentence_boundary(subs,i++)) {
+            var discard_sentence = false;
+            if (si >= 0) {
+                if (sents[si].length == 0) { discard_sentence = true }
+                var time_len = sents[si][sents[si].length-1].timestamp - sents[si][0].timestamp;
+                if (time_len < min_len) { discard_sentence = true }
+                if (time_len > max_len) { discard_sentence = true }
+            }
+            
+            if (!discard_sentence) {
+                si++;
+                if (si >= sents.length) {
+                    break;
+                }
+            }
+            sents[si] = [];
+        }
+        if (si < 0) {
+            continue;
+        }
+        if (w.cmscore) {
+            sents[si].push(w);
+        }
+    }
+    
+    if (si < lookahead/2) {
+        return null;
+    }
+    
+    var cmss = new Array(si); // confidence measure scores (of the looked-ahead sentences)
+    for (var j = 0; j < si; j++) {
+        var cm_sorted = $.map(sents[j],function(e){return e.cmscore}).sort(function(a,b) { return a-b; });
+        // take 33th percentile because we want a sentence where the lows are low but not interested in outliers
+        cmss[j] = cm_sorted[ Math.floor(cm_sorted.length / 3) ];
+    }
+    
+    var winner_i = -1;
+    var winner_cm = Infinity;
+    for (j = 0; j < cmss.length; j++) {
+        if (cmss[j] < winner_cm) {
+            winner_cm = cmss[j];
+            winner_i = j;
+        }
+    }
+    
+    return sents[winner_i];
+    
+    
+    function sentence_boundary(subs,i) {
+        var w = subs[i];
+        if (!w) { return; }
+        var wo = ko.utils.unwrapObservable(w.occurrence);
+        var p = subs[i-1];
+        if (!w) { return null; }
+        var po = ko.utils.unwrapObservable(p.occurrence);
+        if ( ! /[.!?:;]\W*$/.test(po) ) { return false; }
+        if (wo.charAt(0).toUpperCase() !== wo.charAt(0)) { return false; }
+        return true;
+    }
 };
 
 $(document).on({
