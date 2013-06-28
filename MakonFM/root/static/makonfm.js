@@ -76,30 +76,30 @@ function MakonFM_constructor(instance_name) {
 
     m.inspected_word = ko.observable(null);
 
-    m.edited_subtitles = ko.observable(null);
+    m.edited_subtitles = ko.observable([]);
+    m.edited_subtitles.backup = [];
     m.edited_subtitles.str = ko.computed({
         read: function() {
             var es = m.edited_subtitles();
-            if (es === null) return '';
+            if (es.length === 0) return '';
             return $.map(
-                $.makeArray(es),
-                function(x) { return $(x).text(); }
+                es,
+                function(x) { return ko.utils.unwrapObservable(x.occurrence); }
             ).join(' ');
         },
         write: function() { return },
         owner: m
     });
-    m.edited_subtitles.subs = [];
     m.editation_active = ko.computed({
         read: function() {
-            return m.edited_subtitles() !== null;
+            return (m.edited_subtitles().length > 0);
         },
         write: function(is_active) {
             if (is_active) {
                 ;;; console.log('editation_active was explicitly switched on, wtf?');
             }
             else {
-                m.edited_subtitles(null);
+                m.edited_subtitles([]);
             }
         }
     });
@@ -134,28 +134,22 @@ function MakonFM_constructor(instance_name) {
     _current_filestem.subscribe(function() {
         m.medium_loaded(false);
     });
-    m.edited_subtitles.subscribe(function($sel) {
-        $.each(m.edited_subtitles.subs, function(i,s) {
+    m.edited_subtitles.subscribe(function(new_edited_subs) {
+        $.each(m.edited_subtitles.backup, function(i,s) {
             s.selected(false);
         });
+        m.edited_subtitles.backup = new_edited_subs;
         
-        if ($sel) {
-            var _vs = m.visible_subs();
-            var sel_first_idx = m._i_by_ts($sel.first().data('timestamp'), _vs               );
-            var sel_last_idx  = m._i_by_ts($sel.last ().data('timestamp'), _vs, sel_first_idx);
-            var new_edited_subs = _vs.slice(sel_first_idx, sel_last_idx+1);
+        if (new_edited_subs.length) {
             $.each(new_edited_subs, function(i,s) {
                 s.selected(true);
             });
-            
-            m.edited_subtitles.subs = new_edited_subs;
             
             m._limit_playback_to_editation_span();
             
             $('.js-subedit').focus();
         }
         else {
-            m.edited_subtitles.subs = [];
             m._cancel_playback_limit();
         }
     });
@@ -187,7 +181,7 @@ function MakonFM_constructor(instance_name) {
         }*/
         m._limit_playback_to_editation_span = function() {
             m.jPlayer('pause');
-            var edited_subs = m.edited_subtitles.subs;
+            var edited_subs = m.edited_subtitles();
             if (edited_subs[0]) {
                 var first_sub = edited_subs[0];
                 m.window_start(first_sub.timestamp);
@@ -325,7 +319,19 @@ function MakonFM_constructor(instance_name) {
     m.min_autostop_window_length = 3;
     
     m.next_autostop = [];
-    setTimeout(function(){m.autostop()},1000);
+    m.do_autostop = ko.observable(false);
+    m.autostop_timeout;
+    if (m.do_autostop()) {
+        m.autostop_timeout = setTimeout(function(){m.autostop()},1000);
+    }
+    m.do_autostop.subscribe(function(active) {
+        if (active) {
+            m.do_autostop();
+        }
+        else {
+            clearTimeout(m.autostop_timeout);
+        }
+    });
 
     return m;
 }
@@ -645,12 +651,9 @@ MakonFMp.get_subs = function(stem) {
     .remove();
 };
 
-MakonFMp.send_subtitles = function($orig, submitted, subs) {
+MakonFMp.send_subtitles = function(submitted, subs) {
     var m = this;
     
-    if (!$orig) throw ('send_subtitles needs original words');
-    if ($orig.length == 0) throw ('send_subtitles needs more than 0 original words');
-    if ($orig.filter('.word').length < $orig.length) throw ("send_subtitles needs original .word's");
     if (typeof submitted !== 'string') throw ('send_subtitles needs string of new subtitles');
     if (!subs) subs = m.subs;
     
@@ -767,15 +770,9 @@ MakonFMp.stop_window = function() {
 MakonFMp.save_editation = function() {
     var m = this;
     var str = $('.js-subedit').val();
-    var $words = m.edited_subtitles();
-    var start_idx = m._i_by_ts($words.first().data('timestamp'), m.subs);
-    var end_idx   = m._i_by_ts($words.last ().data('timestamp'), m.subs);
-    var words = m.subs.slice(start_idx, end_idx+1);
-    if (words.length != $words.length) {
-        ;;; console.log('words and $words differ in length', words, $words);
-    }
+    var words = m.edited_subtitles();
     $.each(words, function(i,w) { w.corrected(true) });
-    m.send_subtitles($words, str);
+    m.send_subtitles(str);
     m.editation_active(false);
 };
 
@@ -893,11 +890,10 @@ MakonFMp.edit_uncertainty_window = function(win) {
     if (!_vs || !_vs.length) { console.log('no visible subs'); return null; }
     if (win[0].timestamp < _vs[0].timestamp) { return +1; /* visible subs beyond window */ }
     if (win[win.length-1].timestamp > _vs[_vs.length-1].timestamp) { return -1; /* window not yet reached */ }
-    var $win = m._get_word_els_span(win[0],win[win.length-1]);
     $.each(win, function(i,w) {
         w.autostopped = true;
     });
-    m.edited_subtitles($win);
+    m.edited_subtitles(win);
     return true;
 };
 
@@ -905,7 +901,7 @@ MakonFMp.autostop = function() {
     var m = this;
     var ast = m.next_autostop;
     
-    if (m.jp.status.paused) {
+    if (m.jp.status.paused || m.editation_active()) {
         ast.length = 0;
     }
     else if (ast.length) {
@@ -920,7 +916,18 @@ MakonFMp.autostop = function() {
     else {
         m.next_autostop = m.get_next_uncertain_sentence();
     }
-    setTimeout(function() { m.autostop() }, 1000);
+    m.autostop_timeout = setTimeout(function() { m.autostop() }, 1000);
+};
+
+MakonFM.get_subs_by_els = function($els, subs) {
+    var m = this;
+    if (!subs) subs = m.subs;
+    if (!$els || $els.length == 0) { return []; }
+    var start_ts  = $els.filter(':first').data('timestamp');
+    var   end_ts  = $els.filter(':last' ).data('timestamp');
+    var start_idx = m._i_by_ts(start_ts, subs);
+    var   end_idx = m._i_by_ts(  end_ts, subs);
+    return subs.slice(start_idx, end_idx+1);
 };
 
 $(document).on({
@@ -1059,7 +1066,7 @@ $('.subtitles').on({
     mouseup: function(evt) {
         var $sel = MakonFM.get_selected_words();
         if ($sel && $sel.length) {} else return;
-        MakonFM.edited_subtitles($sel);
+        MakonFM.edited_subtitles(MakonFM.get_subs_by_els($sel));
     }
 });
 $(document).on({
