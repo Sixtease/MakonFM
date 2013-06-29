@@ -87,7 +87,6 @@ function MakonFM_constructor(instance_name) {
                 function(x) { return ko.utils.unwrapObservable(x.occurrence); }
             ).join(' ');
         },
-        write: function() { return },
         owner: m
     });
     m.editation_active = ko.computed({
