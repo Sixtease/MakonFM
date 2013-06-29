@@ -147,6 +147,8 @@ function MakonFM_constructor(instance_name) {
             m._limit_playback_to_editation_span();
             
             $('.js-subedit').focus();
+            
+            m.jPlayer('play');
         }
         else {
             m._cancel_playback_limit();
