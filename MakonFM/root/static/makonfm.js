@@ -319,14 +319,14 @@ function MakonFM_constructor(instance_name) {
     m.min_autostop_window_length = 3;
     
     m.next_autostop = [];
-    m.do_autostop = ko.observable(false);
+    m.do_autostop = ko.observable(true);
     m.autostop_timeout;
     if (m.do_autostop()) {
         m.autostop_timeout = setTimeout(function(){m.autostop()},1000);
     }
     m.do_autostop.subscribe(function(active) {
         if (active) {
-            m.do_autostop();
+            m.autostop();
         }
         else {
             clearTimeout(m.autostop_timeout);
@@ -885,11 +885,11 @@ MakonFMp.get_next_uncertain_sentence = function(ts) {
 
 MakonFMp.edit_uncertainty_window = function(win) {
     var m = this;
-    var _vs = m.visible_subs();
     if (!win || !win.length) { console.log('no window'); return null; }
-    if (!_vs || !_vs.length) { console.log('no visible subs'); return null; }
-    if (win[0].timestamp < _vs[0].timestamp) { return +1; /* visible subs beyond window */ }
-    if (win[win.length-1].timestamp > _vs[_vs.length-1].timestamp) { return -1; /* window not yet reached */ }
+    var time_left = win[0].timestamp - m.jp.status.currentTime;
+    if (Math.abs(time_left) > 0.25) {
+        return time_left;
+    }
     $.each(win, function(i,w) {
         w.autostopped = true;
     });
@@ -900,23 +900,29 @@ MakonFMp.edit_uncertainty_window = function(win) {
 MakonFMp.autostop = function() {
     var m = this;
     var ast = m.next_autostop;
+    var editing;
     
     if (m.jp.status.paused || m.editation_active()) {
         ast.length = 0;
     }
     else if (ast.length) {
-        var editing = m.edit_uncertainty_window(ast);
+        editing = m.edit_uncertainty_window(ast);
         if (editing === true) {
             ast.length = 0;
         }
-        else if (editing > 0) {
+        else if (editing < 0) {
             m.next_autostop = m.get_next_uncertain_sentence();
         }
     }
     else {
         m.next_autostop = m.get_next_uncertain_sentence();
     }
-    m.autostop_timeout = setTimeout(function() { m.autostop() }, 1000);
+    
+    var timeout = 1;
+    if ($.isNumeric(editing) && editing < 1) {
+        timeout = editing;
+    }
+    m.autostop_timeout = setTimeout(function() { m.autostop() }, 1000*timeout);
 };
 
 MakonFM.get_subs_by_els = function($els, subs) {
