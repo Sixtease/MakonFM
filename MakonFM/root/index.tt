@@ -25,9 +25,6 @@
 <!--[if IE 8 ]><div class="ua-ie ua-ie8"><![endif]-->
 <!--[if IE 9 ]><div class="ua-ie ua-ie9"><![endif]-->
 
-    [%# <h1>Makoň.FM</h1> %]
-    [%# <p class="hint" data-bind="text: hint_message">Vyberte nahrávku</p> %]
-
     <div class="top">
 
         [%- PROCESS 'jplayer.tt'   | indent(4) %]

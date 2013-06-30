@@ -34,7 +34,7 @@ h1 {
     font-weight: normal;
 }
 .top {
-    height: 174px;
+    min-height: 174px;
     margin-bottom: 20px;
 }
 .subtitles {
@@ -227,4 +227,15 @@ footer label {
 }
 .menu {
     min-height: 142px;
+}
+.menu>li {
+    margin-bottom: 10px;
+}
+.menu-name input {
+    font-size: 16px;
+    font-family: verdana;
+}
+.menu-name input:not(:focus) {
+    border: 0 none;
+    padding: 0;
 }
