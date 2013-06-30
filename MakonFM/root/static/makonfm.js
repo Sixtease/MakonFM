@@ -343,6 +343,8 @@ var MakonFM = new MakonFM_constructor('MakonFM');
 MakonFMp._i_by_ts = function(ts, subs, i) {
     var m = this;
     
+    if (!subs || subs.length === 0) return null;
+    
     if (isNaN(i)) i = m.CURRENT_INDEX;
     if (i < 0) i = 0;
     if (i >= subs.length) i = subs.length - 1;
@@ -813,6 +815,7 @@ MakonFMp.get_next_uncertain_sentence = function(ts) {
     var sents = new Array(lookahead);
     sents[0] = [];
     var subs = m.subs;
+    if (!subs || !subs.length) return [];
     var i = m._i_by_ts(ts, subs);   // word index
     var si = -1;    // sentence index
     var w;
