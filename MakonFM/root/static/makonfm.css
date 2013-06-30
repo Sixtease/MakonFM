@@ -33,10 +33,9 @@ h1 {
     margin: 0;
     font-weight: normal;
 }
-.main {
-    position: relative;
-    margin-top: 58px;
-    transition: padding 1s;
+.top {
+    height: 174px;
+    margin-bottom: 20px;
 }
 .subtitles {
     height: 66px;
@@ -58,6 +57,7 @@ h1 {
     z-index: -2;
     width: 100%;
     background-color: white;
+    height: 174px;
     opacity: 0;
     transition: opacity 1s;
 }
@@ -72,6 +72,7 @@ h1 {
     width: 100%;
     margin: 5px -5px;
     font-size: 150%;
+    height: 85px;
 }
 
 .subedit .Window-edges {

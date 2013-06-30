@@ -28,17 +28,17 @@
     [%# <h1>Makoň.FM</h1> %]
     [%# <p class="hint" data-bind="text: hint_message">Vyberte nahrávku</p> %]
 
-    [%- PROCESS 'jplayer.tt'   | indent(4) %]
+    <div class="top">
 
-    [%- PROCESS 'menu.tt' | indent(4) %]
+        [%- PROCESS 'jplayer.tt'   | indent(4) %]
 
-    <div class="main" data-bind="style: {paddingTop: editation_active() ? '150px' : '0px'}">
-
-        [%- PROCESS 'subtitles.tt' | indent(8) %]
-
+        [%- PROCESS 'menu.tt' | indent(4) %]
+        
         [%- PROCESS 'editor.tt'    | indent(8) %]
 
     </div>
+
+    [%- PROCESS 'subtitles.tt' | indent(8) %]
 
     [%- PROCESS 'footer.tt'    | indent(4) %]
 
