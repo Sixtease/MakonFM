@@ -872,6 +872,7 @@ MakonFMp.get_next_uncertain_sentence = function(ts) {
     
     
     function sentence_boundary(subs,i) {
+        if (i === 0) return false;
         var w = subs[i];
         if (!w) { return; }
         var wo = ko.utils.unwrapObservable(w.occurrence);
