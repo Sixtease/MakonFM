@@ -1,4 +1,4 @@
-<div class="subtitles" data-bind="css: {edited: editation_active}, foreach: visible_subs">
+<div class="subtitles" data-bind="foreach: visible_subs">
     <span class="word" data-bind="
         text: occurrence,
         css: {

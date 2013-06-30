@@ -20,34 +20,27 @@
     <script type="text/javascript" src="[% c.config.static_base %]/jquery.jplayer.min.js[% c.v('jplayer') %]"></script>
 </head>
 
-<body>
+<body data-bind="css: {editing: editation_active}">
 <!--[if IE 7 ]><div class="ua-ie ua-ie7"><![endif]-->
 <!--[if IE 8 ]><div class="ua-ie ua-ie8"><![endif]-->
 <!--[if IE 9 ]><div class="ua-ie ua-ie9"><![endif]-->
 
     [%# <h1>Makoň.FM</h1> %]
     [%# <p class="hint" data-bind="text: hint_message">Vyberte nahrávku</p> %]
-    <div data-bind="css: { 'safe-hidden': editation_active() }">
-        <div class="jplayer-safe-hider">
 
-            [%- PROCESS 'jplayer.tt'   | indent(12) %]
+    [%- PROCESS 'jplayer.tt'   | indent(12) %]
 
-        </div>
-        <div class="generic-safe-hider">
+    [%- PROCESS 'tracklist.tt' | indent(12) %]
 
-            [%- PROCESS 'tracklist.tt' | indent(12) %]
+    <div class="main" data-bind="style: {paddingTop: editation_active() ? '150px' : '0px'}">
 
-            [%- PROCESS 'subtitles.tt' | indent(12) %]
-
-            [%- PROCESS 'footer.tt'    | indent(12) %]
-
-        </div>
-    </div>
-    <div data-bind="visible: editation_active">
+        [%- PROCESS 'subtitles.tt' | indent(12) %]
 
         [%- PROCESS 'editor.tt'    | indent(8) %]
 
     </div>
+
+    [%- PROCESS 'footer.tt'    | indent(12) %]
 
     <script type="text/javascript">
         [%~ PROCESS 'js_init.js' | indent(8) %]
