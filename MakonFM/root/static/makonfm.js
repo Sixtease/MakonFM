@@ -76,30 +76,29 @@ function MakonFM_constructor(instance_name) {
 
     m.inspected_word = ko.observable(null);
 
-    m.edited_subtitles = ko.observable(null);
+    m.edited_subtitles = ko.observable([]);
+    m.edited_subtitles.backup = [];
     m.edited_subtitles.str = ko.computed({
         read: function() {
             var es = m.edited_subtitles();
-            if (es === null) return '';
+            if (es.length === 0) return '';
             return $.map(
-                $.makeArray(es),
-                function(x) { return $(x).text(); }
+                es,
+                function(x) { return ko.utils.unwrapObservable(x.occurrence); }
             ).join(' ');
         },
-        write: function() { return },
         owner: m
     });
-    m.edited_subtitles.subs = [];
     m.editation_active = ko.computed({
         read: function() {
-            return m.edited_subtitles() !== null;
+            return (m.edited_subtitles().length > 0);
         },
         write: function(is_active) {
             if (is_active) {
                 ;;; console.log('editation_active was explicitly switched on, wtf?');
             }
             else {
-                m.edited_subtitles(null);
+                m.edited_subtitles([]);
             }
         }
     });
@@ -122,34 +121,36 @@ function MakonFM_constructor(instance_name) {
         if (!sub) return $();
         return m._get_word_el_by_ts(sub.timestamp);
     };
+    m._get_word_els_span = function(start_sub,end_sub) {
+        if (!start_sub) return $();
+        var $start = m._get_word_el(start_sub);
+        var $end   = m._get_word_el(  end_sub);
+        return $start.add($start.nextUntil($end)).add($end);
+    };
     
     m.medium_loaded = ko.observable(false);
     
     _current_filestem.subscribe(function() {
         m.medium_loaded(false);
     });
-    m.edited_subtitles.subscribe(function($sel) {
-        $.each(m.edited_subtitles.subs, function(i,s) {
+    m.edited_subtitles.subscribe(function(new_edited_subs) {
+        $.each(m.edited_subtitles.backup, function(i,s) {
             s.selected(false);
         });
+        m.edited_subtitles.backup = new_edited_subs;
         
-        if ($sel) {
-            var _vs = m.visible_subs();
-            var sel_first_idx = m._i_by_ts($sel.first().data('timestamp'), _vs               );
-            var sel_last_idx  = m._i_by_ts($sel.last ().data('timestamp'), _vs, sel_first_idx);
-            var new_edited_subs = _vs.slice(sel_first_idx, sel_last_idx+1);
+        if (new_edited_subs.length) {
             $.each(new_edited_subs, function(i,s) {
                 s.selected(true);
             });
             
-            m.edited_subtitles.subs = new_edited_subs;
-            
             m._limit_playback_to_editation_span();
             
             $('.js-subedit').focus();
+            
+            m.jPlayer('play');
         }
         else {
-            m.edited_subtitles.subs = [];
             m._cancel_playback_limit();
         }
     });
@@ -181,7 +182,7 @@ function MakonFM_constructor(instance_name) {
         }*/
         m._limit_playback_to_editation_span = function() {
             m.jPlayer('pause');
-            var edited_subs = m.edited_subtitles.subs;
+            var edited_subs = m.edited_subtitles();
             if (edited_subs[0]) {
                 var first_sub = edited_subs[0];
                 m.window_start(first_sub.timestamp);
@@ -313,6 +314,25 @@ function MakonFM_constructor(instance_name) {
     });
 
     m._ignore_hashchange = 0;
+
+    m.uncertainty_lookahead = 10;
+    m.max_autostop_window_length = 15;  // seconds
+    m.min_autostop_window_length = 3;
+    
+    m.next_autostop = [];
+    m.do_autostop = ko.observable(true);
+    m.autostop_timeout;
+    if (m.do_autostop()) {
+        m.autostop_timeout = setTimeout(function(){m.autostop()},1000);
+    }
+    m.do_autostop.subscribe(function(active) {
+        if (active) {
+            m.autostop();
+        }
+        else {
+            clearTimeout(m.autostop_timeout);
+        }
+    });
 
     return m;
 }
@@ -632,12 +652,9 @@ MakonFMp.get_subs = function(stem) {
     .remove();
 };
 
-MakonFMp.send_subtitles = function($orig, submitted, subs) {
+MakonFMp.send_subtitles = function(submitted, subs) {
     var m = this;
     
-    if (!$orig) throw ('send_subtitles needs original words');
-    if ($orig.length == 0) throw ('send_subtitles needs more than 0 original words');
-    if ($orig.filter('.word').length < $orig.length) throw ("send_subtitles needs original .word's");
     if (typeof submitted !== 'string') throw ('send_subtitles needs string of new subtitles');
     if (!subs) subs = m.subs;
     
@@ -754,15 +771,9 @@ MakonFMp.stop_window = function() {
 MakonFMp.save_editation = function() {
     var m = this;
     var str = $('.js-subedit').val();
-    var $words = m.edited_subtitles();
-    var start_idx = m._i_by_ts($words.first().data('timestamp'), m.subs);
-    var end_idx   = m._i_by_ts($words.last ().data('timestamp'), m.subs);
-    var words = m.subs.slice(start_idx, end_idx+1);
-    if (words.length != $words.length) {
-        ;;; console.log('words and $words differ in length', words, $words);
-    }
+    var words = m.edited_subtitles();
     $.each(words, function(i,w) { w.corrected(true) });
-    m.send_subtitles($words, str);
+    m.send_subtitles(str);
     m.editation_active(false);
 };
 
@@ -788,6 +799,143 @@ MakonFMp.set_hash = function(hash) {
     var m = this;
     m._ignore_hashchange++;
     location.hash = hash;
+};
+
+MakonFMp.get_next_uncertain_sentence = function(ts) {
+    var m = this;
+    var lookahead = m.uncertainty_lookahead;
+    var max_len = m.max_autostop_window_length;
+    var min_len = m.min_autostop_window_length;
+    if (!$.isNumeric(ts)) {
+        ts = m.jp.status.currentTime;
+    }
+    var sents = new Array(lookahead);
+    sents[0] = [];
+    var subs = m.subs;
+    var i = m._i_by_ts(ts, subs);   // word index
+    var si = -1;    // sentence index
+    var w;
+    while (i < subs.length) {
+        w = subs[i];
+        if (sentence_boundary(subs,i++)) {
+            var discard_sentence = false;
+            if (si >= 0) {
+                if (sents[si].do_discard) { discard_sentence = true }
+                var time_len = sents[si][sents[si].length-1].timestamp - sents[si][0].timestamp;
+                if (time_len < min_len) { discard_sentence = true }
+                if (time_len > max_len) { discard_sentence = true }
+            }
+            
+            if (!discard_sentence) {
+                si++;
+                if (si >= sents.length) {
+                    break;
+                }
+            }
+            sents[si] = [];
+        }
+        if (si < 0) {
+            continue;
+        }
+        
+        if (!w.cmscore) {
+            sents[si].do_discard = true;
+        }
+        if (w.autostopped) {
+            sents[si].do_discard = true;
+        }
+        
+        sents[si].push(w);
+    }
+    
+    if (si === 0) {
+        return [];
+    }
+    
+    var cmss = new Array(si); // confidence measure scores (of the looked-ahead sentences)
+    for (var j = 0; j < si; j++) {
+        var cm_sorted = $.map(sents[j],function(e){return e.cmscore}).sort(function(a,b) { return a-b; });
+        // take 33th percentile because we want a sentence where the lows are low but not interested in outliers
+        cmss[j] = cm_sorted[ Math.floor(cm_sorted.length / 3) ];
+    }
+    
+    var winner_i = -1;
+    var winner_cm = Infinity;
+    for (j = 0; j < cmss.length; j++) {
+        if (cmss[j] < winner_cm) {
+            winner_cm = cmss[j];
+            winner_i = j;
+        }
+    }
+    
+    return sents[winner_i];
+    
+    
+    function sentence_boundary(subs,i) {
+        if (i === 0) return false;
+        var w = subs[i];
+        if (!w) { return; }
+        var wo = ko.utils.unwrapObservable(w.occurrence);
+        var p = subs[i-1];
+        if (!w) { return null; }
+        var po = ko.utils.unwrapObservable(p.occurrence);
+        if ( ! /[.!?:;]\W*$/.test(po) ) { return false; }
+        if (wo.charAt(0).toUpperCase() !== wo.charAt(0)) { return false; }
+        return true;
+    }
+};
+
+MakonFMp.edit_uncertainty_window = function(win) {
+    var m = this;
+    if (!win || !win.length) { console.log('no window'); return null; }
+    var time_left = win[0].timestamp - m.jp.status.currentTime;
+    if (Math.abs(time_left) > 0.25) {
+        return time_left;
+    }
+    $.each(win, function(i,w) {
+        w.autostopped = true;
+    });
+    m.edited_subtitles(win);
+    return true;
+};
+
+MakonFMp.autostop = function() {
+    var m = this;
+    var ast = m.next_autostop;
+    var editing;
+    
+    if (m.jp.status.paused || m.editation_active()) {
+        ast.length = 0;
+    }
+    else if (ast.length) {
+        editing = m.edit_uncertainty_window(ast);
+        if (editing === true) {
+            ast.length = 0;
+        }
+        else if (editing < 0) {
+            m.next_autostop = m.get_next_uncertain_sentence();
+        }
+    }
+    else {
+        m.next_autostop = m.get_next_uncertain_sentence();
+    }
+    
+    var timeout = 1;
+    if ($.isNumeric(editing) && editing < 1) {
+        timeout = editing;
+    }
+    m.autostop_timeout = setTimeout(function() { m.autostop() }, 1000*timeout);
+};
+
+MakonFM.get_subs_by_els = function($els, subs) {
+    var m = this;
+    if (!subs) subs = m.subs;
+    if (!$els || $els.length == 0) { return []; }
+    var start_ts  = $els.filter(':first').data('timestamp');
+    var   end_ts  = $els.filter(':last' ).data('timestamp');
+    var start_idx = m._i_by_ts(start_ts, subs);
+    var   end_idx = m._i_by_ts(  end_ts, subs);
+    return subs.slice(start_idx, end_idx+1);
 };
 
 $(document).on({
@@ -926,7 +1074,7 @@ $('.subtitles').on({
     mouseup: function(evt) {
         var $sel = MakonFM.get_selected_words();
         if ($sel && $sel.length) {} else return;
-        MakonFM.edited_subtitles($sel);
+        MakonFM.edited_subtitles(MakonFM.get_subs_by_els($sel));
     }
 });
 $(document).on({
