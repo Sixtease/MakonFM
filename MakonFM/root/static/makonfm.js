@@ -77,8 +77,8 @@ function MakonFM_constructor(instance_name) {
     m.inspected_word = ko.observable(null);
 
     m.edited_subtitles = ko.observable([]);
-    m.edited_subtitles.backup = [];
-    m.edited_subtitles.str = ko.computed({
+    m.edited_subtitles_backup = [];
+    m.edited_subtitles_str = ko.computed({
         read: function() {
             var es = m.edited_subtitles();
             if (es.length === 0) return '';
@@ -134,10 +134,10 @@ function MakonFM_constructor(instance_name) {
         m.medium_loaded(false);
     });
     m.edited_subtitles.subscribe(function(new_edited_subs) {
-        $.each(m.edited_subtitles.backup, function(i,s) {
+        $.each(m.edited_subtitles_backup, function(i,s) {
             s.selected(false);
         });
-        m.edited_subtitles.backup = new_edited_subs;
+        m.edited_subtitles_backup = new_edited_subs;
         
         if (new_edited_subs.length) {
             $.each(new_edited_subs, function(i,s) {
@@ -889,7 +889,7 @@ MakonFMp.edit_uncertainty_window = function(win) {
     var m = this;
     if (!win || !win.length) { console.log('no window'); return null; }
     var time_left = win[0].timestamp - m.jp.status.currentTime;
-    if (Math.abs(time_left) > 0.25) {
+    if (time_left < -0.5 || time_left > 0.2) {
         return time_left;
     }
     $.each(win, function(i,w) {
@@ -905,10 +905,11 @@ MakonFMp.autostop = function() {
     var editing;
     
     if (m.jp.status.paused || m.editation_active()) {
-        ast.length = 0;
+        editing = 1;
     }
     else if (ast.length) {
         editing = m.edit_uncertainty_window(ast);
+        ;;; console.log('autostop',editing);
         if (editing === true) {
             ast.length = 0;
         }
@@ -1245,7 +1246,8 @@ function _xreq(opt) {
 function _clear_selection() {
     if (window.getSelection) {
         try {
-            getSelection().collapseToStart();
+            var sel = getSelection();
+            if (sel) { sel.collapseToStart() }
         } catch(e) {
             ;;; console.log('getSelection().collapseToStart() failed:', e);
         }
