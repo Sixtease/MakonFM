@@ -1,0 +1,20 @@
+<ul class="menu">
+    <li class="menu-tracklist">
+        <a class="menu-toggle js-next-toggler">vybrat nahrávku</a>
+        <div class="toggled Off">
+            [% PROCESS 'tracklist.tt' | indent(12) %]
+        </div>
+    </li>
+    <li class="menu-name">
+        <label>
+            <span>vaše jméno:</span>
+            <input class="js-set-name" type="text" placeholder="prosím vyplňte" />
+        </label>
+    </li>
+    <li class="menu-autostop">
+        <label title="Autostop umožňuje systému doporučit vám určité věty k přepisu.">
+            <span>vypnout autostop</span>
+            <input type="checkbox" data-bind="checked: disable_autostop" />
+        </label>
+    </li>
+</ul>
