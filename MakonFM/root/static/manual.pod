@@ -6,8 +6,13 @@
 
 Přepisovací nástroj se nachází na adrese http://www.makon.fm/ .
 
-V levé části se nachází strukturovaný seznam nahrávek. Kliknutím na kategorii se
-zobrazí její položky. Kliknutím na jméno nahrávky se tato začne přehrávat. Než
+V levé části se nachází strukturovaný hlavní menu.
+
+=head3 Výběr nahrávky
+
+První položkou je seznam nahrávek.  
+Kliknutím se vždy seznam rozbalí, až se dostanete ke konkrétní nahrávce.
+Kliknutím na jméno nahrávky se tato začne přehrávat. Než
 se rozeznějí Makoňova slova, může to chvíli trvat podle toho, jak rychlé je vaše
 připojení k internetu a jak dlouhá je pauza na začátku.
 
@@ -19,10 +24,49 @@ Po započetí přehrávání se zobrazí přepis. Pokud k tomu nedojde, je možn
 jedná o nahrávku, pro niž přepis zatím nebyl vygenerován. Vyberte prosím v
 takovém případě jinou.
 
+=head3 Jméno přepisujícího
+
+Druhou položkou menu je políčko pro jméno přepisujícího.
+Vyplňte prosím svoje jméno -- nemusí se jednat o Vaše občanské jméno. Účelem je
+pouze to, aby bylo možné identifikovat, které příspěvky jsou od koho. Je proto
+žádoucí, abyste jméno vyplnili pokaždé stejně.
+
+=head3 Autostop
+
+Třetí položkou menu je vypínač automatického zastavování. O této funkci pojednává
+následující sekce.
+
+=head2 Metody přepisování
+
+Systém umožňuje automatický a manuální výběr úseků pro přepis. Automatický výběr
+je ve výchozím nastavení zapnutý. Vypnout se dá pomocí zaškrtnutí políčka
+"vypnout autostop" v menu.
+
+=head3 Zapnutý autostop
+
+Při zapnuté funkci autostop stačí, když si nahrávku pustíte a posloucháte. Až se
+přehrávání dostane k úseku, který počítač vyhodnotí jako vhodný pro přepis,
+přehrávání se zastaví, vybraný úsek se označí a jednou přehraje.
+
+Opakovaně přehrát lze označený úsek pomocí tlačítka I<přehrát> nebo klávesovou
+zkratkou C<ctrl+mezera>.
+
+Po vepsání správného přepisu a uložení znovu zapněte přehrávání.
+
+B<!Důležité!> Pokud je označený úsek byť zčásti nesrozumitelný, nepřepisujte
+jej, nýbrž opusťte přepisovací mód pomocí klávesy C<esc> nebo pomocí kliknutí na
+křížek vpravo nahoře.
+
+=head3 Vypnutý autostop
+
+Při vypnuté funkci autostopje potřeba myší označit úsek, který se má přepsat.
+Přístupy se dají libovolně kombinovat, to jest manuálně zastavit a označit úsek
+pro přepis i při zapnuté funkci autostop.
+
 =head2 Zásady pro přepis
 
 Přepisujeme jen srozumitelné úseky a zásadně pouze úseky, kde hovoří Karel
-Makoň. Jiné mluvčí prosím nepřepisujte!
+Makoň. Jiné mluvčí a nesrozumitelné úseky prosím nepřepisujte!
 
 Prosím, přepsaný úsek uložte až po pečlivé kontrole, kdy se
 ujistíte, že přepis opravdu přesně odpovídá vyslovenému projevu.
@@ -55,6 +99,14 @@ zopakuje), přidejte za toto slovo tři tečky. Např.:
 
 Slova s nečeskou výslovností přepisujeme foneticky. Tedy ne I<Schwarz>,
 ale I<Švarc>.
+
+Je možné pak takovému slovu opravit grafickou podobu: Až se oprava uloží a
+zobrazí se tučně v přepisu, se kliknutím na inkriminované slovo (Švarc) pod
+přepisem zobrazí informace o slovu. Mohu pak změnit výskyt na I<Schwarz>.
+
+Rozdíl mezi slovním tvarem a výskytem je v tom, že slovní tvar je vždy malými
+písmeny a je oproštěn od interpunkce. Pomocí tečky na konci výskytu slova a
+velkého písmene ve výskytu následujícího slova se označují hranice vět.
 
 =head2 Ovládání
 
