@@ -184,6 +184,7 @@ footer {
     position: fixed;
     bottom: 0;
     background-color: white;
+    width: 100%;
 }
 footer > * {
     margin: 0 10px;
