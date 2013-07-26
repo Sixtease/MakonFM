@@ -315,9 +315,16 @@ function MakonFM_constructor(instance_name) {
 
     m._ignore_hashchange = 0;
 
-    m.uncertainty_lookahead = 10;
-    m.max_autostop_window_length = 15;  // seconds
+    m.min_lookahead_length = 90;    // seconds
+    m.max_autostop_window_length = 10;
     m.min_autostop_window_length = 3;
+    m.opt_autostop_window_length = Math.sqrt(3*15);
+    m.min_autostop_pause_length = 0.1;
+    m.autostop_weights = {
+        pause_length      : 1,
+        segment_length    : 1,
+        confidence_measure: 4
+    };
     
     m.next_autostop = [];
     m.disable_autostop = ko.observable(false);
@@ -804,89 +811,105 @@ MakonFMp.set_hash = function(hash) {
     location.hash = hash;
 };
 
-MakonFMp.get_next_uncertain_sentence = function(ts) {
+MakonFMp.get_next_uncertain_segment = function(ts) {
     var m = this;
-    var lookahead = m.uncertainty_lookahead;
     var max_len = m.max_autostop_window_length;
     var min_len = m.min_autostop_window_length;
+    var min_lookahead = m.min_lookahead_length;
     if (!$.isNumeric(ts)) {
         ts = m.jp.status.currentTime;
     }
-    var sents = new Array(lookahead);
-    sents[0] = [];
     var subs = m.subs;
     if (!subs || !subs.length) return [];
     var i = m._i_by_ts(ts, subs);   // word index
-    var si = -1;    // sentence index
     var w;
-    while (i < subs.length) {
+    
+    var starts = [];
+    var ends = [];
+    while (i < subs.length && subs[i].timestamp - ts < min_lookahead) {
         w = subs[i];
-        if (sentence_boundary(subs,i++)) {
-            var discard_sentence = false;
-            if (si >= 0) {
-                if (sents[si].do_discard) { discard_sentence = true }
-                var time_len = sents[si][sents[si].length-1].timestamp - sents[si][0].timestamp;
-                if (time_len < min_len) { discard_sentence = true }
-                if (time_len > max_len) { discard_sentence = true }
+        if (segment_boundary(w)) {
+            ends.push({word:w,pause:w.slen,index:i});
+            if (i<subs.length-1) starts.push({word:subs[i+1],pause:w.slen,index:i+1});
+        }
+        i++;
+    }
+    
+    var candidate_segments = [];
+    $.each(starts, function(is, start) {
+        var sts = start.word.timestamp;
+        $.each(ends, function(ie, end) {
+            var ets = end.word.timestamp;
+            if (ets - sts >= m.min_autostop_window_length && ets - sts <= m.max_autostop_window_length) {
+                candidate_segments.push(new AutostopSegment(start,end));
             }
-            
-            if (!discard_sentence) {
-                si++;
-                if (si >= sents.length) {
-                    break;
-                }
-            }
-            sents[si] = [];
+        });
+    });
+    
+    function segment_boundary(word) {
+        if (word.slen && word.slen > m.min_autostop_pause_length) {
+            return true;
         }
-        if (si < 0) {
-            continue;
-        }
+        else return false;
+    }
+    
+    function AutostopSegment(start,end) {
+        var s = this;
+        s.words = subs.slice(start.index,end.index+1);
+        s.start = start;
+        s.end = end;
         
-        if (!w.cmscore) {
-            sents[si].do_discard = true;
+        var cm_sorted = $.map(s.words, function(e){return e.cmscore||-Infinity}).sort(function(a,b) { return a-b; });
+        if (cm_sorted[0] === -Infinity) {
+            s.do_discard = true;
         }
-        if (w.autostopped) {
-            sents[si].do_discard = true;
-        }
+        // take 33th percentile because we want a segments where the lows are low but not interested in outliers
+        s.cm33 = cm_sorted[ Math.floor(cm_sorted.length / 3) ];
         
-        sents[si].push(w);
+        var optlen = m.opt_autostop_window_length;
+        var maxlen = m.max_autostop_window_length;
+        var minlen = m.min_autostop_window_length;
+        
+
+        s.duration
+            = subs[end.index+1]
+            ? subs[end.index+1].timestamp - start.word.timestamp 
+            : end.word.timestamp - start.word.timestamp /* no way telling the length of last word; ignore it */
+        ;
+        
+        s.length_deviation = (function(x) { return 2 + (
+            x < optlen
+            ? Math.log(optlen-3)-Math.log(x-minlen)
+            : Math.log(-optlen+15)-Math.log(-x+maxlen)
+        )})(s.duration);
+        
+        var start_pause_dumbness = 1 + 1 / ( 5 * s.start.pause );
+        var   end_pause_dumbness = 1 + 1 / ( 5 * s.end  .pause );
+        
+        var weights = m.autostop_weights;
+        
+        if (s.do_discard) s.dumbness = Infinity;
+        else s.dumbness
+            = Math.pow(start_pause_dumbness, weights.pause_length       )
+            * Math.pow(  end_pause_dumbness, weights.pause_length       )
+            * Math.pow(s.length_deviation,   weights.segment_length     )
+            * Math.pow(s.cm33,               weights.confidence_measure )
+        ;
+        
+        return s;
     }
+    AutostopSegment.prototype.toString = function() {
+        var me = this;
+        var w = $.map(me.words,function(e){return e.occurrence}).join(' ');
+        return w + ' (' + me.dumbness.toPrecision(2) + '/' + me.cm33 + ') ' + me.start.pause + ' .. ' + me.duration + ' .. ' + me.end.pause;
+    };
     
-    if (si === 0) {
-        return [];
-    }
+    if (candidate_segments.length === 0) return [];
     
-    var cmss = new Array(si); // confidence measure scores (of the looked-ahead sentences)
-    for (var j = 0; j < si; j++) {
-        var cm_sorted = $.map(sents[j],function(e){return e.cmscore}).sort(function(a,b) { return a-b; });
-        // take 33th percentile because we want a sentence where the lows are low but not interested in outliers
-        cmss[j] = cm_sorted[ Math.floor(cm_sorted.length / 3) ];
-    }
-    
-    var winner_i = -1;
-    var winner_cm = Infinity;
-    for (j = 0; j < cmss.length; j++) {
-        if (cmss[j] < winner_cm) {
-            winner_cm = cmss[j];
-            winner_i = j;
-        }
-    }
-    
-    return sents[winner_i];
-    
-    
-    function sentence_boundary(subs,i) {
-        if (i === 0) return false;
-        var w = subs[i];
-        if (!w) { return; }
-        var wo = ko.utils.unwrapObservable(w.occurrence);
-        var p = subs[i-1];
-        if (!w) { return null; }
-        var po = ko.utils.unwrapObservable(p.occurrence);
-        if ( ! /[.!?:;]\W*$/.test(po) ) { return false; }
-        if (wo.charAt(0).toUpperCase() !== wo.charAt(0)) { return false; }
-        return true;
-    }
+    candidate_segments.sort(function(a,b) {
+        return a.dumbness - b.dumbness;
+    });
+    return candidate_segments[0].words;
 };
 
 MakonFMp.edit_uncertainty_window = function(win) {
@@ -918,11 +941,11 @@ MakonFMp.autostop = function() {
             ast.length = 0;
         }
         else if (editing < 0) {
-            m.next_autostop = m.get_next_uncertain_sentence();
+            m.next_autostop = m.get_next_uncertain_segment();
         }
     }
     else {
-        m.next_autostop = m.get_next_uncertain_sentence();
+        m.next_autostop = m.get_next_uncertain_segment();
     }
     
     var timeout = 1;
