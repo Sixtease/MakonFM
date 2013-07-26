@@ -877,11 +877,7 @@ MakonFMp.get_next_uncertain_segment = function(ts) {
             : end.word.timestamp - start.word.timestamp /* no way telling the length of last word; ignore it */
         ;
         
-        s.length_deviation = (function(x) { return 2 + (
-            x < optlen
-            ? Math.log(optlen-3)-Math.log(x-minlen)
-            : Math.log(-optlen+15)-Math.log(-x+maxlen)
-        )})(s.duration);
+        s.length_deviation = (function(x) { return 2 + abs((x-optlen)/((x-minlen)*(x-maxlen)))})(s.duration);
         
         var start_pause_dumbness = 1 + 1 / ( 5 * s.start.pause );
         var   end_pause_dumbness = 1 + 1 / ( 5 * s.end  .pause );
