@@ -71,6 +71,10 @@ sub index :Path :Args(0) {
                 name => 'session',
                 value => $session,
             },
+            {
+                name => 'user_agent',
+                value => $c->request->user_agent,
+            },
         ],
     });
     
