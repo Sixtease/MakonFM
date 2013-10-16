@@ -5,7 +5,11 @@
             cur       : current,
             corrected : corrected,
             humanic   : humanic,
-            selected  : selected
+            selected  : selected,
+            wrongside : (+cmscore||1) < 0.5
+        },
+        style: {
+            borderBottomColor: 'hsl(0,100%,'+(50+100*(+cmscore||1))+'%)'
         },
         attr: {
             id: $root.name + '-word-ts-' + timestamp,

@@ -156,6 +156,10 @@ h1 {
 .word.humanic {
     font-weight: bold;
 }
+.word.wrongside {
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
 .show-content-after:after {
     content: " " attr(content-after);
     font-weight: bold;
