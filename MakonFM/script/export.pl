@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# export.pl *.sub.js > index.html
+# export.pl *.sub.js
 # creates a page with all the transcriptions aligned with the recordings
 
 use 5.010;
