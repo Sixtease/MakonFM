@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Karel Makoň: [% filestem %]</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="http://static.makon.fm/makon-export.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="http://static.makon.fm/makon-export.js"></script>
+    <base href="http://www.makon.fm/" />
+</head>
+
+<body>
+    <h1>Karel Makoň: [% filestem %]</h1>
+    <div class="text">
+        [% FOR s IN data %]
+        <a href="#[% filestem %]#[% s.timestamp %]">[% s.occurrence %]</a>
+        [% END %]
+    </div>
+</body>
+
+</html>
