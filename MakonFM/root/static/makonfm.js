@@ -23,9 +23,13 @@ function MakonFM_constructor(instance_name) {
     });
     m.current_file = ko.computed({
         read: function() {
-            return _current_filestem() || _no_file_str;
+            return _current_filestem();
         },
         write: function(fnpos) {
+            if (!fnpos) {
+                _current_filestem('');
+                return;
+            }
             var fp = fnpos.split('#');
             var fn  = fp[0];
             var pos = fp[1];
@@ -64,6 +68,9 @@ function MakonFM_constructor(instance_name) {
             }
         },
         owner: m
+    });
+    m.current_file_fmt = ko.computed(function() {
+        return m.current_file() || _no_file_str;
     });
     m.file_selected = ko.computed( function() {
         return _current_filestem() ? true : false;
