@@ -1056,13 +1056,13 @@ $(window).on({
 });
 
 $('.track-menu li').click(function(evt) {
-    if (evt.button != 0) return;
+    if (evt.button) return;
     if ($(evt.target).is('li,li>:header')) {} else return;
     evt.stopPropagation();
     $(this).toggleClass('show');
 });
 $('.track-menu li>a').click(function(evt) {
-    if (evt.button != 0) return;
+    if (evt.button) return;
     var fn = $(this)
     .text()
     .replace(/ě/,'e')
@@ -1099,7 +1099,7 @@ $('.track-menu li>a').click(function(evt) {
 });
 
 $(document).on('click', '.subtitles .word', function(evt) {
-    if (evt.button != 0) return;
+    if (evt.button) return;
     var word = MakonFM.show_word_info(evt.target);
     MakonFM.jPlayer('pause', word.timestamp);
     MakonFM.requested_position(MakonFM.jp.status.currentTime);
@@ -1134,7 +1134,7 @@ $('.play.Button').on('click', function(evt) {
     }
 });
 $('.pause.Button').on('click', function(evt) {
-    if (evt.button != 0) return;
+    if (evt.button) return;
     MakonFM.requested_position(MakonFM.jp.status.currentTime);
 });
 
@@ -1175,7 +1175,7 @@ $('.curword').on('focusin', 'input', function(evt) {
 });
 
 $(document).on('click', '.js-next-toggler', function(evt) {
-    if (evt.button != 0) return;
+    if (evt.button) return;
     $(evt.target).next('.toggled').toggleClass('Off');
 });
 
