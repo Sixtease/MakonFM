@@ -348,7 +348,9 @@ function MakonFM_constructor(instance_name) {
         }
         $.cookie('disable_autostop', active ? '1' : '', { path: '/', expires: 365 });
     });
-
+    
+    m.reached_media_end = ko.observable(false);
+    
     return m;
 }
 var MakonFMp = MakonFM_constructor.prototype;
@@ -1006,6 +1008,9 @@ $(document).ready(function() {
             if (!MakonFM.medium_loaded()) {
                 MakonFM.medium_loaded(true);
             }
+        },
+        ended: function() {
+            MakonFM.reached_media_end(true);
         }
     });
     MakonFM.jp = $('#jquery_jplayer_1').data('jPlayer');
@@ -1032,6 +1037,7 @@ $(document).on({
         if (evt.ctrlKey && evt.keyCode == 32) { // ctrl+space
             evt.preventDefault();
             MakonFM.toggle_playback();
+            onplay({});
         }
         if (evt.ctrlKey && (evt.keyCode == 10 || evt.keyCode == 13)) { // ctrl-enter
             if (MakonFM.editation_active()) {
@@ -1043,7 +1049,11 @@ $(document).on({
 
 $(window).on({
     unload: function() {
+        if (!MakonFM.file_selected()) return;
+        if (MakonFM.reached_media_end()) return;
+        var pos = MakonFM.jp.status.currentTime;
         MakonFM.requested_position(MakonFM.jp.status.currentTime);
+        $.cookie('bookmark', [MakonFM.current_file(), pos].join('#'), {path: '/', expires: 365});
     },
     hashchange: function(evt) {
         if (MakonFM._ignore_hashchange) {
@@ -1124,15 +1134,21 @@ $(document).on({
 function rnd(arr) {
     return arr[ Math.floor( Math.random() * arr.length ) ];
 }
-$('.play.Button').on('click', function(evt) {
-    if (evt.button != 0) return;
+function onplay(evt) {
+    if (evt.button) return;
+    MakonFM.reached_media_end(false);
     if (MakonFM.file_selected()) {}
     else {
-        var file = rnd( $.makeArray( $('.track-menu a') ) );
-        var fn = $(file).text();
-        MakonFM.current_file(fn);
+        var bkm = $.cookie('bookmark');
+        if (!bkm) {
+            var file = rnd( $.makeArray( $('.track-menu a') ) );
+            bkm = $(file).text();
+        }
+        MakonFM.current_file(bkm);
     }
-});
+    $.removeCookie('bookmark');
+}
+$('.play.Button').on('click', onplay);
 $('.pause.Button').on('click', function(evt) {
     if (evt.button) return;
     MakonFM.requested_position(MakonFM.jp.status.currentTime);
