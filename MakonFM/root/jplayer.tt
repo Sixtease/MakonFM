@@ -25,7 +25,7 @@
         </div>
         <div class="jp-title">
             <ul>
-                <li data-bind="text: current_file">nepřehrává se</li>
+                <li data-bind="text: current_file_fmt" class="js-no-file-str">nepřehrává se</li>
             </ul>
         </div>
         <div class="jp-no-solution">

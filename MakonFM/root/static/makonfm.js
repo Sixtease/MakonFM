@@ -8,7 +8,7 @@ function MakonFM_constructor(instance_name) {
 
     m.subtitles = {};
     var _current_filestem = ko.observable('');
-    var _no_file_str = 'nepřehrává se';
+    var _no_file_str = $('.js-no-file-str').text();
     m._requested_position = ko.observable(0);
     m.requested_position = ko.computed({
         read: function() { return m._requested_position(); },
