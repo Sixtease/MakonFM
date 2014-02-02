@@ -1156,6 +1156,7 @@ $('.pause.Button').on('click', function(evt) {
 
 $('input.js-set-name').on('blur', function(evt) {
     $.cookie('author', $(evt.target).val(), { path: '/', expires: 365 });
+    notify_page_load();
 });
 
 $('.curword').on('change', 'input', function(evt) {
@@ -1403,7 +1404,21 @@ function save_word_fn(word) {
     return function() { save_word(word); };
 }
 
+function notify_page_load() {
+    _xreq({
+        url: MakonFM.NOTIFY_PAGELOAD_URL,
+        type: 'post',
+        cache: false,
+        dataType: 'json',
+        data: {
+            username: $.cookie('author'),
+            session: $.cookie('session')
+        }
+    });
+}
+
 if ($.cookie('session')) { } else {
     var sess = new Date().getTime() + '_' + (Math.random()+'').substr(2);
     $.cookie('session', sess, { path: '/', expires: 365 });
 }
+notify_page_load();
