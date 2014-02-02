@@ -1,4 +1,5 @@
-DROP TABLE IF EXISTS prondict;
+DROP TABLE IF EXISTS page_loads;
+DROP TABLE IF EXISTS dict;
 DROP TABLE IF EXISTS versions;
 DROP TABLE IF EXISTS sub_info;
 DROP TABLE IF EXISTS submissions;
@@ -34,4 +35,13 @@ CREATE TABLE dict (
     form varchar(63) NOT NULL,
     pron text NOT NULL,
     UNIQUE(form, pron)
+);
+
+CREATE TABLE page_loads (
+    id serial PRIMARY KEY,
+    username text,
+    ip inet,
+    useragent text,
+    session text,
+    ts timestamp(0) WITH TIME ZONE NOT NULL DEFAULT now()
 );
