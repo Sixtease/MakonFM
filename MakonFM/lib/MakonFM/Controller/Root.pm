@@ -27,6 +27,24 @@ sub init :Local {
     $c->response->header('Access-Control-Allow-Origin' => '*');
 }
 
+sub req :Local {
+    my ($self, $c) = @_;
+    my $req = $c->request;
+    my $ip = $req->address;
+    my $ua = $req->user_agent;
+    my $username = $req->param('username') || '';
+    my $session = $req->param('session') || $c->sessionid || '';
+    $c->model->resultset('PageLoad')->create({
+        username => $username,
+        ip => $ip,
+        useragent => $ua,
+        session => $session,
+    });
+    $c->response->header('Access-Control-Allow-Origin' => '*');
+    $c->response->content_type('text/json');
+    $c->response->body('{"status":"OK"}');
+}
+
 sub default :Path {
     my ( $self, $c ) = @_;
     $c->response->body( 'Page not found' );
