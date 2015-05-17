@@ -34,3 +34,9 @@
     <dt><a data-bind="click: function(){$root.play_from_word($data)}">&#9654; přehrát</a></dt>
 <!-- /ko -->
 </dl>
+
+<div class="export" data-bind="if: file_selected">
+    <a target="_blank" data-bind="attr: {href: 'http://makon.positron.cz/putsub/?stem=' + current_file}">
+        export
+    </a>
+</div>
