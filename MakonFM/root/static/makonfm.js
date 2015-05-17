@@ -1422,3 +1422,8 @@ if ($.cookie('session')) { } else {
     $.cookie('session', sess, { path: '/', expires: 365 });
 }
 notify_page_load();
+
+if (location.hostname === 'www.makon.fm') {
+    alert('Aplikace přesunuta na makon.positron.cz');
+    location.replace('http://makon.positron.cz');
+}
