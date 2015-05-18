@@ -2,6 +2,7 @@ package MakonFM::Controller::Root;
 use Moose;
 use namespace::autoclean;
 use JSON ();
+use File::Basename qw(fileparse dirname);
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -43,6 +44,15 @@ sub req :Local {
     $c->response->header('Access-Control-Allow-Origin' => '*');
     $c->response->content_type('text/json');
     $c->response->body('{"status":"OK"}');
+}
+
+sub lssub :Local {
+    my ($self, $c) = @_;
+    my $PATH = sub { dirname((caller)[1]) }->();
+    my %subs = map {; scalar(fileparse $_, '.sub.js') => ((stat)[9])} glob("$PATH/../../../root/static/subs/*.sub.js");
+    $c->response->header('Access-Control-Allow-Origin' => '*');
+    $c->response->content_type('text/plain');
+    $c->response->body(JSON->new->utf8->encode(\%subs));
 }
 
 sub default :Path {
