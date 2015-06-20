@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Karel Makoň: [% filestem %]</title>
+    <title>Karel Makoň: [% filestem %] (přepis nahrávky)</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="http://storage.positron.cz/makon-export.css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -11,7 +11,14 @@
 </head>
 
 <body>
-    <h1>Karel Makoň: [% filestem %]</h1>
+    <h1>Karel Makoň: [% filestem %] (přepis nahrávky)</h1>
+
+    <p>
+        Účelem tohoto přepisu je věrně zachytit mluvená slova Karla Makoně,
+        může však obsahovat chyby a nepřesnosti.
+        Každé slovo je odkazem na odpovídající pozici v nahrávce.
+    </p>
+
     <div class="text">
         [% FOR s IN data %]
         <a href="#[% filestem %]#[% s.timestamp %]">[% s.occurrence %]</a>
