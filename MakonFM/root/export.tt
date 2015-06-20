@@ -4,10 +4,10 @@
 <head>
     <title>Karel Makoň: [% filestem %]</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="http://static.makon.fm/makon-export.css" />
+    <link rel="stylesheet" type="text/css" href="http://storage.positron.cz/makon-export.css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script src="http://static.makon.fm/makon-export.js"></script>
-    <base href="http://www.makon.fm/" />
+    <script src="http://storage.positron.cz/makon-export.js"></script>
+    <base href="http://makon.positron.cz/" />
 </head>
 
 <body>

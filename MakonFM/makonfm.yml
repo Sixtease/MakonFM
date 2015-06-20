@@ -1,7 +1,7 @@
 name: MakonFM
 default_model: DB
 server_base: 'http://rwis.cz:8080'
-static_base: 'http://static.makon.fm'
+static_base: 'http://storage.positron.cz'
 paths:
     HTK: ''
     sox: ''
