@@ -23,6 +23,7 @@ h1 {
 .track-menu  li a:hover { text-decoration: underline; }
 .track-menu  li > * { display: none; }
 .track-menu  li > a { display: inline; }
+.track-menu  li > a + .Info { display: inline; font-style: italic; font-size: 80%; margin-left: 1em; }
 .track-menu  li.show > * { display: block; }
 .track-menu  li > h2,
 .track-menu  li > h3,

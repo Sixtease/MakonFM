@@ -1033,6 +1033,20 @@ $(document).on({
         MakonFM.subtitles[arg.filestem] = arg.data;
     },
 
+    'got_humpart.MakonFM': function (evt, arg) {
+        var stem, datum;
+        window.humpart = arg;
+        $('.track-menu a').each(function () {
+            $(this).attr('id', $(this).text());
+        });
+        for (stem in arg.data) {
+            datum = arg.data[stem];
+            $('<span class="Info">')
+            .text(Math.ceil(100*datum.human/datum.total)+'%')
+            .insertAfter(document.getElementById(stem));
+        }
+    },
+
     keyup: function(evt) {
         if (evt.ctrlKey && evt.keyCode == 32) { // ctrl+space
             evt.preventDefault();
@@ -1417,11 +1431,16 @@ function notify_page_load() {
     });
 }
 
+function load_humpart() {
+    $.getScript(MakonFM.GET_HUMPART_URL);
+}
+
 if ($.cookie('session')) { } else {
     var sess = new Date().getTime() + '_' + (Math.random()+'').substr(2);
     $.cookie('session', sess, { path: '/', expires: 365 });
 }
 notify_page_load();
+load_humpart();
 
 if (location.hostname === 'www.makon.fm') {
     alert('Aplikace přesunuta na makon.positron.cz');

@@ -8,6 +8,7 @@ MAKONFM_CONFIG.SEND_SUBTITLES_URL = '[% server %]/subsubmit/';
 MAKONFM_CONFIG.SAVE_WORD_URL      = '[% server %]/saveword/';
 MAKONFM_CONFIG.INIT_URL           = '[% server %]/init/';
 MAKONFM_CONFIG.NOTIFY_PAGELOAD_URL= '[% server %]/req/';
+MAKONFM_CONFIG.GET_HUMPART_URL    = '[% server %]/static/humpart.js';
 [%- IF c.config.local %]
 MAKONFM_CONFIG.MEDIA_BASE         = '/static/audio/';
 MAKONFM_CONFIG.JQ_UI_URL          = '/static/jquery-ui.js';
