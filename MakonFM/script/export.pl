@@ -35,8 +35,7 @@ sub main {
         my $sub_jsonp = read_file($sub_fn, {binmode => ':utf8'});
         my ($sub) = load_sub($sub_jsonp);
         my $stem = $sub->{filestem};
-        mkdir $stem;
-        my $out_fn = "$stem/index.html";
+        my $out_fn = "$stem.html";
         $tt->process('export.tt', $sub, $out_fn);
     }
 }
