@@ -55,6 +55,26 @@ sub lssub :Local {
     $c->response->body(JSON->new->utf8->encode(\%subs));
 }
 
+sub humpart :Local {
+    my ($self, $c) = @_;
+    my $PATH = sub { dirname((caller)[1]) }->();
+    my %subs;
+    for my $subfn (glob("$PATH/../../../root/static/subs/*.sub.js")) {
+        open my $subfh, '<', $subfn or next;
+        my $all = 0;
+        my $hum = 0;
+        while (<$subfh>) {
+            ++$all if /\boccurrence\b/;
+            ++$hum if /\bhumanic\b/;
+        }
+        my $stem = fileparse $subfn, '.sub.js';
+        $subs{$stem} = { human => $hum, total => $all };
+    }
+    $c->response->header('Access-Control-Allow-Origin' => '*');
+    $c->response->content_type('text/plain');
+    $c->response->body(JSON->new->utf8->encode(\%subs));
+}
+
 sub default :Path {
     my ( $self, $c ) = @_;
     $c->response->body( 'Page not found' );
