@@ -1036,9 +1036,6 @@ $(document).on({
     'got_humpart.MakonFM': function (evt, arg) {
         var stem, datum;
         window.humpart = arg;
-        $('.track-menu a').each(function () {
-            $(this).attr('id', $(this).text());
-        });
         for (stem in arg.data) {
             datum = arg.data[stem];
             $('<span class="Info">')
@@ -1432,6 +1429,9 @@ function notify_page_load() {
 }
 
 function load_humpart() {
+    $('.track-menu a').each(function () {
+        $(this).attr('id', $(this).text());
+    });
     $.getScript(MakonFM.GET_HUMPART_URL);
 }
 
