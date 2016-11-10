@@ -43,6 +43,7 @@ sub specialcase {
 
 sub init {
     s/NISM/NYZM/g;
+    s/TISM/TYZM/g;
     s/ANTI/ANTY/g;
     s/AKTI/AKTY/g;
     s/ATIK/ATYK/g;
@@ -114,7 +115,8 @@ sub init {
     s/^MATINÉ/MATYNÉ/g;
     s/MANIP/MANYP/g;
     s/MODERNI/MODERNY/g;
-    s/^NAU/NA!U/g;
+    s/NAU/NA!U/g;
+    s/ZAU/NA!U/g;
     s/^NE/NE!/g;
     s/^ODD/OD!D/g;
     s/^ODT/OT!T/g;
