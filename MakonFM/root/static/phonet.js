@@ -1,6 +1,6 @@
 var Phonet = {
     tbl_to_human: {
-        a: 'a', aa: 'á',
+        a: 'a', aa: 'á', aw: 'au',
         b: 'b',
         c: 'c', ch: 'č',
         d: 'd', dj: 'ď',
@@ -26,7 +26,7 @@ var Phonet = {
         sil: '', sp: ''
     },
     tbl_from_human: {
-        'a': 'a', 'á': 'aa',
+        'a': 'a', 'á': 'aa', 'aw': 'aw',
         'b': 'b',
         'c': 'c', 'č': 'ch',
         'd': 'd', 'ď': 'dj',
@@ -81,6 +81,9 @@ var Phonet = {
             if (!(phone in Phonet.tbl_to_human)) { return; }
             rv.str += Phonet.tbl_to_human[phone];
             
+            if (phone === 'a' && lookahead === 'u') {
+                rv.str += "'";
+            }
             if (phone === 'o' && lookahead === 'u') {
                 rv.str += "'";
             }
@@ -95,6 +98,7 @@ var Phonet = {
         var rv = [];
         var human = human_raw
         .toLowerCase()
+        .replace(/^au/g, 'aw')
         .replace('x', 'ks', 'g')
         .replace('q', 'kv', 'g')
         .replace(/([bfpv])ě/g, '$1je')
