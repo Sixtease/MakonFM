@@ -28,16 +28,21 @@ sub merge {
     save_subs_gs($merged, $stem);
 }
 
-sub get_subs_local {
-    my ($stem) = @_;
-    my $path = MakonFM->econf(qw(subs path));
-    my $fn = "$path/$stem.sub.js";
+sub get_subs_from_filename {
+    my ($fn) = @_;
     open my $fh, '<:utf8', $fn or do {
         warn("Failed to open file '$fn': $!");
         return
     };
     my $subs_str = do { local $/; <$fh> };
     return subs_from_jsonp($subs_str)
+}
+
+sub get_subs_local {
+    my ($stem) = @_;
+    my $path = MakonFM->econf(qw(subs path));
+    my $fn = "$path/$stem.sub.js";
+    return get_subs_from_filename($fn);
 }
 
 sub get_subs_gs {
