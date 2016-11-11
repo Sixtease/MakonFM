@@ -156,6 +156,7 @@ sub parse_words {
     
     $trans =~ s/(?<=\w[,.!?;:])\b/ /g;      # jeden,dva  => jeden, dva
     $trans =~ s/\b\s+([,.!?;:])\b/$1 /g;    # jeden ,dva => jeden, dva
+    $trans =~ s/\b\.\.\.\b/... /g;          # jeden...dva => jeden... dva
     my @w = split /\s+/, $trans;
     
     print STDERR "\n\ntrans:$trans\n\n\@w:@w\n\n";
