@@ -327,7 +327,6 @@ sub infreq {
     s/dzh/ch/g;
     s/ew/e u/g;
     s/mg/m/g;
-    s/oo/o/g;
 }
 
 sub add_sp {
