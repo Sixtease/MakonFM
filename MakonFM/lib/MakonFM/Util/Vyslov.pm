@@ -74,20 +74,23 @@ sub init {
     s/DISP/DYSP/g;
     s/DIST/DYST/g;
     s/DIVIDE/DYVIDE/g;
-    s/^DOUČ/DO!UČ/g;
+    s/^DOUČ/DO!UČ/;
     s/DUKTI/DUKTY/g;
     s/EDIC/EDYC/g;
-    s/^EX(?=[AEIOUÁÉÍÓÚŮ])/EGZ/g;
+    s/^EX(?=[AEIOUÁÉÍÓÚŮ])/EGZ/;
     s/ELEKTRONI/ELEKTRONY/g;
     s/ENERGETI/ENERGETY/g;
     s/ETIK/ETYK/g;
+    s/EUS/E!US/g;
     s/FEMINI/FEMINY/g;
     s/FINIŠ/FINYŠ/g;
+    s/^FREUD/FROJD/g;
     s/MONIE/MONYE/g;
     s/GENETI/GENETY/g;
     s/GIENI/GIENY/g;
+    s/IDEU$/IDE!U/;
     s/IMUNI/IMUNY/g;
-    s/^INDI(?=.)/INDY/g;
+    s/^INDI(?=.)/INDY/;
     s/INDIV/INDYV/g;
     s/INICI/INYCI/g;
     s/INVESTI/INVESTY/g;
@@ -101,6 +104,7 @@ sub init {
     s/KOMODIT/KOMODYT/g;
     s/KONSOR/KONZOR/g;
     s/LEASING/L ii z ING/g;
+    s/LISIEUX/LISIJÉ/;
     s/GITI/GITY/g;
     s/MEDI/MEDY/g;
     s/MOTIV/MOTYV/g;
@@ -112,15 +116,17 @@ sub init {
     s/GATIV/GATYV/g;
     s/(?<=.)MATI/MATY/g;
     s/^MATI(?=[^CČN])/MATY/g;
-    s/^MATINÉ/MATYNÉ/g;
+    s/^MATINÉ/MATYNÉ/;
     s/MANIP/MANYP/g;
     s/MODERNI/MODERNY/g;
+    s/MUZEU/MUZE!U/;
     s/NAU/NA!U/g;
-    s/ZAU/NA!U/g;
-    s/^NE/NE!/g;
-    s/^ODD/OD!D/g;
-    s/^ODT/OT!T/g;
-    s/^ODI(?=[^V])/ODY/g;
+    s/ZAU/ZA!U/g;
+    s/^NE/NE!/;
+    s/^ZNE/ZNE!/;
+    s/^ODD/OD!D/;
+    s/^ODT/OT!T/;
+    s/^ODI(?=[^V])/ODY/;
     s/ORGANI/ORGANY/g;
     s/OPTIM/OPTYM/g;
     s/PANICK/PANYCK/g;
@@ -134,18 +140,20 @@ sub init {
     s/^POULI/PO!ULI/g;
     s/PRIVATI/PRIVATY/g;
     s/PROSTITU/PROSTYTU/g;
-    s/^PŘED(?=[^Ě])/PŘED!/g;
+    s/^PŘED(?=[^Ě])/PŘED!/;
     s/RADIK/RADYK/g;
-    s/^RADIO/RADYO/g;
+    s/^RADIO/RADYO/;
     s/RELATIV/RELATYV/g;
     s/RESTITU/RESTYTU/g;
     s/ROCK/ROK/g;
-    s/^ROZ/ROZ!/g;
+    s/^ROZ/ROZ!/;
     s/RUTIN/RUTYN/g;
     s/^RÁDI(?=.)/RÁDY/g;
-    s/SHOP/sh O P/g;
-    s/^SEBE/SEBE!/g;
-    s/^SHO/SCHO/g;
+    s/SCHWARZ/ŠVARC/g;
+    s/SCHW/ŠV/g;
+    s/SHOP/ŠOP/g;
+    s/^SEBE/SEBE!/;
+    s/^SHO/SCHO/;
     s/SOFTWAR/SOFTVER/g;
     s/SORTIM/SORTYM/g;
     s/SPEKTIV/SPEKTYV/g;
@@ -168,7 +176,24 @@ sub init {
     s/UNIVER/UNYVER/g;
     s/VENTI/VENTY/g;
     s/VERTIK/VERTYK/g;
+    s/AUGUSTIN/AUGUSTÝN/g;
     s/^ZAU/ZA!U/g;
+    s/ÄH/É/g;
+    s/[ÄÆŒ]/É/g;
+    y/Å/O/;
+    s/[ĆÇ]/C/g;
+    s/[ËÈĘ]/E/g;
+    y/Ï/Y/;
+    s/[ĽĹŁ]/L/g;
+    y/Ñ/Ň/;
+    s/Ô/UO/g;
+    s/ÖH/É/g;
+    y/Ö/É/;
+    y/Ø/O/;
+    y/Ŕ/R/;
+    s/ÜH/Ý/g;
+    y/Ü/Y/;
+
 }
 
 sub prepis {
@@ -182,7 +207,7 @@ sub prepis {
     s/CH/#/g;
     s/W/V/g;
     s/Q/KV/g;
-    #s/DŽ/&/g;  v původním vyslov nefungovalo
+    s/DŽ/&/g;
     s/DZ/@/g;
     s/X/KS/g;
 
@@ -324,7 +349,6 @@ sub _pilsen2prague {
 
 sub infreq {
     s/dz/c/g;
-    s/dzh/ch/g;
 }
 
 sub add_sp {
