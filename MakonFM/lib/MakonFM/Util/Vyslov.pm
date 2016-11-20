@@ -94,6 +94,7 @@ sub init {
     s/INDIV/INDYV/g;
     s/INICI/INYCI/g;
     s/INVESTI/INVESTY/g;
+    s/JOSEF/JOZEF/g;
     s/KARATI/KARATY/g;
     s/KARDI/KARDY/g;
     s/KLAUS(?=.)/KLAUZ/g;
