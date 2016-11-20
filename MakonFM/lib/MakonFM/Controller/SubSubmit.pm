@@ -23,7 +23,8 @@ sub index :Path :Args(0) {
         $param = URL::Encode::url_params_mixed($body);
     }
     
-    my $trans = decode_utf8 $param->{trans};
+    my $trans_bytes = $param->{trans};
+    my $trans = decode_utf8 $trans_bytes;
     my $filestem = $param->{filestem};
     my $mfcc_fn = 
         $c->econf(qw{paths audio mfcc})
@@ -43,7 +44,7 @@ sub index :Path :Args(0) {
     }
     
     MakonFM::Util::Vyslov::set_dict($c->model->resultset('Dict'));
-    my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans, $mfcc_fn, $start, $end, $mp3_fn);
+    my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans_bytes, $mfcc_fn, $start, $end, $mp3_fn);
     $subs->{filestem} = $filestem;
     $subs->{start} = $start;
     $subs->{end} = $end;
