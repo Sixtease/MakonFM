@@ -350,6 +350,7 @@ sub _pilsen2prague {
 
 sub infreq {
     s/dz/c/g;
+    s/ew/e u/g;
 }
 
 sub add_sp {
