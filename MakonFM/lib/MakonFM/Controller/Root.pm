@@ -3,6 +3,7 @@ use Moose;
 use namespace::autoclean;
 use JSON ();
 use File::Basename qw(fileparse dirname);
+use Encode qw(encode_utf8);
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -36,7 +37,7 @@ sub req :Local {
     my $username = $req->param('username') || '';
     my $session = $req->param('session') || $c->sessionid || '';
     $c->model->resultset('PageLoad')->create({
-        username => $username,
+        username => encode_utf8($username),
         ip => $ip,
         useragent => $ua,
         session => $session,

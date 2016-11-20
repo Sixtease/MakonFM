@@ -1,7 +1,7 @@
 package MakonFM::Controller::SubSubmit;
 use Moose;
 use namespace::autoclean;
-use Encode;
+use Encode qw(encode_utf8);
 use MakonFM::Util::MatchChunk;
 use MakonFM::Util::Vyslov;
 use MakonFM::Util::Subs;
@@ -57,7 +57,7 @@ sub index :Path :Args(0) {
         filestem => $filestem,
         start_ts => $start,
         end_ts   => $end,
-        transcription => $trans,
+        transcription => $trans_bytes,
         matched_ok => $subs->{success},
         sub_infos => [
             {

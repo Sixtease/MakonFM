@@ -2,6 +2,7 @@ package MakonFM::Util::Vyslov;
 
 use strict;
 use utf8;
+use Encode qw(encode_utf8);
 use Exporter qw(import);
 
 our @EXPORT_OK = qw(vyslov);
@@ -38,7 +39,7 @@ sub vyslov {
 
 sub specialcase {
     if (not defined $dict_tbl) { return }
-    return $dict_tbl->search({ form => $_ })->get_column('pron')->all
+    return $dict_tbl->search({ form => encode_utf8($_) })->get_column('pron')->all
 }
 
 sub init {
