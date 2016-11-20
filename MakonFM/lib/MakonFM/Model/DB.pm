@@ -7,12 +7,14 @@ BEGIN { extends 'Catalyst::Model::DBIC::Schema' }
 __PACKAGE__->config(
     schema_class => 'MakonFM::Schema',
     
-    connect_info => {
-        dsn => 'dbi:Pg:dbname=MakonFM',
-        user => MakonFM->config->{db}{user},
-        password => MakonFM->config->{db}{password},
-        AutoCommit => '1',
-    }
+    connect_info => [
+        'dbi:Pg:dbname=MakonFM',
+        MakonFM->config->{db}{user},
+        MakonFM->config->{db}{password},
+        {
+            AutoCommit => 1,
+        },
+    ],
 );
 
 sub get_version {
