@@ -1,0 +1,13 @@
+requires 'Catalyst::Runtime';
+requires 'Catalyst::Model::DBIC::Schema';
+requires 'Catalyst::View::TT';
+requires 'Catalyst::Plugin::Session::Store::FastMmap';
+requires 'Catalyst::Plugin::Session::State::Cookie';
+requires 'Catalyst::Plugin::Static::Simple';
+requires 'Catalyst::Plugin::ConfigLoader';
+requires 'Catalyst::Action::RenderView';
+requires 'DBD::Pg';
+requires 'File::chdir';
+requires 'MooseX::NonMoose';
+requires 'YAML::XS';
+requires 'URL::Encode';
