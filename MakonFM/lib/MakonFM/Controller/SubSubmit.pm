@@ -23,8 +23,8 @@ sub index :Path :Args(0) {
         $param = URL::Encode::url_params_mixed($body);
     }
     
-    my $trans_bytes = $param->{trans};
-    my $trans = decode_utf8 $trans_bytes;
+    my $trans = $param->{trans};
+    my $trans_bytes = encode_utf8 $trans;
     my $filestem = $param->{filestem};
     my $mfcc_fn = 
         $c->econf(qw{paths audio mfcc})
@@ -85,7 +85,7 @@ sub index :Path :Args(0) {
     
     $c->response->content_type('text/json');
     $c->response->header('Access-Control-Allow-Origin' => '*');
-    $c->response->body(encode_utf8(JSON->new->pretty->encode($subs)));
+    $c->response->body(JSON->new->pretty->encode($subs));
 }
 
 __PACKAGE__->meta->make_immutable;

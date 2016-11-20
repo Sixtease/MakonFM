@@ -1,7 +1,6 @@
 package MakonFM::Controller::SaveWord;
 use Moose;
 use namespace::autoclean;
-use Encode;
 use MakonFM::Util::Subs;
 use MakonFM::Util::Vyslov qw(vyslov);
 use JSON ();
@@ -22,11 +21,11 @@ sub index :Path :Args(0) {
         $param = URL::Encode::url_params_mixed($body);
     }
     
-    my $wordform   = decode_utf8 $param->{wordform};
-    my $occurrence = decode_utf8 $param->{occurrence};
-    my $fonet      =             $param->{fonet};
-    my $timestamp  =             $param->{timestamp};
-    my $stem       =             $param->{stem};
+    my $wordform   = $param->{wordform};
+    my $occurrence = $param->{occurrence};
+    my $fonet      = $param->{fonet};
+    my $timestamp  = $param->{timestamp};
+    my $stem       = $param->{stem};
     
     my $subs = MakonFM::Util::Subs::get_subs_local($stem);
     if (not $subs) {
@@ -61,7 +60,7 @@ sub index :Path :Args(0) {
     
     $c->response->content_type('text/json');
     $c->response->header('Access-Control-Allow-Origin' => '*');
-    $c->response->body(encode_utf8(JSON->new->pretty->encode({success => 1})));
+    $c->response->body(JSON->new->pretty->encode({success => 1}));
     
     MakonFM::Util::Subs::save_subs_local($subs);
     MakonFM::Util::Subs::save_subs_gs   ($subs);
