@@ -66,7 +66,7 @@ sub get_subs {
 
     my $aligned_fn = expand_wc('alignedX.mlf', $rand);
     unlink $aligned_fn;
-    system(qq(LANG=C ${HTKpath}HVite -l '*' -b silence -C config1 -a -H hmmmacros -H hmmdefs -i $aligned_fn -m -t 500.0 -I "$trans_mlf_fn" -y lab "$dict_fn" monophones1 "$mfc_chunk_fn"));
+    system(qq(LANG=C ${HTKpath}HVite -l '*' -b silence -C config1 -a -H hmmmodel -i $aligned_fn -m -t 500.0 -I "$trans_mlf_fn" -y lab "$dict_fn" phones "$mfc_chunk_fn"));
 
     my @subs = do {
         open my $aligned_fh, '<', $aligned_fn or die "Couldn't open '$aligned_fn': $!";
