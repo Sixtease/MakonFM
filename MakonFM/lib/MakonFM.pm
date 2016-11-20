@@ -42,6 +42,7 @@ __PACKAGE__->config(
     name => 'MakonFM',
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
+    enable_catalyst_header => 1, # Send X-Catalyst header
 );
 
 # Start the application
@@ -72,6 +73,8 @@ sub v {
     my ($self, $key) = @_;
     return '?v=' . $self->model->get_version($key)
 }
+
+=encoding utf8
 
 =head1 NAME
 

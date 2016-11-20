@@ -23,7 +23,7 @@ makonfm_create.pl [options] model|view|controller name [helper] [options]
 
  Examples:
    makonfm_create.pl controller My::Controller
-   makonfm_create.pl -mechanize controller My::Controller
+   makonfm_create.pl --mechanize controller My::Controller
    makonfm_create.pl view My::View
    makonfm_create.pl view HTML TT
    makonfm_create.pl model My::Model
