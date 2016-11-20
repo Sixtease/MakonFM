@@ -1,1 +1,1 @@
-[% INSERT 'static/manual.html' %]
+﻿[% INSERT 'static/manual.html' %]

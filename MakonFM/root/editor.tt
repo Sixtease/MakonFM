@@ -1,4 +1,4 @@
-<div class="editor-overlay">
+﻿<div class="editor-overlay">
 </div>
 
 <div class="subedit Window" data-bind="style: { opacity: editation_active() ? '1' : '0' }">
