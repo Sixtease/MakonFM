@@ -9,5 +9,6 @@ requires 'Catalyst::Action::RenderView';
 requires 'DBD::Pg';
 requires 'File::chdir';
 requires 'MooseX::NonMoose';
+requires 'Search::Elasticsearch';
 requires 'YAML::XS';
 requires 'URL::Encode';
