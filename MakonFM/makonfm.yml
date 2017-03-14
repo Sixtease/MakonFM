@@ -12,7 +12,7 @@ Util:
     MatchChunk:
         workpath: '[% home %]/temp/match_chunk/'
 subs:
-    jsonp_start: 'jQuery(document).trigger("got_subtitles.MakonFM", { "filestem": "[% stem %]", "data": '
+    jsonp_start: 'jsonp_subtitles({ "filestem": "[% stem %]", "data": '
     jsonp_end:   "});"
     path: '[% home %]/root/static/subs' 
     gs_root: 'gs://karel-makon-sub/'

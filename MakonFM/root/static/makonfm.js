@@ -1446,3 +1446,10 @@ if (location.hostname === 'www.makon.fm') {
     alert('Aplikace přesunuta na makon.positron.cz');
     location.replace('http://makon.positron.cz');
 }
+
+window.jsonp_subtitles = function (subs) {
+    $(document).trigger('got_subtitles.MakonFM', subs);
+};
+window.jsonp_humpart = function (humpart) {
+    jQuery(document).trigger('got_humpart.MakonFM', humpart);
+};

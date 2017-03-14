@@ -7,6 +7,7 @@ requires 'Catalyst::Plugin::Static::Simple';
 requires 'Catalyst::Plugin::ConfigLoader';
 requires 'Catalyst::Action::RenderView';
 requires 'DBD::Pg';
+requires 'JSON::XS';
 requires 'File::chdir';
 requires 'MooseX::NonMoose';
 requires 'Search::Elasticsearch';

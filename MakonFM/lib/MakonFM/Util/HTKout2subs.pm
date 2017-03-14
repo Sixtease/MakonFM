@@ -78,7 +78,10 @@ sub convert {
     close $splits_fh;
     
     my $json = JSON->new->pretty;
-    print qq/jQuery(document).trigger('got_subtitles.MakonFM', { "filestem": "$subfn", "data": /, $json->encode(\@subs), '});';
+    my $jsonp_start = MakonFM->config->{subs}{jsonp_start};
+    my $jsonp_end   = MakonFM->config->{subs}{jsonp_end};
+    $jsonp_start =~ s/\Q[% stem %]/$subfn/;
+    print $jsonp_start, $json->encode(\@subs), $jsonp_end;
 }
 
 1
