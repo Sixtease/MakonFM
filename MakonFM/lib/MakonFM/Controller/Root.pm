@@ -25,7 +25,7 @@ sub init :Local {
     };
     $c->session->{foo} = 1;
     $c->response->content_type('text/javascript');
-    $c->response->body( 'jQuery(document).trigger("init_arrived", ' . JSON->new->encode($data) . ');' );
+    $c->response->body( 'jsonp_init(' . JSON->new->encode($data) . ');' );
     $c->response->header('Access-Control-Allow-Origin' => '*');
 }
 

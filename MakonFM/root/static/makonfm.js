@@ -1451,5 +1451,8 @@ window.jsonp_subtitles = function (subs) {
     $(document).trigger('got_subtitles.MakonFM', subs);
 };
 window.jsonp_humpart = function (humpart) {
-    jQuery(document).trigger('got_humpart.MakonFM', humpart);
+    $(document).trigger('got_humpart.MakonFM', humpart);
+};
+window.jsonp_init = function (init) {
+    $(document).trigger('init_arrived', init);
 };
