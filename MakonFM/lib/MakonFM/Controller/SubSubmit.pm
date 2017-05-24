@@ -53,7 +53,17 @@ sub index :Path :Args(0) {
     }
     
     MakonFM::Util::Vyslov::set_dict($c->model->resultset('Dict'));
-    my $subs = MakonFM::Util::MatchChunk::get_subs(\$trans_bytes, $mfcc_fn, $start, $end, $mp3_fn);
+
+    undef $@;
+    my $subs = eval {
+        MakonFM::Util::MatchChunk::get_subs(\$trans_bytes, $mfcc_fn, $start, $end, $mp3_fn);
+    };
+    if ($@) {
+        $c->response->status(400);
+        $c->response->body(JSON->new->encode({message=>$@}));
+        $c->detach();
+    }
+
     $subs->{filestem} = $filestem;
     $subs->{start} = $start;
     $subs->{end} = $end;
