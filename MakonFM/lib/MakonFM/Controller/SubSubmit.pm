@@ -85,7 +85,7 @@ sub index :Path :Args(0) {
             },
             {
                 name => 'author',
-                value => $author,
+                value => encode_utf8($author),
             },
             {
                 name => 'session',
