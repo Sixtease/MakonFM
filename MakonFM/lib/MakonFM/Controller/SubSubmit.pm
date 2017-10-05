@@ -42,7 +42,8 @@ sub index :Path :Args(0) {
     my $subs;
     my $is_success;
 
-    my $version = $c->model->resultset('Version')->find({key => $filestem})->get_column('value');
+    my $version_row = $c->model->resultset('Version')->find({key => $filestem});
+    my $version = $version_row ? $version_row->get_column('value') : 0;
     if ($version < 0) {
         $is_success = 0;
     }
