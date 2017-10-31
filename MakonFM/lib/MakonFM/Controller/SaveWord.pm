@@ -10,6 +10,15 @@ BEGIN { extends 'Catalyst::Controller' }
 
 sub index :Path :Args(0) {
     my ($self, $c) = @_;
+
+    $c->response->content_type('text/json');
+    $c->response->header('Access-Control-Allow-Origin' => '*');
+    $c->response->header('Access-Control-Allow-Methods' => 'POST');
+    $c->response->header('Access-Control-Allow-Headers' => 'Content-Type');
+    if ($c->request->method eq 'OPTIONS') {
+        $c->response->body('');
+        $c->detach;
+    }
     
     my $param = $c->request->parameters;
     if ($c->request->user_agent =~ /MSIE/
@@ -58,8 +67,6 @@ sub index :Path :Args(0) {
     die "invalid filestem '$stem'" unless $stem =~ /^[-.!()\w\d]+$/;
     () = $c->model->resultset('RaiseVersion')->search({}, {bind => [$stem]});
     
-    $c->response->content_type('text/json');
-    $c->response->header('Access-Control-Allow-Origin' => '*');
     $c->response->body(JSON->new->pretty->encode({success => 1}));
     
     MakonFM::Util::Subs::save_subs_local($subs);
