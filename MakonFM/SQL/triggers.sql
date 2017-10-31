@@ -12,7 +12,7 @@ $BODY$ LANGUAGE SQL VOLATILE;
 
 CREATE OR REPLACE FUNCTION inc_version(IN vkey varchar(255)) RETURNS integer AS $BODY$
     WITH v AS (SELECT value FROM versions WHERE key = $1)
-    UPDATE versions SET value = (select sign(value) from v) * 1 + (select value from v) WHERE key = $1;
+    UPDATE versions SET value = (select sign(value) from v) + (select value from v) WHERE key = $1;
     SELECT 0;
 $BODY$ LANGUAGE SQL VOLATILE;
 
