@@ -7,9 +7,9 @@ use File::chdir;
 use MakonFM::Util::Vyslov qw(vyslov);
 use MakonFM::Util::HTKout2subs;
 
-our $HTKpath  = MakonFM->econf(qw{paths HTK});
-our $soxpath  = MakonFM->econf(qw{paths sox});
-our $workpath = MakonFM->econf(qw{Util MatchChunk workpath});
+our $HTKpath;
+our $soxpath;
+our $workpath;
 
 sub import {
     my ($class, %arg) = @_;
@@ -17,11 +17,20 @@ sub import {
         $workpath = $arg{workpath};
         $workpath =~ s{(?<=[^/])/*$}{/};
     }
+    else {
+        $workpath = MakonFM->econf(qw{Util MatchChunk workpath});
+    }
     if (exists $arg{HTKpath}) {
         $HTKpath = $arg{HTKpath};
     }
+    else {
+        $HTKpath  = MakonFM->econf(qw{paths HTK});
+    }
     if (exists $arg{soxpath}) {
         $soxpath = $arg{soxpath};
+    }
+    else {
+        $soxpath  = MakonFM->econf(qw{paths sox});
     }
 }
 
