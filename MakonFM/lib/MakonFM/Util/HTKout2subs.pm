@@ -62,9 +62,10 @@ sub get_subs {
         }
         if (my ($phoneme) = /^(?:\d+\s+){2}(\w+)/) {
             $subs[-1]{fonet} .= $phoneme . ' ' unless $phoneme eq 'sil';
-            if ($phoneme eq 'sp') {
+            if ($phoneme ~~ [qw(sp sil)]) {
                 my ($start, $stop) = /^(\d+)\s+(\d+)/;
                 $subs[-1]{slen} = ($stop - $start) / 1e7 if $start != $stop;
+                $subs[-1]{sstart} = $start / 1e7;
             }
         }
     }
