@@ -8,6 +8,7 @@ requires 'Catalyst::Runtime';
 requires 'Catalyst::View::TT';
 requires 'DBD::Pg';
 requires 'File::chdir';
+requires 'JSON';
 requires 'JSON::XS';
 requires 'Moose';
 requires 'MooseX::NonMoose';
