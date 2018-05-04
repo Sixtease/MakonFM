@@ -44,7 +44,7 @@ sub specialcase {
         $dict_tbl->search({ form => encode_utf8($_) })->get_column('pron')->all;
     };
     if ($@) {
-        warn "error using pronunciation dict: $@"
+        warn "error using pronunciation dict: $@";
         return;
     }
     return @rv;
