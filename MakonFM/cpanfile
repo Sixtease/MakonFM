@@ -9,6 +9,7 @@ requires 'Catalyst::View::TT';
 requires 'DBD::Pg';
 requires 'File::chdir';
 requires 'JSON::XS';
+requires 'Moose';
 requires 'MooseX::NonMoose';
 requires 'Search::Elasticsearch';
 requires 'URL::Encode';
