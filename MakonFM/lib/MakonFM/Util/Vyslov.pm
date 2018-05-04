@@ -39,7 +39,15 @@ sub vyslov {
 
 sub specialcase {
     if (not defined $dict_tbl) { return }
-    return $dict_tbl->search({ form => encode_utf8($_) })->get_column('pron')->all
+    undef $@;
+    my @rv = eval {
+        $dict_tbl->search({ form => encode_utf8($_) })->get_column('pron')->all;
+    };
+    if ($@) {
+        warn "error using pronunciation dict: $@"
+        return;
+    }
+    return @rv;
 }
 
 sub init {
