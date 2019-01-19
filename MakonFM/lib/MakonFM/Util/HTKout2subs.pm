@@ -65,7 +65,7 @@ sub get_subs {
             if ($phoneme ~~ [qw(sp sil)]) {
                 my ($start, $stop) = /^(\d+)\s+(\d+)/;
                 $subs[-1]{slen} = ($stop - $start) / 1e7 if $start != $stop;
-                $subs[-1]{sstart} = $start / 1e7;
+                $subs[-1]{sstart} = $offset + $start / 1e7;
             }
         }
     }

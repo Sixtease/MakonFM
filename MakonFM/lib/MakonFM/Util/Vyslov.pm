@@ -371,7 +371,7 @@ sub add_variants {
     if (/^o /) {    # opice => vopice
         push @$rv, "v $_";
     }
-    # TODO náct$ => nást, osm(consonant) => osum, ditto sed(u)m, osm => vosm
+    # TODO náct$ => nást, osm(consonant) => osum, ditto sed(u)m, osm => vosm, hanba => hamba, tonfa => tom'fa
 }
 
 1
