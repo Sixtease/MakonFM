@@ -1,0 +1,3 @@
+﻿curl -XPUT localhost:9200/tarr/nahravka/[% filestem %] -d '[
+    
+]'

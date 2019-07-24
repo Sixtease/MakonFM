@@ -1,0 +1,30 @@
+{
+    "query": {
+        "bool": {
+            "must": [
+                {
+                    "match": {
+                        "occurrences": "duch"
+                    }
+                },
+                {
+                    "match": {
+                        "phonet":"aw r o"
+                    }
+                }
+            ],
+            "filter": [
+                {
+                    "term": {
+                        "humanicity": "complete"
+                    }
+                }
+            ]
+        }
+    },
+    "highlight": {
+         "fields" : {
+            "occurrences" : {}
+         }
+    }
+}

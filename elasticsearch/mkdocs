@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for s in *.sub.js; do s stem "$s" /.sub.js//; echo $stem; f=~/skola/phd/webapp/elasticsearch/docs/"$stem"; cat ~/skola/phd/webapp/elasticsearch/doc-head > $f;
+ echo -n $stem >> $f; cat ~/skola/phd/webapp/elasticsearch/doc-mid >> $f; cat $s | grep occurrence | sed 's/\([^"]*"\)\{3\}//;s/",\?$//;s/'\''/\\'\''/' >> $f;
+   cat ~/skola/phd/webapp/elasticsearch/doc-tail >> $f; done
