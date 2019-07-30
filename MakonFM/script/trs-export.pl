@@ -32,11 +32,12 @@ sub load_sub {
 
 sub main {
     for my $sub_fn (@ARGV) {
+        say STDERR $sub_fn;
         my $sub_jsonp = read_file($sub_fn, {binmode => ':utf8'});
         my ($sub) = load_sub($sub_jsonp);
         my $stem = $sub->{filestem};
         my $out_fn = "$stem.xml";
-        $tt->process('trs-export.tt', $sub, $out_fn);
+        $tt->process('plain-export.tt', $sub, $out_fn);
     }
 }
 

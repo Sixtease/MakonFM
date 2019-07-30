@@ -1,0 +1,1 @@
+﻿curl -XPUT localhost:9200/tflat/nahravka/[% filestem %] -d '{"prepis":"[% FOR s IN data; s.occurrence; ' '; END; %]"}'
