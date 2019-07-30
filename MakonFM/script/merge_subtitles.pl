@@ -6,8 +6,11 @@ use strict;
 use warnings;
 use utf8;
 use open qw(:std :utf8);
-use JSON ();
-use File::Slurp;
+use File::Basename qw(dirname);
+my $PATH;
+BEGIN { $PATH = (sub { dirname( (caller)[1] ) })->(); }
+use lib $PATH;
+use Subs qw(decode_subs encode_subs);
 
 my $sub2_depleted = 0;
 my ($subs1, $subs2);
@@ -170,31 +173,33 @@ sub load_sub {
 }
 
 sub main {
-    my ($sub1_fn, $sub2_fn) = @ARGV;
-    my $sub1_jsonp = read_file($sub1_fn, {binmode => ':utf8'});
-    undef $@;
-    my $sub2_jsonp = eval {
-        read_file($sub2_fn, {binmode => ':utf8'})
-    };
-    if ($@) {
+    my ($sub1_fn, $sub2_fn) = @_;
+    my ($sub1, $sub1_jsonp) = eval { decode_subs($sub1_fn, include_jsonp => 1) };
+    my ($sub2, $sub2_jsonp) = eval { decode_subs($sub2_fn, include_jsonp => 1) };
+    if (not $sub1 and not $sub2) {
+        die "could open neither '$sub1_fn' nor '$sub2_fn'";
+    }
+    elsif ($sub1 and not $sub2) {
         print $sub1_jsonp;
-        die $@
+        exit 0;
+    }
+    elsif ($sub2 and not $sub1) {
+        print $sub2_jsonp;
+        exit 0;
     }
     
     unless ($sub2_jsonp =~ /\bhumanic\b/) {
         print $sub1_jsonp;
-        exit(0)
+        exit 0;
     }
     
-    my ($sub1, $head, $foot) = load_sub($sub1_jsonp);
-    my ($sub2              ) = load_sub($sub2_jsonp);
     my $merged = merge2($sub1->{data}, $sub2->{data});
     delete $sub1->{data};
     my $filestem = delete $sub1->{filestem};
     if (keys %$sub1) {
         die "sub has more JSON fields than data and filestem";
     }
-    print $head, qq({ "filestem": "$filestem", "data": ), JSON->new->pretty->space_before(0)->encode($merged), "});\n";
+    print encode_subs($merged, $filestem);
 }
 
-main();
+main(@ARGV);
