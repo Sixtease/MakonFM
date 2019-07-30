@@ -3,6 +3,7 @@ use Moose;
 use namespace::autoclean;
 use MakonFM::Util::Subs;
 use MakonFM::Util::Vyslov qw(vyslov);
+use MakonFM::Util::MatchChunk ();
 use JSON ();
 use URL::Encode ();
 
@@ -30,11 +31,11 @@ sub index :Path :Args(0) {
         $param = URL::Encode::url_params_mixed($body);
     }
     
-    my $wordform   = $param->{wordform};
     my $occurrence = $param->{occurrence};
     my $fonet      = $param->{fonet};
     my $timestamp  = $param->{timestamp};
     my $stem       = $param->{stem};
+    my $wordform   = MakonFM::Util::MatchChunk::occ2form($occurrence);
     
     my $subs = MakonFM::Util::Subs::get_subs_local($stem);
     if (not $subs) {
@@ -67,7 +68,7 @@ sub index :Path :Args(0) {
     die "invalid filestem '$stem'" unless $stem =~ /^[-.!()\w\d]+$/;
     () = $c->model->resultset('RaiseVersion')->search({}, {bind => [$stem]});
     
-    $c->response->body(JSON->new->pretty->encode({success => 1}));
+    $c->response->body(JSON->new->pretty->encode({success => 1, %$word}));
     
     MakonFM::Util::Subs::save_subs_local($subs);
     MakonFM::Util::Subs::save_subs_gs   ($subs);
