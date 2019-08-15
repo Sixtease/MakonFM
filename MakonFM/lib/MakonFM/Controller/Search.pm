@@ -15,7 +15,7 @@ sub index :Path :Args(0) {
     
     my $query = $param->{query};
     my $from = $param->{from} || 0;
-    my @order_by = (parse_order_by($param->{order_by}), '_score');
+    my @order_by = (parse_order_by($param->{'order_by[]'}), '_score');
 
     my %es_query = (
         query => {
