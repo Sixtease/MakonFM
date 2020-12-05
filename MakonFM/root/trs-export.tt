@@ -1,15 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Trans SYSTEM "trans-14.dtd">
-<Trans scribe="sixtease" audio_filename="83-28-394-84-01A" version="4" version_date="120119">
+<Trans scribe="radio.makon.cz" audio_filename="[% filestem %].mp3" version="5" version_date="2020-11-03">
     <Speakers>
         <Speaker id="makon" name="Karel Makoň" check="no" type="male" dialect="native" accent="Czech" scope="local"/>
     </Speakers>
     <Episode>
-        [%~ end_ts = data.last.timestamp + 5 %]
+        [%~ end_ts = audiolen; DEFAULT end_ts = data.last.timestamp + 5 %]
         <Section type="report" startTime="0" endTime="[% end_ts %]">
             <Turn startTime="0" endTime="[% end_ts %]" speaker="makon" mode="spontaneous">
                 [%- FOR s IN data %]
-                <Sync time="[% s.timestamp %]" transcription_source="[% s.humanic ? 'human' : 'computer' %]" />
+                [% src = s.humanic ? 'manual' : 'automatic'; IF src != lastsrc %]<Who nb="transcript:[% src %]" />[% END; lastsrc = src %]
+                <Sync time="[% s.timestamp %]" />
                 [% s.occurrence -%]
                 [% END %]
             </Turn>

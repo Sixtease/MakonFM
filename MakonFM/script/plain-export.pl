@@ -9,14 +9,8 @@ use warnings;
 use utf8;
 use open qw(:std :utf8);
 use JSON ();
+use File::Slurp;
 use Template;
-
-sub read_file {
-  my ($fn) = @_;
-  local $/;
-  open my $fh, '<:utf8', $fn or die;
-  return <$fh>;
-}
 
 my $PATH;
 use File::Basename qw(dirname);
@@ -42,12 +36,11 @@ sub main {
         my $sub_jsonp = read_file($sub_fn, {binmode => ':utf8'});
         my ($sub) = load_sub($sub_jsonp);
         my $stem = $sub->{filestem};
-        my $audiofn = "$ENV{MAKONFM_MP3_DIR}/$stem.mp3";
+        my $audiofn = "$ENV{MAKONFM_MP3_DIR}/$stem.mp3"
         my $audiolen = `soxi -D "$audiofn"`;
-        chomp $audiolen;
-        my $out_fn = "$stem.trs";
+        my $out_fn = "$stem.xml";
         $sub->{audiolen} = $audiolen;
-        $tt->process('trs-export.tt', $sub, $out_fn, { binmode => 'utf8' });
+        $tt->process('plain-export.tt', $sub, $out_fn);
     }
 }
 
