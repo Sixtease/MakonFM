@@ -114,7 +114,7 @@ sub are_identical_words {
     if (not defined $sub1 or not defined $sub2) {
         return 0
     }
-    no warnings 'misc';
+    no warnings 'shadow';
     my ($sub1, $subs1, $sub2, $subs2) = ($sub1->{timestamp} < $sub2->{timestamp})
     ?  ($sub1, $subs1, $sub2, $subs2) : ($sub1->{timestamp} > $sub2->{timestamp})
     ?  ($sub2, $subs2, $sub1, $subs1) : return 1
