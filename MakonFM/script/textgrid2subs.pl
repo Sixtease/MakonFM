@@ -9,4 +9,14 @@ use 5.010;
 
 use TextGrid2subs qw(files2sub);
 
-files2sub(@ARGV);
+my $outdir = shift;
+
+my @files;
+while (<>) {
+  chomp;
+  push @files, $_;
+}
+
+@files = sort @files;
+
+files2sub($outdir, @files);
