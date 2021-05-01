@@ -60,8 +60,8 @@ sub files2sub {
       @subwords = ();
     }
     my $offset = fn2offset($tgfile);
-    open my $tgfh, '<:utf8', $tgfile or die;
-    push @subwords, tg2subwords($tgfh, $offset);
+    open my $tgfh, '<:utf8', $tgfile or die "Cannot open '$tgfile': $!";
+    @subwords = sort {$a->{timestamp} <=> $b->{timestamp}} @subwords, tg2subwords($tgfh, $offset);
     $prevstem = $stem;
   }
   flush($outdir, $prevstem, \@subwords);
@@ -69,6 +69,7 @@ sub files2sub {
 
 sub flush {
   my ($outdir, $stem, $words) = @_;
+  warn "> $stem\n";
   return if not $stem or not @$words;
   open my $ofh, '>:utf8', "$outdir/$stem.sub.js";
   print {$ofh} encode_subs($words, $stem);
