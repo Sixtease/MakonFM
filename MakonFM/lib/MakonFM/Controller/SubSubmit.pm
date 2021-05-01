@@ -38,14 +38,27 @@ sub index :Path :Args(0) {
     my $filestem = $param->{filestem};
 
     my $start = $param->{start};
-    my $end   = $param->{ end };
+    my $end   = $param->{end};
     my $subs;
+    my $subs_json = $param->{subs};
     my $is_success;
 
     my $version_row = $c->model->resultset('Version')->find({key => $filestem});
     my $version = $version_row ? $version_row->get_column('value') : 0;
     if ($version < 0) {
         $is_success = 0;
+    }
+    elsif ($subs_json) {
+      undef $@;
+      eval {
+        $subs = JSON->new->decode($subs_json);
+        $_->{humanic} = 1 for @{$subs->{data}};
+        $subs->{success} = 1;
+        $is_success = 1;
+      };
+      if ($@) {
+        $is_success = 0;
+      }
     }
     else {
         my $mfcc_fn =
