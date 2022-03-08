@@ -1,5 +1,5 @@
 ﻿curl -XPUT localhost:9200/tking/veta/[% id %] -d '{
     "occurrences": "[% FOR w IN words; w.occurrence; ' ' UNLESS loop.last; END %]",
-    "phonet": "[% FOR w IN words; w.fonet; ' ' UNLESS loop.last; END %]",
+    "phonet": "[% FOR w IN words; IF w.fonet; w.fonet; ' ' UNLESS loop.last; END; END %]",
     "humanicity": "[% humanicity %]"
 }'
