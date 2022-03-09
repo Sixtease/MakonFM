@@ -69,7 +69,7 @@ sub main {
         my $last_flush = 0;
         for my $i (0 .. $#$words) {
             my $word = $words->[$i];
-            $word->{fonet} =~ s/\s*\b(sil|sp)\b//g;
+            $word->{fonet} =~ s/\s*\b(sil|sp)\b//g if $word->{fonet};
             $word->{occurrence} =~ s/"/\\"/g;
             $word->{occurrence} =~ s/'/'\\''/g;
             if ($word->{humanic}) {
