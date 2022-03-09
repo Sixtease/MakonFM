@@ -71,7 +71,7 @@ sub main {
             my $word = $words->[$i];
             $word->{fonet} =~ s/\s*\b(sil|sp)\b//g;
             $word->{occurrence} =~ s/"/\\"/g;
-            $word->{occurrence} =~ s/'/\\'/g;
+            $word->{occurrence} =~ s/'/'\\''/g;
             if ($word->{humanic}) {
                 $has_humanic = 1;
                 $word->{cmscore} = 1;
