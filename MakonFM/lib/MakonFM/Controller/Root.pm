@@ -17,6 +17,17 @@ sub index :Path :Args(0) { }
 
 sub manual :Local { }
 
+sub init_json :Local {
+    my ($self, $c) = @_;
+    my %sub_versions = map {; $_->key => $_->value } $c->model->resultset('Version')->all();
+    my $data = {
+        subversions => \%sub_versions,
+    };
+    $c->response->content_type('application/json');
+    $c->response->body(JSON->new->encode($data));
+    $c->response->header('Access-Control-Allow-Origin' => '*');
+}
+
 sub init :Local {
     my ($self, $c) = @_;
     my %sub_versions = map {; $_->key => $_->value } $c->model->resultset('Version')->all();
