@@ -15,3 +15,4 @@ requires 'MooseX::NonMoose';
 requires 'Search::Elasticsearch';
 requires 'URL::Encode';
 requires 'YAML::XS';
+requires 'Daemon::Control';

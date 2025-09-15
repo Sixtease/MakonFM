@@ -1,6 +1,6 @@
 name: MakonFM
 default_model: DB
-server_base: 'http://rwis.cz:8080'
+server_base: 'http://lindat.mff.cuni.cz/services/aligner/makon'
 static_base: 'http://storage.positron.cz'
 paths:
     HTK: ''
