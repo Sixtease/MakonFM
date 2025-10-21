@@ -12,9 +12,12 @@ sub set_dict {
     ($dict_tbl) = @_;
 }
 
+my $warned = 0;
+
 sub vyslov {
-    if (not defined $dict_tbl) {
+    if (not defined $dict_tbl and not $warned) {
         warn 'using vyslov without having set dictionary';
+        $warned = 1;
     }
     for (my ($tmp) = @_) {
         my @rv;
