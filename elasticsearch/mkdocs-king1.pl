@@ -15,7 +15,7 @@ my $PATH;
 BEGIN { $PATH = (sub { dirname( (caller)[1] ) })->(); }
 use lib $PATH;
 
-use Subs qw(decode_subs);
+use MakonFM::Util::Subs;
 
 my $tt = Template->new({
     INCLUDE_PATH => "$PATH",
@@ -60,7 +60,7 @@ sub should_flush {
 sub main {
     for my $sub_fn (@_) {
         say STDERR $sub_fn;
-        my ($sub) = decode_subs($sub_fn);
+        my ($sub) = MakonFM::Util::Subs::get_subs_from_filename($sub_fn);
         my $stem = $sub->{filestem};
         my @sentence;
         my $has_humanic = 0;
