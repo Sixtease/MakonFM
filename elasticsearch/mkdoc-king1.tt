@@ -1,4 +1,4 @@
-﻿curl -XPUT localhost:9200/tking/_doc/[% id %] -d '{
+﻿curl -XPUT -H 'Content-Type: application/json' localhost:9200/tking/_doc/[% id %] -d '{
     "occurrences": "[% FOR w IN words; w.occurrence; ' ' UNLESS loop.last; END %]",
     "phonet": "[% FOR w IN words; IF w.fonet; w.fonet; ' ' UNLESS loop.last; END; END %]",
     "humanicity": "[% humanicity %]"
