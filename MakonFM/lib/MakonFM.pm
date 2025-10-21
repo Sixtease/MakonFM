@@ -45,7 +45,7 @@ __PACKAGE__->config(
     enable_catalyst_header => 1, # Send X-Catalyst header
 
     'Plugin::Session' => {
-        cookie_same_site => 'None',
+        cookie_samesite => 'None',
         cookie_secure => 1,
     },
 );
